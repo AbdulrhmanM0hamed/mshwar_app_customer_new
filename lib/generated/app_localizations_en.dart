@@ -496,7 +496,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logIn => 'Log in';
 
   @override
-  String get didntReceiveCode => 'Didn�t receive the code?';
+  String get didntReceiveCode => 'Didn’t receive the code?';
 
   @override
   String get resendCodeIn => 'Resend code in ';
@@ -620,7 +620,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordSubtitle =>
-      'Don�t worry! Enter your email or mobile number and we�ll help you reset your password.';
+      'Don’t worry! Enter your email or mobile number and we’ll help you reset your password.';
 
   @override
   String get sendResetLink => 'Send reset link';
@@ -736,10 +736,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rideManagement => 'Ride Management';
 
   @override
-  String get allRides => 'All rides';
+  String get allRides => 'All Rides';
 
   @override
-  String get scheduledRides => 'Scheduled rides';
+  String get scheduledRides => 'Scheduled Rides';
 
   @override
   String get accountPayments => 'Account & Payments';
@@ -929,7 +929,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get classicRidesOnly =>
-      'Coming soon! ??\nCurrently we offer Classic rides only. Other vehicle types will be available soon!';
+      'Coming soon! 🚗\nCurrently we offer Classic rides only. Other vehicle types will be available soon!';
 
   @override
   String get unableToGetAddress => 'Unable to get address information.';
@@ -1244,13 +1244,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'You can buy the same package multiple times!';
 
   @override
-  String get availableKm => 'Available KM';
+  String get availableKm => 'Available';
 
   @override
   String get usedKm => 'Used KM';
 
   @override
-  String get totalKm => 'Total KM';
+  String get totalKm => 'Total';
 
   @override
   String get remaining => 'remaining';
@@ -1320,4 +1320,296 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get knetPaymentNotImplemented => 'KNET payment not implemented yet';
+
+  @override
+  String get coupons => 'Coupons';
+
+  @override
+  String get noCouponsAvailable => 'No Coupons Available';
+
+  @override
+  String get couponCodeCopied => 'Coupon code copied to clipboard';
+
+  @override
+  String get validTill => 'Valid till';
+
+  @override
+  String get activeRides => 'Active Rides';
+
+  @override
+  String get rideHistory => 'Ride History';
+
+  @override
+  String get rideDetails => 'Ride Details';
+
+  @override
+  String get searchingForDriver => 'Searching for driver';
+
+  @override
+  String get driverAssigned => 'Driver assigned';
+
+  @override
+  String get driverArrived => 'Driver arrived';
+
+  @override
+  String get onRide => 'On Ride';
+
+  @override
+  String get rejected => 'Rejected';
+
+  @override
+  String get errorLoadingRides => 'Error Loading Rides';
+
+  @override
+  String get errorLoadingHistory => 'Error Loading History';
+
+  @override
+  String get noActiveRides => 'No Active Rides';
+
+  @override
+  String get noRideHistory => 'No Ride History';
+
+  @override
+  String get bookARideToGetStarted => 'Book a ride to get started';
+
+  @override
+  String get yourCompletedRidesWillAppearHere =>
+      'Your completed rides will appear here';
+
+  @override
+  String get chatWithDriver => 'Chat with Driver';
+
+  @override
+  String get sendMessage => 'Send message';
+
+  @override
+  String get typeAMessage => 'Type a message';
+
+  @override
+  String get addReview => 'Add Review';
+
+  @override
+  String get rateYourRide => 'Rate your ride';
+
+  @override
+  String get writeAReview => 'Write a review (optional)';
+
+  @override
+  String get submitReview => 'Submit Review';
+
+  @override
+  String get reviewSubmitted => 'Review submitted successfully';
+
+  @override
+  String get addComplaint => 'Add Complaint';
+
+  @override
+  String get complaintType => 'Complaint Type';
+
+  @override
+  String get selectComplaintType => 'Select complaint type';
+
+  @override
+  String get driverBehavior => 'Driver Behavior';
+
+  @override
+  String get vehicleCondition => 'Vehicle Condition';
+
+  @override
+  String get routeIssue => 'Route Issue';
+
+  @override
+  String get paymentIssue => 'Payment Issue';
+
+  @override
+  String get safetyIssue => 'Safety Issue';
+
+  @override
+  String get describeYourComplaint => 'Describe your complaint';
+
+  @override
+  String get submitComplaint => 'Submit Complaint';
+
+  @override
+  String get complaintSubmitted => 'Complaint submitted successfully';
+
+  @override
+  String get callDriver => 'Call Driver';
+
+  @override
+  String get cancelRide => 'Cancel Ride';
+
+  @override
+  String get confirmCancellation => 'Confirm Cancellation';
+
+  @override
+  String get areYouSureYouWantToCancelThisRide =>
+      'Are you sure you want to cancel this ride?';
+
+  @override
+  String get cancellationReason => 'Cancellation reason (optional)';
+
+  @override
+  String get rideCancelled => 'Ride cancelled successfully';
+
+  @override
+  String get route => 'Route';
+
+  @override
+  String get vehicleDetails => 'Vehicle Details';
+
+  @override
+  String get vehiclePlate => 'Vehicle Plate';
+
+  @override
+  String get vehicleModel => 'Vehicle Model';
+
+  @override
+  String get vehicleColor => 'Vehicle Color';
+
+  @override
+  String get contactDriver => 'Contact Driver';
+
+  @override
+  String get viewOnMap => 'View on Map';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get enRoute => 'En Route';
+
+  @override
+  String get arrived => 'Arrived';
+
+  @override
+  String get offline => 'Offline';
+
+  @override
+  String get driverInfoAfterPayment =>
+      'Driver information will be shown after payment';
+
+  @override
+  String get driverContact => 'Driver\'s Contact';
+
+  @override
+  String get carDetails => 'Car Details';
+
+  @override
+  String get licensePlate => 'License Plate';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get searchByLocation =>
+      'Search by location, date, time, or ride ID...';
+
+  @override
+  String get searchByHint =>
+      'Search by: Pickup, Destination, Date, Time, or Ride ID';
+
+  @override
+  String get errorLoadingScheduledRides => 'Error Loading Scheduled Rides';
+
+  @override
+  String get noScheduledRidesFound => 'No scheduled rides found';
+
+  @override
+  String get tryDifferentSearch => 'Try a different search term';
+
+  @override
+  String get noRecentSearches => 'No Recent Searches';
+
+  @override
+  String get startTypingToSearch => 'Start typing to search for locations';
+
+  @override
+  String get recentSearches => 'Recent Searches';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get locationSearching => 'Searching location...';
+
+  @override
+  String get notFoundLocation => 'Location not found';
+
+  @override
+  String get suggestedLocation => 'Suggested location';
+
+  @override
+  String get searchAddress => 'Search Address';
+
+  @override
+  String get scheduled => 'SCHEDULED';
+
+  @override
+  String get normal => 'Normal';
+
+  @override
+  String get driverEstimateArrivalTime => 'Driver Estimate Arrival Time';
+
+  @override
+  String get hideMyLocation => 'Hide my location';
+
+  @override
+  String get showMyLocation => 'Show my location';
+
+  @override
+  String get locationPermissionDenied => 'Location permission denied';
+
+  @override
+  String get locationPermissionsPermanentlyDenied =>
+      'Location permissions are permanently denied. Please enable them in settings.';
+
+  @override
+  String get tripHash => 'Trip #';
+
+  @override
+  String get paid => 'Paid';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get newStatus => 'New';
+
+  @override
+  String get confirmed => 'Confirmed';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get thankYouForFeedback => 'Thank you for your feedback!';
+
+  @override
+  String get reviewSubmittedSuccessfully =>
+      'Your rating has been submitted successfully. We appreciate your input in helping us improve your ride experience.';
+
+  @override
+  String get cancelTrip => 'Cancel Trip';
+
+  @override
+  String get writeCancelReason => 'Write a reason for trip cancellation';
+
+  @override
+  String get pleaseEnterReason => 'Please enter a reason';
+
+  @override
+  String get doYouWantToCancel => 'Do you want to cancel this booking?';
+
+  @override
+  String get iDoNotFeelSafe => 'I do not feel safe';
+
+  @override
+  String get reportSubmitted => 'Report submitted';
 }

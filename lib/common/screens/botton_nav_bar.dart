@@ -7,7 +7,7 @@ import 'package:cabme/features/ride/ride/view/normal_rides_screen.dart';
 import 'package:cabme/features/payment/wallet/view/wallet_screen.dart';
 import 'package:cabme/features/plans/subscription/view/subscription_list_screen.dart';
 import 'package:cabme/features/plans/package/view/package_list_screen.dart';
-import 'package:cabme/features/settings/settings/view/settings_screen.dart';
+import 'package:cabme/features/settings_new/presentation/pages/settings_page.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class BottomNavBar extends StatelessWidget {
     WalletScreen(showBackButton: false),
     const SubscriptionListScreen(showBackButton: false),
     const PackageListScreen(showBackButton: false),
-    SettingsScreen(),
+    const SettingsPage(),
   ];
 
   @override

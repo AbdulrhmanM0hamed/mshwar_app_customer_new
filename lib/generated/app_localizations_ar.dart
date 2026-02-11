@@ -657,7 +657,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get skipForNow => 'تخطي الآن';
 
   @override
-  String get pleaseWait => 'الرجاء الانتظار';
+  String get pleaseWait => 'يرجى الانتظار';
 
   @override
   String get pleaseWaitDots => 'الرجاء الانتظار...';
@@ -1302,4 +1302,294 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get knetPaymentNotImplemented => 'الدفع بالكي نت غير متاح حالياً';
+
+  @override
+  String get coupons => 'الكوبونات';
+
+  @override
+  String get noCouponsAvailable => 'لا توجد كوبونات متاحة';
+
+  @override
+  String get couponCodeCopied => 'تم نسخ كود الكوبون';
+
+  @override
+  String get validTill => 'صالح حتى';
+
+  @override
+  String get activeRides => 'الرحلات النشطة';
+
+  @override
+  String get rideHistory => 'سجل الرحلات';
+
+  @override
+  String get rideDetails => 'تفاصيل الرحلة';
+
+  @override
+  String get searchingForDriver => 'البحث عن سائق';
+
+  @override
+  String get driverAssigned => 'تم تعيين السائق';
+
+  @override
+  String get driverArrived => 'وصل السائق';
+
+  @override
+  String get onRide => 'في الرحلة';
+
+  @override
+  String get rejected => 'مرفوض';
+
+  @override
+  String get errorLoadingRides => 'خطأ في تحميل الرحلات';
+
+  @override
+  String get errorLoadingHistory => 'خطأ في تحميل السجل';
+
+  @override
+  String get noActiveRides => 'لا توجد رحلات نشطة';
+
+  @override
+  String get noRideHistory => 'لا يوجد سجل رحلات';
+
+  @override
+  String get bookARideToGetStarted => 'احجز رحلة للبدء';
+
+  @override
+  String get yourCompletedRidesWillAppearHere => 'ستظهر رحلاتك المكتملة هنا';
+
+  @override
+  String get chatWithDriver => 'الدردشة مع السائق';
+
+  @override
+  String get sendMessage => 'إرسال رسالة';
+
+  @override
+  String get typeAMessage => 'اكتب رسالة';
+
+  @override
+  String get addReview => 'إضافة تقييم';
+
+  @override
+  String get rateYourRide => 'قيم رحلتك';
+
+  @override
+  String get writeAReview => 'اكتب تقييم (اختياري)';
+
+  @override
+  String get submitReview => 'إرسال التقييم';
+
+  @override
+  String get reviewSubmitted => 'تم إرسال التقييم بنجاح';
+
+  @override
+  String get addComplaint => 'إضافة شكوى';
+
+  @override
+  String get complaintType => 'نوع الشكوى';
+
+  @override
+  String get selectComplaintType => 'اختر نوع الشكوى';
+
+  @override
+  String get driverBehavior => 'سلوك السائق';
+
+  @override
+  String get vehicleCondition => 'حالة المركبة';
+
+  @override
+  String get routeIssue => 'مشكلة في المسار';
+
+  @override
+  String get paymentIssue => 'مشكلة في الدفع';
+
+  @override
+  String get safetyIssue => 'مشكلة أمان';
+
+  @override
+  String get describeYourComplaint => 'صف شكواك';
+
+  @override
+  String get submitComplaint => 'إرسال الشكوى';
+
+  @override
+  String get complaintSubmitted => 'تم إرسال الشكوى بنجاح';
+
+  @override
+  String get callDriver => 'الاتصال بالسائق';
+
+  @override
+  String get cancelRide => 'إلغاء الرحلة';
+
+  @override
+  String get confirmCancellation => 'تأكيد الإلغاء';
+
+  @override
+  String get areYouSureYouWantToCancelThisRide =>
+      'هل أنت متأكد من إلغاء هذه الرحلة؟';
+
+  @override
+  String get cancellationReason => 'سبب الإلغاء (اختياري)';
+
+  @override
+  String get rideCancelled => 'تم إلغاء الرحلة بنجاح';
+
+  @override
+  String get route => 'المسار';
+
+  @override
+  String get vehicleDetails => 'تفاصيل المركبة';
+
+  @override
+  String get vehiclePlate => 'لوحة المركبة';
+
+  @override
+  String get vehicleModel => 'موديل المركبة';
+
+  @override
+  String get vehicleColor => 'لون المركبة';
+
+  @override
+  String get contactDriver => 'الاتصال بالسائق';
+
+  @override
+  String get viewOnMap => 'عرض على الخريطة';
+
+  @override
+  String get ok => 'حسنا';
+
+  @override
+  String get online => 'متصل';
+
+  @override
+  String get enRoute => 'في الطريق';
+
+  @override
+  String get arrived => 'وصل';
+
+  @override
+  String get offline => 'غير متصل';
+
+  @override
+  String get driverInfoAfterPayment => 'سيتم عرض معلومات السائق بعد الدفع';
+
+  @override
+  String get driverContact => 'اتصال السائق';
+
+  @override
+  String get carDetails => 'تفاصيل السيارة';
+
+  @override
+  String get licensePlate => 'لوحة الترخيص';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
+  String get searchByLocation =>
+      'البحث بالموقع، التاريخ، الوقت، أو رقم الرحلة...';
+
+  @override
+  String get searchByHint =>
+      'البحث بـ: نقطة الانطلاق، الوجهة، التاريخ، الوقت، أو رقم الرحلة';
+
+  @override
+  String get errorLoadingScheduledRides => 'خطأ في تحميل الرحلات المجدولة';
+
+  @override
+  String get noScheduledRidesFound => 'لا توجد رحلات مجدولة';
+
+  @override
+  String get tryDifferentSearch => 'جرب مصطلح بحث مختلف';
+
+  @override
+  String get noRecentSearches => 'لا توجد عمليات بحث حديثة';
+
+  @override
+  String get startTypingToSearch => 'ابدأ الكتابة للبحث عن المواقع';
+
+  @override
+  String get recentSearches => 'عمليات البحث الأخيرة';
+
+  @override
+  String get clear => 'مسح';
+
+  @override
+  String get locationSearching => 'جاري البحث عن الموقع...';
+
+  @override
+  String get notFoundLocation => 'لم يتم العثور على الموقع';
+
+  @override
+  String get suggestedLocation => 'الموقع المقترح';
+
+  @override
+  String get searchAddress => 'البحث عن عنوان';
+
+  @override
+  String get scheduled => 'مجدولة';
+
+  @override
+  String get normal => 'عادي';
+
+  @override
+  String get driverEstimateArrivalTime => 'وقت وصول السائق المقدر';
+
+  @override
+  String get hideMyLocation => 'إخفاء موقعي';
+
+  @override
+  String get showMyLocation => 'إظهار موقعي';
+
+  @override
+  String get locationPermissionDenied => 'تم رفض إذن الموقع';
+
+  @override
+  String get locationPermissionsPermanentlyDenied =>
+      'تم رفض أذونات الموقع بشكل دائم. يرجى تمكينها في الإعدادات.';
+
+  @override
+  String get tripHash => 'رحلة #';
+
+  @override
+  String get paid => 'مدفوع';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get pending => 'قيد الانتظار';
+
+  @override
+  String get newStatus => 'جديد';
+
+  @override
+  String get confirmed => 'مؤكد';
+
+  @override
+  String get other => 'أخرى';
+
+  @override
+  String get thankYouForFeedback => 'شكرًا لك على ملاحظاتك!';
+
+  @override
+  String get reviewSubmittedSuccessfully =>
+      'تم إرسال تقييمك بنجاح. نحن نقدر رأيك لمساعدتنا في تحسين تجربة الركوب.';
+
+  @override
+  String get cancelTrip => 'إلغاء الرحلة';
+
+  @override
+  String get writeCancelReason => 'اكتب سبب إلغاء الرحلة';
+
+  @override
+  String get pleaseEnterReason => 'الرجاء إدخال سبب';
+
+  @override
+  String get doYouWantToCancel => 'هل تريد إلغاء هذا الحجز؟';
+
+  @override
+  String get iDoNotFeelSafe => 'لا أشعر بالأمان';
+
+  @override
+  String get reportSubmitted => 'تم تقديم التقرير';
 }

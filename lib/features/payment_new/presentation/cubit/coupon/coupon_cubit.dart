@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/repositories/coupon_repository.dart';
 import '../../../data/models/coupon_model.dart';
-import '../../../../core(new)/errors/api_exception.dart';
 import 'coupon_state.dart';
 
 class CouponCubit extends Cubit<CouponState> {

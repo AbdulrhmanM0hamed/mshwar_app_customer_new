@@ -1,4 +1,5 @@
 import 'package:cabme/core(new)/utils/theme/app_theme.dart';
+import 'package:cabme/service_locator.dart';
 import 'package:cabme/core/config/app_initialization.dart';
 import 'package:cabme/core/cubit/theme_cubit.dart';
 import 'package:cabme/features/splash/splash_screen.dart';
@@ -28,6 +29,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   // Initialize all app dependencies
   await AppInitialization.initializeAppDependencies();
+  setupAllDependencies();
 
   // Run app with Device Preview in debug mode only
   runApp(

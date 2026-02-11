@@ -6,7 +6,6 @@ import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:cabme/features/authentication_new/presentation/pages/login_page.dart';
 import 'package:cabme/common/screens/botton_nav_bar.dart';
 import 'package:cabme/features/settings/localization/view/localization_screen.dart';
-import 'package:cabme/features/home/controller/home_controller.dart';
 import 'package:cabme/features/splash/server_down_screen.dart';
 import 'package:cabme/common/widget/custom_text.dart';
 import 'package:cabme/service/api.dart';
@@ -14,7 +13,6 @@ import 'package:cabme/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,7 +34,6 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _waveAnimation;
 
   bool _imageLoaded = false;
-  bool _homeDataReady = false;
   bool _minTimeElapsed = false;
   bool _hasNavigated = false; // Prevent double navigation
 
@@ -98,18 +95,12 @@ class _SplashScreenState extends State<SplashScreen>
       debugPrint('❌ Server is DOWN - Navigating to ServerDownScreen');
       if (mounted) {
         _hasNavigated = true;
-        Get.offAll(
-          () => const ServerDownScreen(),
-          transition: Transition.fadeIn,
-          duration: const Duration(milliseconds: 500),
-        );
+        _navigateToScreen(const ServerDownScreen());
       }
       return;
     }
 
     debugPrint('✅ Server is UP - Proceeding with app initialization');
-    // Server is available, proceed with data preloading
-    _preloadHomeData();
   }
 
   /// Absolute failsafe - if splash is still showing after 15s, force navigate
@@ -125,74 +116,11 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
-  /// Preload all home screen data during splash
-  Future<void> _preloadHomeData() async {
-    final isLoggedIn = Preferences.getBoolean(Preferences.isLogin);
 
-    if (isLoggedIn) {
-      // User is logged in - load data and navigate immediately when done (no minimum wait)
-      try {
-        // Dismiss any toasts before starting data preload
-        EasyLoading.dismiss();
 
-        // Initialize HomeController early to preload data (permanent so it survives navigation)
-        final homeController = Get.put(HomeController(), permanent: true);
-
-        // Wait for initialization to complete with a MAXIMUM timeout
-        // This prevents splash from getting stuck if API/Firebase is slow
-        await homeController.setInitData().timeout(
-          const Duration(seconds: 12),
-          onTimeout: () {
-            debugPrint(
-              '⚠️ setInitData timed out after 12s, continuing anyway...',
-            );
-            // Mark as initialized even on timeout so it won't retry
-            homeController.isHomePageLoading.value = false;
-          },
-        );
-
-        // Dismiss any toasts that might have been shown during initialization
-        EasyLoading.dismiss();
-
-        if (mounted) {
-          setState(() {
-            _homeDataReady = true;
-            _minTimeElapsed = true; // Skip minimum timer for logged in users
-          });
-          // Verify server before navigating
-          await _verifyServerBeforeNavigate();
-        }
-      } catch (e) {
-        debugPrint('Error preloading home data: $e');
-        // Dismiss any toasts that might have been shown
-        EasyLoading.dismiss();
-        // Silently catch errors - don't show toast during splash
-        if (mounted) {
-          setState(() {
-            _homeDataReady = true;
-            _minTimeElapsed = true;
-          });
-          // Verify server before navigating
-          await _verifyServerBeforeNavigate();
-        }
-      }
-    } else {
-      // User not logged in - just mark data ready, wait for minimum timer
-      if (mounted) {
-        setState(() {
-          _homeDataReady = true;
-        });
-        // Server check will happen in _startMinTimer
-      }
-    }
-  }
-
-  /// Minimum splash time for branding (only applies to non-logged-in users)
+  /// Minimum splash time for branding
   void _startMinTimer() {
-    // Only use timer for non-logged-in users (shorter time for login screen)
-    final duration = Preferences.getBoolean(Preferences.isLogin)
-        ? const Duration(milliseconds: 0) // No extra wait for logged in users
-        : const Duration(milliseconds: 1500); // Brief branding for login screen
+    const duration = Duration(milliseconds: 1500); // Brief branding
 
     Timer(duration, () async {
       if (mounted) {
@@ -208,8 +136,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   /// Check if server is available before navigation
   Future<void> _verifyServerBeforeNavigate() async {
-    // Only navigate if both conditions are met
-    if (!_homeDataReady || !_minTimeElapsed || _hasNavigated) {
+    // Only navigate if conditions are met
+    if (!_minTimeElapsed || _hasNavigated) {
       return;
     }
 
@@ -218,11 +146,7 @@ class _SplashScreenState extends State<SplashScreen>
     if (!serverAvailable) {
       if (mounted) {
         _hasNavigated = true;
-        Get.offAll(
-          () => const ServerDownScreen(),
-          transition: Transition.fadeIn,
-          duration: const Duration(milliseconds: 500),
-        );
+        _navigateToScreen(const ServerDownScreen());
       }
       return;
     }
@@ -347,46 +271,30 @@ class _SplashScreenState extends State<SplashScreen>
   void _navigateToNextScreen() {
     if (!mounted) return;
 
-    // ✅ FIX: Use WidgetsBinding to ensure navigation happens after frame is rendered
-    // This prevents the '_history.isNotEmpty' assertion error
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    // Use WidgetsBinding to ensure navigation happens after frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
 
-      try {
-        if (Preferences.getString(Preferences.languageCodeKey).isEmpty) {
-          Get.offAll(
-            () => const LocalizationScreens(intentType: "main"),
-            transition: Transition.fadeIn,
-            duration: const Duration(milliseconds: 500),
-          );
-        } else if (Preferences.getBoolean(Preferences.isLogin)) {
-          Get.offAll(
-            () => BottomNavBar(),
-            transition: Transition.fadeIn,
-            duration: const Duration(milliseconds: 500),
-          );
-        } else {
-          Get.offAll(
-            () => const LoginPage(),
-            transition: Transition.fadeIn,
-            duration: const Duration(milliseconds: 500),
-          );
-        }
-      } catch (e) {
-        // Fallback: If Get.offAll fails, use standard Navigator
-        debugPrint('Navigation error: $e');
-        if (mounted) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => Preferences.getBoolean(Preferences.isLogin)
-                  ? BottomNavBar()
-                  : const LoginPage(),
-            ),
-            (route) => false,
-          );
-        }
+      Widget nextScreen;
+      if (Preferences.getString(Preferences.languageCodeKey).isEmpty) {
+        nextScreen = const LocalizationScreens(intentType: "main");
+      } else if (Preferences.getBoolean(Preferences.isLogin)) {
+        nextScreen = BottomNavBar();
+      } else {
+        nextScreen = const LoginPage();
       }
+
+      _navigateToScreen(nextScreen);
     });
+  }
+
+  void _navigateToScreen(Widget screen) {
+    if (!mounted) return;
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => screen),
+      (route) => false,
+    );
   }
 
   @override

@@ -762,5 +762,22 @@
   "pleaseEnterReason": "Please enter a reason",
   "doYouWantToCancel": "Do you want to cancel this booking?",
   "iDoNotFeelSafe": "I do not feel safe",
-  "reportSubmitted": "Report submitted"
+  "reportSubmitted": "Report submitted",
+  "profileUpdateSuccessfully": "Profile updated successfully",
+  "passwordUpdatedSuccessfully": "Password updated successfully",
+  "currentPassword": "Current password",
+  "contactUsDetails": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+  "messageSentSuccessfully": "Message sent successfully",
+  "markAllAsRead": "Mark all as read",
+  "viewAll": "View all",
+  "noNotificationsHere": "No notifications here",
+  "phoneNumber": "Phone number",
+  "delete": "Delete",
+  "noContentAvailable": "No content available",
+  "subject": "Subject",
+  "message": "Message",
+  "send": "Send",
+  "catAll": "All",
+  "catRide": "Ride",
+  "catBroadcast": "Broadcast"
 }

@@ -4,9 +4,7 @@ import 'dart:io';
 import 'package:cabme/core/constant/constant.dart';
 import 'package:cabme/features/settings_new/data/repositories/settings_repository.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/profile/profile_state.dart';
-import 'package:cabme/features/authentication/model/user_model.dart'; // Ensure correct import
 import 'package:cabme/core/utils/Preferences.dart';
-import 'package:cabme/core/constant/show_toast_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
@@ -46,9 +44,9 @@ class ProfileCubit extends Cubit<ProfileState> {
       // Update local storage
       await Preferences.setString(
           Preferences.user, jsonEncode(updatedUser.toJson()));
-      
+
       // Update User Model in Constant if applicable (though Constant usually reads directly)
-      
+
       emit(ProfileUpdated(updatedUser));
       emit(ProfileLoaded(updatedUser));
     } catch (e) {
@@ -57,8 +55,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> updatePassword(
-      String currentPassword, String newPassword, String confirmPassword) async {
+  Future<void> updatePassword(String currentPassword, String newPassword,
+      String confirmPassword) async {
     emit(PasswordUpdating());
     try {
       if (newPassword != confirmPassword) {

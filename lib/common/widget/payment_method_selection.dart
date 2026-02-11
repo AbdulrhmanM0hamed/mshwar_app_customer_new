@@ -6,7 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:cabme/core/constant/constant.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/Preferences.dart';
-import 'package:cabme/features/payment/payment/model/payment_setting_model.dart';
+import 'package:cabme/features/payment_new/data/models/payment_gateway_config_model.dart';
 import 'package:cabme/service/api.dart';
 
 /// Payment method data model for UI
@@ -88,7 +88,7 @@ class _PaymentSelectionSheet extends StatefulWidget {
 }
 
 class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
-  late PaymentSettingModel paymentSettings;
+  late PaymentSettingsModel paymentSettings;
   List<PaymentMethodItem> availablePaymentMethods = [];
   String walletBalance = "0.0";
   bool isLoading = true;
@@ -117,27 +117,27 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
           walletBalance = data['data']['amount']?.toString() ?? "0.0";
 
           // Also update cached user data with fresh balance
-          try {
-            final userData = Constant.getUserData();
-            userData.data?.amount = walletBalance;
-            Preferences.setString(
-                Preferences.user, json.encode(userData.toJson()));
-          } catch (_) {}
+          // try {
+          //   final userData = Constant.getUserData();
+          //   // userData.data?.amount = walletBalance;
+          //   // Preferences.setString(
+          //   //     Preferences.user, json.encode(userData.toJson()));
+          // } catch (_) {}
         } else {
           // Fallback to cached data
-          final userData = Constant.getUserData();
-          walletBalance = userData.data?.amount ?? "0.0";
+          // final userData = Constant.getUserData();
+          walletBalance = "0.0";
         }
       } else {
         // Fallback to cached data
-        final userData = Constant.getUserData();
-        walletBalance = userData.data?.amount ?? "0.0";
+        // final userData = Constant.getUserData();
+        walletBalance = "0.0";
       }
     } catch (e) {
       // Fallback to cached data on error
       try {
-        final userData = Constant.getUserData();
-        walletBalance = userData.data?.amount ?? "0.0";
+        // final userData = Constant.getUserData();
+        walletBalance = "0.0";
       } catch (_) {
         walletBalance = "0.0";
       }
@@ -161,159 +161,173 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     }
 
     // Wallet - Always available if enabled
-    if (paymentSettings.myWallet?.isEnabled == "true" && isAllowed("wallet")) {
+    if (paymentSettings.wallet?.isEnabled == true && isAllowed("wallet")) {
       methods.add(PaymentMethodItem(
         id: "wallet",
-        name: "Wallet".tr,
+        name: paymentSettings.wallet?.credentials['libelle'] ?? "Wallet".tr,
         description: "${"Balance".tr}: $walletBalance ${widget.currency}",
         icon: Iconsax.wallet_3,
         iconColor: Colors.green,
-        paymentMethodId: paymentSettings.myWallet?.idPaymentMethod ?? "5",
+        paymentMethodId:
+            paymentSettings.wallet?.credentials['id_payment_method'] ?? "5",
       ));
     }
 
     // Cash - skip if excludeCash is true
-    if (paymentSettings.cash?.isEnabled == "true" &&
+    if (paymentSettings.cash?.isEnabled == true &&
         isAllowed("cash") &&
         !widget.excludeCash) {
       methods.add(PaymentMethodItem(
         id: "cash",
-        name: "Cash".tr,
+        name: paymentSettings.cash?.credentials['libelle'] ?? "Cash".tr,
         description: "Pay cash to driver".tr,
         icon: Iconsax.money,
         iconColor: Colors.orange,
-        paymentMethodId: paymentSettings.cash?.idPaymentMethod ?? "1",
+        paymentMethodId:
+            paymentSettings.cash?.credentials['id_payment_method'] ?? "1",
       ));
     }
 
     // Stripe (Card)
-    if (paymentSettings.strip?.isEnabled == "true" && isAllowed("stripe")) {
+    if (paymentSettings.stripe?.isEnabled == true && isAllowed("stripe")) {
       methods.add(PaymentMethodItem(
         id: "stripe",
-        name: paymentSettings.strip?.libelle ?? "Card".tr,
+        name: paymentSettings.stripe?.credentials['libelle'] ?? "Card".tr,
         description: "Credit or Debit card".tr,
         icon: Iconsax.card,
         iconColor: Colors.purple,
-        paymentMethodId: paymentSettings.strip?.idPaymentMethod ?? "2",
+        paymentMethodId:
+            paymentSettings.stripe?.credentials['id_payment_method'] ?? "2",
       ));
     }
 
     // PayPal
-    if (paymentSettings.payPal?.isEnabled == "true" && isAllowed("paypal")) {
+    if (paymentSettings.paypal?.isEnabled == true && isAllowed("paypal")) {
       methods.add(PaymentMethodItem(
         id: "paypal",
-        name: paymentSettings.payPal?.libelle ?? "PayPal".tr,
+        name: paymentSettings.paypal?.credentials['libelle'] ?? "PayPal".tr,
         description: "Pay with PayPal".tr,
         icon: Iconsax.money_recive,
         iconColor: Colors.blue.shade800,
-        paymentMethodId: paymentSettings.payPal?.idPaymentMethod ?? "3",
+        paymentMethodId:
+            paymentSettings.paypal?.credentials['id_payment_method'] ?? "3",
       ));
     }
 
     // RazorPay
-    if (paymentSettings.razorpay?.isEnabled == "true" &&
-        isAllowed("razorpay")) {
+    if (paymentSettings.razorpay?.isEnabled == true && isAllowed("razorpay")) {
       methods.add(PaymentMethodItem(
         id: "razorpay",
-        name: paymentSettings.razorpay?.libelle ?? "RazorPay".tr,
+        name: paymentSettings.razorpay?.credentials['libelle'] ?? "RazorPay".tr,
         description: "Pay with RazorPay".tr,
         icon: Iconsax.card_pos,
         iconColor: Colors.indigo,
-        paymentMethodId: paymentSettings.razorpay?.idPaymentMethod ?? "4",
+        paymentMethodId:
+            paymentSettings.razorpay?.credentials['id_payment_method'] ?? "4",
       ));
     }
 
     // PayStack
-    if (paymentSettings.payStack?.isEnabled == "true" &&
-        isAllowed("paystack")) {
+    if (paymentSettings.paystack?.isEnabled == true && isAllowed("paystack")) {
       methods.add(PaymentMethodItem(
         id: "paystack",
-        name: paymentSettings.payStack?.libelle ?? "PayStack".tr,
+        name: paymentSettings.paystack?.credentials['libelle'] ?? "PayStack".tr,
         description: "Pay with PayStack".tr,
         icon: Iconsax.card_tick,
         iconColor: Colors.teal,
-        paymentMethodId: paymentSettings.payStack?.idPaymentMethod ?? "6",
+        paymentMethodId:
+            paymentSettings.paystack?.credentials['id_payment_method'] ?? "6",
       ));
     }
 
     // FlutterWave
-    if (paymentSettings.flutterWave?.isEnabled == "true" &&
+    if (paymentSettings.flutterwave?.isEnabled == true &&
         isAllowed("flutterwave")) {
       methods.add(PaymentMethodItem(
         id: "flutterwave",
-        name: paymentSettings.flutterWave?.libelle ?? "FlutterWave".tr,
+        name: paymentSettings.flutterwave?.credentials['libelle'] ??
+            "FlutterWave".tr,
         description: "Pay with FlutterWave".tr,
         icon: Iconsax.flash,
         iconColor: Colors.amber,
-        paymentMethodId: paymentSettings.flutterWave?.idPaymentMethod ?? "7",
+        paymentMethodId:
+            paymentSettings.flutterwave?.credentials['id_payment_method'] ??
+                "7",
       ));
     }
 
     // MercadoPago
-    if (paymentSettings.mercadopago?.isEnabled == "true" &&
+    if (paymentSettings.mercadopago?.isEnabled == true &&
         isAllowed("mercadopago")) {
       methods.add(PaymentMethodItem(
         id: "mercadopago",
-        name: "MercadoPago".tr,
+        name: paymentSettings.mercadopago?.credentials['libelle'] ??
+            "MercadoPago".tr,
         description: "Pay with MercadoPago".tr,
         icon: Iconsax.money_send,
         iconColor: Colors.lightBlue,
-        paymentMethodId: paymentSettings.mercadopago?.idPaymentMethod ?? "8",
+        paymentMethodId:
+            paymentSettings.mercadopago?.credentials['id_payment_method'] ??
+                "8",
       ));
     }
 
     // PayFast
-    if (paymentSettings.payFast?.isEnabled == "true" && isAllowed("payfast")) {
+    if (paymentSettings.payfast?.isEnabled == true && isAllowed("payfast")) {
       methods.add(PaymentMethodItem(
         id: "payfast",
-        name: paymentSettings.payFast?.libelle ?? "PayFast".tr,
+        name: paymentSettings.payfast?.credentials['libelle'] ?? "PayFast".tr,
         description: "Pay with PayFast".tr,
         icon: Iconsax.card_receive,
         iconColor: Colors.cyan,
-        paymentMethodId: paymentSettings.payFast?.idPaymentMethod ?? "9",
+        paymentMethodId:
+            paymentSettings.payfast?.credentials['id_payment_method'] ?? "9",
       ));
     }
 
     // Xendit
-    if (paymentSettings.xendit?.isEnabled == "true" && isAllowed("xendit")) {
+    if (paymentSettings.xendit?.isEnabled == true && isAllowed("xendit")) {
       methods.add(PaymentMethodItem(
         id: "xendit",
-        name: paymentSettings.xendit?.libelle ?? "Xendit".tr,
+        name: paymentSettings.xendit?.credentials['libelle'] ?? "Xendit".tr,
         description: "Pay with Xendit".tr,
         icon: Iconsax.card_add,
         iconColor: Colors.deepPurple,
-        paymentMethodId: paymentSettings.xendit?.idPaymentMethod ?? "10",
+        paymentMethodId:
+            paymentSettings.xendit?.credentials['id_payment_method'] ?? "10",
       ));
     }
 
     // OrangePay
-    if (paymentSettings.orangePay?.isEnabled == "true" &&
+    if (paymentSettings.orangepay?.isEnabled == true &&
         isAllowed("orangepay")) {
       methods.add(PaymentMethodItem(
         id: "orangepay",
-        name: paymentSettings.orangePay?.libelle ?? "Orange Pay".tr,
+        name: paymentSettings.orangepay?.credentials['libelle'] ??
+            "Orange Pay".tr,
         description: "Pay with Orange Pay".tr,
         icon: Iconsax.mobile,
         iconColor: Colors.deepOrange,
-        paymentMethodId: paymentSettings.orangePay?.idPaymentMethod ?? "11",
+        paymentMethodId:
+            paymentSettings.orangepay?.credentials['id_payment_method'] ?? "11",
       ));
     }
 
     // Midtrans
-    if (paymentSettings.midtrans?.isEnabled == "true" &&
-        isAllowed("midtrans")) {
+    if (paymentSettings.midtrans?.isEnabled == true && isAllowed("midtrans")) {
       methods.add(PaymentMethodItem(
         id: "midtrans",
-        name: paymentSettings.midtrans?.libelle ?? "Midtrans".tr,
+        name: paymentSettings.midtrans?.credentials['libelle'] ?? "Midtrans".tr,
         description: "Pay with Midtrans".tr,
         icon: Iconsax.card_slash,
         iconColor: Colors.blueGrey,
-        paymentMethodId: paymentSettings.midtrans?.idPaymentMethod ?? "12",
+        paymentMethodId:
+            paymentSettings.midtrans?.credentials['id_payment_method'] ?? "12",
       ));
     }
 
     // UPayments (KNET, Apple Pay, etc.) - Only show if enabled by admin
-    if (paymentSettings.uPayments?.isEnabled == "true" &&
+    if (paymentSettings.upayments?.isEnabled == true &&
         isAllowed("upayments")) {
       methods.add(PaymentMethodItem(
         id: "upayments",
@@ -321,7 +335,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
         description: "Pay with KNET, Apple Pay, Cards".tr,
         icon: Iconsax.card,
         iconColor: Colors.blue,
-        paymentMethodId: paymentSettings.uPayments?.idPaymentMethod ?? "13",
+        paymentMethodId:
+            paymentSettings.upayments?.credentials['id_payment_method'] ?? "13",
       ));
     }
 
@@ -390,10 +405,10 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppThemeData.primary200.withValues(alpha:0.1),
+              color: AppThemeData.primary200.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
-              border:
-                  Border.all(color: AppThemeData.primary200.withValues(alpha:0.3)),
+              border: Border.all(
+                  color: AppThemeData.primary200.withValues(alpha: 0.3)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -509,7 +524,7 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: method.iconColor.withValues(alpha:0.1),
+                    color: method.iconColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(method.icon, color: method.iconColor, size: 24),

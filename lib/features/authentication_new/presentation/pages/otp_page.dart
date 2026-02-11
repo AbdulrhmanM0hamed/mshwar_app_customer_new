@@ -6,9 +6,8 @@ import 'package:cabme/features/authentication_new/presentation/cubit/otp/otp_cub
 import 'package:cabme/features/authentication_new/presentation/cubit/otp/otp_state.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/login/login_cubit.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/login/login_state.dart';
-import 'package:cabme/features/authentication_new/data/di/auth_di.dart';
+import 'package:cabme/features/authentication_new/di/auth_service_locator.dart';
 import 'package:cabme/features/authentication_new/presentation/widgets/auth_widgets.dart';
-import 'package:cabme/features/home/controller/home_controller.dart';
 import 'package:cabme/common/screens/botton_nav_bar.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:cabme/generated/app_localizations.dart';
@@ -18,7 +17,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
-import 'package:get/get.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 
@@ -333,17 +331,6 @@ class _OtpPageState extends State<OtpPage> {
   }
 
   Future<void> _preloadHomeAndNavigate() async {
-    try {
-      // Delete existing controller if any and create fresh one
-      if (Get.isRegistered<HomeController>()) {
-        Get.delete<HomeController>(force: true);
-      }
-      final homeController = Get.put(HomeController(), permanent: true);
-      await homeController.setInitData(forceInit: true);
-    } catch (e) {
-      debugPrint('Error preloading home data: $e');
-    }
-
     // Navigate to home
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(

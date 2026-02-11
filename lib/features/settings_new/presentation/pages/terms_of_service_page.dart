@@ -21,7 +21,7 @@ class TermsOfServicePage extends StatelessWidget {
       backgroundColor:
           isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
       appBar: CustomAppBar(
-        title: l10n.termsAndCondition,
+        title: l10n.termsConditions,
         showBackButton: true,
         onBackPressed: () => Navigator.pop(context),
       ),
@@ -41,7 +41,7 @@ class TermsOfServicePage extends StatelessWidget {
           final htmlContent = snapshot.data ?? '';
 
           if (htmlContent.isEmpty) {
-            return const Center(child: Text('No content available'));
+            return Center(child: Text(l10n.noContentAvailable));
           }
 
           return SingleChildScrollView(

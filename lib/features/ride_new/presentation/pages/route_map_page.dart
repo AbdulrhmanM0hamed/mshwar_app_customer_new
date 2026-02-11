@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:cabme/common/widget/button.dart';
 import 'package:cabme/common/widget/StarRating.dart';
-import 'package:cabme/common/widget/custom_alert_dialog.dart';
+
+import 'package:cabme/core/themes/custom_alert_dialog.dart';
 import 'package:cabme/common/widget/custom_text.dart';
-import 'package:cabme/common/widget/text_field_widget.dart';
+import 'package:cabme/core/themes/text_field_them.dart';
 import 'package:cabme/core/constant/constant.dart';
 import 'package:cabme/core/constant/show_toast_dialog.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
@@ -13,9 +14,9 @@ import 'package:cabme/core/utils/preferences.dart';
 import 'package:cabme/generated/app_localizations.dart';
 import 'package:cabme/features/ride_new/data/models/ride_model.dart';
 import 'package:cabme/features/ride_new/presentation/cubit/active_ride/active_ride_cubit.dart';
-import 'package:cabme/features/ride_new/presentation/cubit/active_ride/active_ride_state.dart';
+
 import 'package:cabme/features/ride_new/presentation/widgets/driver_info_bottom_sheet.dart';
-import 'package:cabme/features/ride_new/presentation/widgets/driver_notification_popup.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +46,8 @@ class _RouteMapPageState extends State<RouteMapPage> {
   GoogleMapController? _mapController;
   final Map<String, Marker> _markers = {};
   final Map<PolylineId, Polyline> _polylines = {};
-  final PolylinePoints _polylinePoints = PolylinePoints();
+  final PolylinePoints _polylinePoints =
+      PolylinePoints(apiKey: Constant.kGoogleApiKey ?? '');
 
   BitmapDescriptor? _departureIcon;
   BitmapDescriptor? _destinationIcon;
@@ -80,12 +82,12 @@ class _RouteMapPageState extends State<RouteMapPage> {
 
   void _initializeLocations() {
     _departureLatLng = LatLng(
-      double.tryParse(widget.ride.pickupLat ?? '0') ?? 0,
-      double.tryParse(widget.ride.pickupLng ?? '0') ?? 0,
+      double.tryParse(widget.ride.pickupLatitude) ?? 0,
+      double.tryParse(widget.ride.pickupLongitude) ?? 0,
     );
     _destinationLatLng = LatLng(
-      double.tryParse(widget.ride.dropoffLat ?? '0') ?? 0,
-      double.tryParse(widget.ride.dropoffLng ?? '0') ?? 0,
+      double.tryParse(widget.ride.dropoffLatitude) ?? 0,
+      double.tryParse(widget.ride.dropoffLongitude) ?? 0,
     );
   }
 
@@ -161,11 +163,9 @@ class _RouteMapPageState extends State<RouteMapPage> {
     List<PolylineWayPoint> wayPointList = [];
 
     // Add stop waypoints
-    if (widget.ride.stops != null) {
-      for (var stop in widget.ride.stops!) {
-        if (stop.location != null) {
-          wayPointList.add(PolylineWayPoint(location: stop.location!));
-        }
+    if (widget.ride.stops.isNotEmpty) {
+      for (var stop in widget.ride.stops) {
+        wayPointList.add(PolylineWayPoint(location: stop.location));
       }
     }
 
@@ -189,20 +189,18 @@ class _RouteMapPageState extends State<RouteMapPage> {
     );
 
     // Add stop markers
-    if (widget.ride.stops != null) {
-      for (var i = 0; i < widget.ride.stops!.length; i++) {
-        final stop = widget.ride.stops![i];
-        if (stop.latitude != null && stop.longitude != null) {
-          _markers['Stop_$i'] = Marker(
-            markerId: MarkerId('Stop_$i'),
-            infoWindow: InfoWindow(title: stop.location ?? 'Stop ${i + 1}'),
-            position: LatLng(
-              double.tryParse(stop.latitude!) ?? 0,
-              double.tryParse(stop.longitude!) ?? 0,
-            ),
-            icon: _stopIcon ?? BitmapDescriptor.defaultMarker,
-          );
-        }
+    if (widget.ride.stops.isNotEmpty) {
+      for (var i = 0; i < widget.ride.stops.length; i++) {
+        final stop = widget.ride.stops[i];
+        _markers['Stop_$i'] = Marker(
+          markerId: MarkerId('Stop_$i'),
+          infoWindow: InfoWindow(title: stop.location),
+          position: LatLng(
+            double.tryParse(stop.latitude) ?? 0,
+            double.tryParse(stop.longitude) ?? 0,
+          ),
+          icon: _stopIcon ?? BitmapDescriptor.defaultMarker,
+        );
       }
     }
 
@@ -221,7 +219,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
                 _departureLatLng.latitude, _departureLatLng.longitude),
           ),
         );
-      } else if (widget.ride.status == 'on ride' &&
+      } else if (widget.ride.status == 'on_ride' &&
           dLat != 0.0 &&
           dLng != 0.0) {
         // On ride: driver to destination
@@ -433,8 +431,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
   Widget _buildBottomPanel(bool isDarkMode, AppLocalizations l10n) {
     return Container(
       decoration: BoxDecoration(
-        color:
-            isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
+        color: isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -468,8 +465,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
               ),
 
               // Driver info row
-              if (widget.ride.hasDriver)
-                _buildDriverInfoRow(isDarkMode, l10n),
+              if (widget.ride.hasDriver) _buildDriverInfoRow(isDarkMode, l10n),
 
               // OTP display (if available)
               if (widget.ride.otp != null && widget.ride.otp!.isNotEmpty)
@@ -598,8 +594,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
     );
   }
 
-  Widget _buildActionIcon(
-      IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildActionIcon(IconData icon, Color color, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -668,14 +663,11 @@ class _RouteMapPageState extends State<RouteMapPage> {
                 final bodyParams = {
                   'lat': location.latitude,
                   'lng': location.longitude,
-                  'user_id':
-                      Preferences.getInt(Preferences.userId).toString(),
+                  'user_id': Preferences.getInt(Preferences.userId).toString(),
                   'feel_safe': 0,
                   'trip_id': widget.ride.id,
                 };
-                context
-                    .read<ActiveRideCubit>()
-                    .reportSafety(bodyParams);
+                context.read<ActiveRideCubit>().reportSafety(bodyParams);
               },
             ),
           ),
@@ -696,8 +688,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
     );
   }
 
-  Future<void> _showCancelBottomSheet(
-      bool isDarkMode, AppLocalizations l10n) {
+  Future<void> _showCancelBottomSheet(bool isDarkMode, AppLocalizations l10n) {
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -714,8 +705,8 @@ class _RouteMapPageState extends State<RouteMapPage> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
               child: Padding(
                 padding: MediaQuery.of(context).viewInsets,
                 child: Column(
@@ -749,7 +740,8 @@ class _RouteMapPageState extends State<RouteMapPage> {
                         maxLine: 3,
                         controller: _cancelReasonController,
                         hintText: '',
-                        fontSize: 14,
+                        fontSize: 14.0,
+                        obscureText: false,
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 8),
                       ),
@@ -765,8 +757,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
                               textColor: Colors.white,
                               borderRadius: 8,
                               ontap: () {
-                                if (_cancelReasonController
-                                    .text.isNotEmpty) {
+                                if (_cancelReasonController.text.isNotEmpty) {
                                   Navigator.of(context).pop();
                                   _confirmCancelRide(isDarkMode, l10n);
                                 } else {
@@ -785,8 +776,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
                                   : AppThemeData.grey200,
                               textColor: AppThemeData.primary200,
                               borderRadius: 8,
-                              ontap: () =>
-                                  Navigator.of(context).pop(),
+                              ontap: () => Navigator.of(context).pop(),
                             ),
                           ),
                         ],
@@ -815,9 +805,7 @@ class _RouteMapPageState extends State<RouteMapPage> {
             final bodyParams = {
               'id_ride': widget.ride.id,
               'id_user': widget.ride.driverId ?? '',
-              'name': widget.ride.userName ?? '',
-              'from_id':
-                  Preferences.getInt(Preferences.userId).toString(),
+              'from_id': Preferences.getInt(Preferences.userId).toString(),
               'reason': _cancelReasonController.text,
             };
             context.read<ActiveRideCubit>().cancelRide(bodyParams);

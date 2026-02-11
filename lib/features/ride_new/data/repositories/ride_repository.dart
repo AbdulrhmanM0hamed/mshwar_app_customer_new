@@ -21,12 +21,13 @@ class RideRepositoryImpl implements RideRepository {
   Future<List<RideModel>> getActiveRides() async {
     try {
       final response = await apiService.get('/active-rides');
-      
-      if (response['success'] == 'success' && response['data'] != null) {
+
+      if ((response['success'] == 'success' || response['success'] == true) &&
+          response['data'] != null) {
         final List<dynamic> data = response['data'] as List;
         return data.map((json) => RideModel.fromJson(json)).toList();
       }
-      
+
       throw Exception(response['message'] ?? 'Failed to load active rides');
     } catch (e) {
       throw Exception('Failed to load active rides: $e');
@@ -44,12 +45,13 @@ class RideRepositoryImpl implements RideRepository {
         '/ride-history',
         queryParameters: queryParams.isNotEmpty ? queryParams : null,
       );
-      
-      if (response['success'] == 'success' && response['data'] != null) {
+
+      if ((response['success'] == 'success' || response['success'] == true) &&
+          response['data'] != null) {
         final List<dynamic> data = response['data'] as List;
         return data.map((json) => RideModel.fromJson(json)).toList();
       }
-      
+
       throw Exception(response['message'] ?? 'Failed to load ride history');
     } catch (e) {
       throw Exception('Failed to load ride history: $e');
@@ -60,11 +62,12 @@ class RideRepositoryImpl implements RideRepository {
   Future<RideModel> getRideDetails(String rideId) async {
     try {
       final response = await apiService.get('/ride-details/$rideId');
-      
-      if (response['success'] == 'success' && response['data'] != null) {
+
+      if ((response['success'] == 'success' || response['success'] == true) &&
+          response['data'] != null) {
         return RideModel.fromJson(response['data']);
       }
-      
+
       throw Exception(response['message'] ?? 'Failed to load ride details');
     } catch (e) {
       throw Exception('Failed to load ride details: $e');
@@ -81,8 +84,8 @@ class RideRepositoryImpl implements RideRepository {
           'reason': reason ?? '',
         },
       );
-      
-      if (response['success'] != 'success') {
+
+      if (response['success'] != 'success' && response['success'] != true) {
         throw Exception(response['message'] ?? 'Failed to cancel ride');
       }
     } catch (e) {
@@ -94,11 +97,12 @@ class RideRepositoryImpl implements RideRepository {
   Future<DriverLocationUpdate?> getDriverLocation(String rideId) async {
     try {
       final response = await apiService.get('/driver-location/$rideId');
-      
-      if (response['success'] == 'success' && response['data'] != null) {
+
+      if ((response['success'] == 'success' || response['success'] == true) &&
+          response['data'] != null) {
         return DriverLocationUpdate.fromJson(response['data']);
       }
-      
+
       return null;
     } catch (e) {
       return null;
@@ -108,7 +112,7 @@ class RideRepositoryImpl implements RideRepository {
   @override
   Future<void> reportSafety(Map<String, dynamic> bodyParams) async {
     try {
-      await apiService.post('/report-safety', bodyParams);
+      await apiService.post('/report-safety', data: bodyParams);
     } catch (e) {
       // Handle or log error
     }

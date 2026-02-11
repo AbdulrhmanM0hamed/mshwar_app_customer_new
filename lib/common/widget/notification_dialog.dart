@@ -1,9 +1,9 @@
 import 'package:cabme/common/widget/custom_text.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
-import 'package:cabme/features/settings/notifications/view/notification_screen.dart';
+import 'package:cabme/features/settings_new/presentation/pages/notification_page.dart';
+import 'package:cabme/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +50,7 @@ class NotificationDialog {
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Notification',
-      barrierColor: Colors.black.withValues(alpha:0.5),
+      barrierColor: Colors.black.withValues(alpha: 0.5),
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
         return Container();
@@ -90,7 +90,8 @@ class NotificationDialog {
                               gradient: LinearGradient(
                                 colors: [
                                   AppThemeData.primary200,
-                                  AppThemeData.primary200.withValues(alpha:0.8),
+                                  AppThemeData.primary200
+                                      .withValues(alpha: 0.8),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -98,8 +99,8 @@ class NotificationDialog {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color:
-                                      AppThemeData.primary200.withValues(alpha:0.4),
+                                  color: AppThemeData.primary200
+                                      .withValues(alpha: 0.4),
                                   blurRadius: 20,
                                   offset: const Offset(0, 8),
                                 ),
@@ -153,7 +154,13 @@ class NotificationDialog {
                             onPressed: () {
                               _isDialogShowing = false;
                               Navigator.of(context).pop();
-                              Get.to(() => const NotificationScreen());
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationPage(),
+                                ),
+                              );
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppThemeData.primary200,
@@ -167,7 +174,7 @@ class NotificationDialog {
                               ),
                             ),
                             child: CustomText(
-                              text: 'View All'.tr,
+                              text: AppLocalizations.of(context)!.viewAll,
                               size: 14,
                               weight: FontWeight.w600,
                               color: AppThemeData.primary200,
@@ -192,7 +199,7 @@ class NotificationDialog {
                               ),
                             ),
                             child: CustomText(
-                              text: 'OK'.tr,
+                              text: AppLocalizations.of(context)!.ok,
                               size: 14,
                               weight: FontWeight.w600,
                               color: Colors.white,

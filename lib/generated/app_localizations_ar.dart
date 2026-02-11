@@ -1592,4 +1592,56 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reportSubmitted => 'تم تقديم التقرير';
+
+  @override
+  String get profileUpdateSuccessfully => 'تم تحديث الملف الشخصي بنجاح!';
+
+  @override
+  String get passwordUpdatedSuccessfully => 'تم تحديث كلمة المرور بنجاح!';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get contactUsDetails =>
+      'We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.';
+
+  @override
+  String get messageSentSuccessfully => 'Message sent successfully';
+
+  @override
+  String get markAllAsRead => 'تحديد الكل كمقروء';
+
+  @override
+  String get viewAll => 'عرض الكل';
+
+  @override
+  String get noNotificationsHere => 'No notifications here';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get noContentAvailable => 'No content available';
+
+  @override
+  String get subject => 'الموضوع';
+
+  @override
+  String get message => 'الرسالة';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get catAll => 'All';
+
+  @override
+  String get catRide => 'Ride';
+
+  @override
+  String get catBroadcast => 'Broadcast';
 }

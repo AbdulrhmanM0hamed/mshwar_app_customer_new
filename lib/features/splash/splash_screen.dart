@@ -5,7 +5,7 @@ import 'package:cabme/core/utils/Preferences.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:cabme/features/authentication_new/presentation/pages/login_page.dart';
 import 'package:cabme/common/screens/botton_nav_bar.dart';
-import 'package:cabme/features/settings/localization/view/localization_screen.dart';
+import 'package:cabme/features/settings_new/presentation/pages/localization_page.dart';
 import 'package:cabme/features/splash/server_down_screen.dart';
 import 'package:cabme/common/widget/custom_text.dart';
 import 'package:cabme/service/api.dart';
@@ -115,8 +115,6 @@ class _SplashScreenState extends State<SplashScreen>
       }
     });
   }
-
-
 
   /// Minimum splash time for branding
   void _startMinTimer() {
@@ -277,7 +275,7 @@ class _SplashScreenState extends State<SplashScreen>
 
       Widget nextScreen;
       if (Preferences.getString(Preferences.languageCodeKey).isEmpty) {
-        nextScreen = const LocalizationScreens(intentType: "main");
+        nextScreen = const LocalizationPage(isFromSettings: false);
       } else if (Preferences.getBoolean(Preferences.isLogin)) {
         nextScreen = BottomNavBar();
       } else {
@@ -320,12 +318,12 @@ class _SplashScreenState extends State<SplashScreen>
             colors: isDarkMode
                 ? [
                     AppThemeData.primary200,
-                    AppThemeData.primary200.withValues(alpha:0.7),
+                    AppThemeData.primary200.withValues(alpha: 0.7),
                     const Color(0xFF001F1F),
                   ]
                 : [
                     AppThemeData.primary200,
-                    AppThemeData.primary200.withValues(alpha:0.8),
+                    AppThemeData.primary200.withValues(alpha: 0.8),
                     const Color(0xFF005555),
                   ],
           ),
@@ -349,8 +347,8 @@ class _SplashScreenState extends State<SplashScreen>
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white.withValues(alpha:
-                            0.1 - (_waveAnimation.value * 0.1),
+                          color: Colors.white.withValues(
+                            alpha: 0.1 - (_waveAnimation.value * 0.1),
                           ),
                           width: 2,
                         ),
@@ -383,7 +381,7 @@ class _SplashScreenState extends State<SplashScreen>
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.white.withValues(alpha:0.5),
+                              color: Colors.white.withValues(alpha: 0.5),
                               blurRadius: 4,
                               spreadRadius: 1,
                             ),
@@ -419,7 +417,7 @@ class _SplashScreenState extends State<SplashScreen>
                           width: 150,
                           height: 150,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha:0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                         );
@@ -441,9 +439,10 @@ class _SplashScreenState extends State<SplashScreen>
                       builder: (context) {
                         final l10n = AppLocalizations.of(context);
                         return CustomText(
-                          text: l10n?.yourJourneyOurPriority ?? 'Your journey, our priority',
+                          text: l10n?.yourJourneyOurPriority ??
+                              'Your journey, our priority',
                           size: 16,
-                          color: Colors.white.withValues(alpha:0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           letterSpacing: 1,
                         );
                       },
@@ -456,7 +455,7 @@ class _SplashScreenState extends State<SplashScreen>
                   FadeTransition(
                     opacity: _fadeAnimation,
                     child: SpinKitThreeBounce(
-                      color: Colors.white.withValues(alpha:0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       size: 30.0,
                     ),
                   ),
@@ -479,13 +478,13 @@ class _SplashScreenState extends State<SplashScreen>
                         CustomText(
                           text: '2.2.0',
                           size: 12,
-                          color: Colors.white.withValues(alpha:0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                         ),
                         const SizedBox(height: 4),
                         CustomText(
                           text: l10n?.poweredByMshwar ?? 'Powered by Mshwar',
                           size: 11,
-                          color: Colors.white.withValues(alpha:0.6),
+                          color: Colors.white.withValues(alpha: 0.6),
                         ),
                       ],
                     );

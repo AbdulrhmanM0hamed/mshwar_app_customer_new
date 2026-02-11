@@ -56,9 +56,7 @@ class _NotificationViewState extends State<NotificationView> {
   List<NotificationModel> _getFilteredNotifications(
       List<NotificationModel> notifications) {
     if (_selectedCategory == 'all') return notifications;
-    return notifications
-        .where((n) => n.category == _selectedCategory)
-        .toList();
+    return notifications.where((n) => n.category == _selectedCategory).toList();
   }
 
   @override
@@ -76,13 +74,15 @@ class _NotificationViewState extends State<NotificationView> {
         onBackPressed: () => Navigator.pop(context),
         actions: [
           IconButton(
-            onPressed: () =>
-                context.read<NotificationCubit>().loadNotifications(refresh: true),
+            onPressed: () => context
+                .read<NotificationCubit>()
+                .loadNotifications(refresh: true),
             icon: const Icon(Iconsax.refresh, color: Colors.white, size: 22),
           ),
           IconButton(
             onPressed: () => context.read<NotificationCubit>().markAllAsRead(),
-            icon: const Icon(Iconsax.tick_circle, color: Colors.white, size: 22),
+            icon:
+                const Icon(Iconsax.tick_circle, color: Colors.white, size: 22),
             tooltip: l10n.markAllAsRead,
           ),
         ],
@@ -115,17 +115,17 @@ class _NotificationViewState extends State<NotificationView> {
               color: AppThemeData.primary200,
               child: Column(
                 children: [
-                  _buildCategoryFilters(isDarkMode),
+                  _buildCategoryFilters(isDarkMode, l10n),
                   Expanded(
                     child: filtered.isEmpty
                         ? Center(
-                            child:
-                                Text('No $_selectedCategory notifications'.toUpperCase()),
+                            child: Text(l10n.noNotificationsHere),
                           )
                         : ListView.builder(
                             controller: _scrollController,
                             padding: const EdgeInsets.all(16),
-                            itemCount: filtered.length + (state.hasMore ? 1 : 0),
+                            itemCount:
+                                filtered.length + (state.hasMore ? 1 : 0),
                             itemBuilder: (context, index) {
                               if (index == filtered.length) {
                                 return Center(
@@ -156,7 +156,7 @@ class _NotificationViewState extends State<NotificationView> {
     );
   }
 
-  Widget _buildCategoryFilters(bool isDarkMode) {
+  Widget _buildCategoryFilters(bool isDarkMode, AppLocalizations l10n) {
     final categories = ['all', 'ride', 'broadcast'];
     return Container(
       height: 50,
@@ -170,7 +170,14 @@ class _NotificationViewState extends State<NotificationView> {
 
           // Simple color logic for filter chips
           Color categoryColor = AppThemeData.primary200;
-          String label = category.toUpperCase(); // Or localize
+          String label = '';
+          if (category == 'all') {
+            label = l10n.catAll;
+          } else if (category == 'ride') {
+            label = l10n.catRide;
+          } else if (category == 'broadcast') {
+            label = l10n.catBroadcast;
+          }
 
           return Container(
             margin: const EdgeInsets.only(right: 8),
@@ -182,7 +189,7 @@ class _NotificationViewState extends State<NotificationView> {
                   _selectedCategory = category;
                 });
               },
-              selectedColor: categoryColor.withValues(alpha:0.2),
+              selectedColor: categoryColor.withValues(alpha: 0.2),
               checkmarkColor: categoryColor,
               labelStyle: TextStyle(
                 color: isSelected
@@ -249,8 +256,9 @@ class _NotificationViewState extends State<NotificationView> {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () =>
-                context.read<NotificationCubit>().loadNotifications(refresh: true),
+            onPressed: () => context
+                .read<NotificationCubit>()
+                .loadNotifications(refresh: true),
             child: Text(l10n.retry),
           ),
         ],
@@ -283,7 +291,7 @@ class _NotificationViewState extends State<NotificationView> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha:0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -292,11 +300,11 @@ class _NotificationViewState extends State<NotificationView> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () async {
-             // Mark as read
-             context.read<NotificationCubit>().markAsRead(notification.id);
-             
-             // Show details or navigate
-             _showNotificationDetail(notification, isDarkMode, context);
+            // Mark as read
+            context.read<NotificationCubit>().markAsRead(notification.id);
+
+            // Show details or navigate
+            _showNotificationDetail(notification, isDarkMode, context);
           },
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -306,7 +314,7 @@ class _NotificationViewState extends State<NotificationView> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: notification.categoryColor.withValues(alpha:0.1),
+                    color: notification.categoryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
@@ -365,15 +373,15 @@ class _NotificationViewState extends State<NotificationView> {
                   ),
                 ),
                 if (!notification.isRead)
-                   Container(
-                     margin: const EdgeInsets.only(left: 8),
-                     width: 8,
-                     height: 8,
-                     decoration: BoxDecoration(
-                       color: AppThemeData.primary200,
-                       shape: BoxShape.circle,
-                     ),
-                   ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 8),
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: AppThemeData.primary200,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -387,7 +395,7 @@ class _NotificationViewState extends State<NotificationView> {
     bool isDarkMode,
     BuildContext context,
   ) {
-      showModalBottomSheet(
+    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -419,7 +427,7 @@ class _NotificationViewState extends State<NotificationView> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: notification.categoryColor.withValues(alpha:0.1),
+                    color: notification.categoryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -430,15 +438,15 @@ class _NotificationViewState extends State<NotificationView> {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                   child: Text(
-                        notification.title,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: isDarkMode
-                                ? AppThemeData.grey900Dark
-                                : AppThemeData.grey900),
-                      ),
+                  child: Text(
+                    notification.title,
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: isDarkMode
+                            ? AppThemeData.grey900Dark
+                            : AppThemeData.grey900),
+                  ),
                 ),
               ],
             ),
@@ -448,11 +456,14 @@ class _NotificationViewState extends State<NotificationView> {
                   isDarkMode ? AppThemeData.grey300Dark : AppThemeData.grey200,
             ),
             const SizedBox(height: 20),
-            Text( // Check notification model for full body if different from message
+            Text(
+              // Check notification model for full body if different from message
               notification.message,
               style: TextStyle(
                 fontSize: 15,
-                color: isDarkMode ? AppThemeData.grey500Dark : AppThemeData.grey500,
+                color: isDarkMode
+                    ? AppThemeData.grey500Dark
+                    : AppThemeData.grey500,
                 height: 1.5,
               ),
             ),
@@ -469,13 +480,7 @@ class _NotificationViewState extends State<NotificationView> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Close'
-                 // style: TextStyle(
-                 //  fontSize: 15,
-                 //  fontWeight: FontWeight.w500,
-                 //  color: Colors.white,
-                 //),
-                ),
+                child: Text(AppLocalizations.of(context)!.close),
               ),
             ),
             SizedBox(height: MediaQuery.of(context).padding.bottom),

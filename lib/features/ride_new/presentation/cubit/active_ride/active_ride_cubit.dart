@@ -58,7 +58,7 @@ class ActiveRideCubit extends Cubit<ActiveRideState> {
   Future<void> reportSafety(Map<String, dynamic> bodyParams) async {
     try {
       // Implement repository call here if supported, for now just log or allow
-      // await repository.reportSafety(bodyParams);
+      await repository.reportSafety(bodyParams);
       // Since repository might not have this yet, we can add it or ignore for now
     } catch (e) {
       // Handle error
@@ -76,7 +76,11 @@ class ActiveRideCubit extends Cubit<ActiveRideState> {
 
       if (location != null) {
         emit(DriverLocationLoaded(location));
-        return location;
+        return {
+          'lat': location.latitudeValue,
+          'lng': location.longitudeValue,
+          'rotation': location.rotationValue,
+        };
       } else {
         // emit(const DriverLocationError('Driver location not available'));
         return null;

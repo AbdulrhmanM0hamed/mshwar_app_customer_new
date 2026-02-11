@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:cabme/core(new)/network/api_service.dart';
+import '../../../../core(new)/network/api_service.dart';
 import 'package:cabme/features/settings_new/data/models/settings_model.dart';
-import 'package:cabme/features/authentication/model/user_model.dart';
+import 'package:cabme/features/authentication_new/data/models/user_model.dart';
 import 'package:cabme/service/api.dart';
 import 'package:cabme/core/utils/Preferences.dart';
 
 abstract class SettingsRepository {
   Future<SettingsModel> getSettings();
-  
+
   Future<UserModel> updateProfile({
     required String firstName,
     required String lastName,
@@ -17,9 +17,9 @@ abstract class SettingsRepository {
     File? image,
     String? password,
   });
-  
+
   Future<Map<String, dynamic>> updatePassword(Map<String, String> bodyParams);
-  
+
   Future<Map<String, dynamic>> deleteAccount(String userId);
 
   Future<Map<String, dynamic>> contactUs({
@@ -42,6 +42,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<SettingsModel> getSettings() async {
     return await apiService.get(
       API.settings,
+      headers: API.authheader,
       fromJson: (json) => SettingsModel.fromJson(json),
     );
   }
@@ -56,7 +57,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     String? password,
   }) async {
     final userId = Preferences.getInt(Preferences.userId).toString();
-    
+
     Map<String, dynamic> data = {
       'nom': lastName,
       'prenom': firstName,
@@ -79,21 +80,24 @@ class SettingsRepositoryImpl implements SettingsRepository {
       API.editProfile,
       data: data,
       files: files,
+      headers: API.header,
       fromJson: (json) => UserModel.fromJson(json),
     );
-    
-    if (result.success && result.data != null) {
+
+    if (result.isSuccess && result.data != null) {
       return result.data!;
     } else {
-      throw Exception(result.message ?? 'Failed to update profile');
+      throw Exception(result.error?.message ?? 'Failed to update profile');
     }
   }
 
   @override
-  Future<Map<String, dynamic>> updatePassword(Map<String, String> bodyParams) async {
+  Future<Map<String, dynamic>> updatePassword(
+      Map<String, String> bodyParams) async {
     final result = await apiService.post(
       API.changePassword,
       data: bodyParams,
+      headers: API.header,
     );
     return result as Map<String, dynamic>;
   }
@@ -103,10 +107,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
     // API.deleteUser returns URL with query params
     // We append user_cat=customer as seen in old controller
     final url = '${API.deleteUser(userId)}&user_cat=customer';
-    final result = await apiService.get(url);
+    final result = await apiService.get(url, headers: API.header);
     return result as Map<String, dynamic>;
   }
-  
+
   @override
   Future<Map<String, dynamic>> contactUs({
     required String name,
@@ -115,14 +119,15 @@ class SettingsRepositoryImpl implements SettingsRepository {
     required String message,
   }) async {
     final data = {
-        'nom': name,
-        'email': email,
-        'subject': subject,
-        'message': message,
+      'nom': name,
+      'email': email,
+      'subject': subject,
+      'message': message,
     };
     final result = await apiService.post(
       API.contactUs,
       data: data,
+      headers: API.header,
     );
     return result as Map<String, dynamic>;
   }

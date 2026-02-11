@@ -1612,4 +1612,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportSubmitted => 'Report submitted';
+
+  @override
+  String get profileUpdateSuccessfully => 'Profile updated successfully';
+
+  @override
+  String get passwordUpdatedSuccessfully => 'Password updated successfully';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get contactUsDetails =>
+      'We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.';
+
+  @override
+  String get messageSentSuccessfully => 'Message sent successfully';
+
+  @override
+  String get markAllAsRead => 'Mark all as read';
+
+  @override
+  String get viewAll => 'View all';
+
+  @override
+  String get noNotificationsHere => 'No notifications here';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get noContentAvailable => 'No content available';
+
+  @override
+  String get subject => 'Subject';
+
+  @override
+  String get message => 'Message';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get catAll => 'All';
+
+  @override
+  String get catRide => 'Ride';
+
+  @override
+  String get catBroadcast => 'Broadcast';
 }

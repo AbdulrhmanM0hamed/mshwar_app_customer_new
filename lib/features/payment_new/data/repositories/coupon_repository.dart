@@ -1,3 +1,5 @@
+import 'package:cabme/core(new)/errors/api_error_type.dart';
+
 import '../../../../core(new)/network/api_service.dart';
 import '../../../../core(new)/errors/api_exception.dart';
 import '../models/coupon_model.dart';
@@ -24,31 +26,36 @@ class CouponRepositoryImpl implements CouponRepository {
           'amount': amount.toString(),
         },
       );
-      
+
       if (response['success'] != 'success' && response['success'] != true) {
         throw ApiException(
+          errorType: ApiErrorType.badRequest,
           message: response['message']?.toString() ?? 'Invalid coupon code',
         );
       }
 
       if (response['data'] == null) {
-        throw ApiException(message: 'Coupon data not found');
+        throw ApiException(
+          errorType: ApiErrorType.badRequest,
+          message: 'Coupon data not found',
+        );
       }
 
       final coupon = CouponModel.fromJson(response['data']);
-      
+
       // Validate coupon
       if (!coupon.isValid) {
         throw ApiException(
-          message: coupon.isExpired 
-              ? 'Coupon has expired' 
-              : 'Coupon is not active',
+          errorType: ApiErrorType.badRequest,
+          message:
+              coupon.isExpired ? 'Coupon has expired' : 'Coupon is not active',
         );
       }
 
       // Check minimum amount
       if (coupon.minimumAmount != null && amount < coupon.minimumAmount!) {
         throw ApiException(
+          errorType: ApiErrorType.badRequest,
           message: 'Minimum amount required: ${coupon.minimumAmount}',
         );
       }
@@ -57,6 +64,7 @@ class CouponRepositoryImpl implements CouponRepository {
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(
+        errorType: ApiErrorType.badRequest,
         message: 'Failed to validate coupon: ${e.toString()}',
       );
     }
@@ -69,11 +77,12 @@ class CouponRepositoryImpl implements CouponRepository {
         'coupon/available',
         queryParameters: {'user_id': userId},
       );
-      
+
       final couponsResponse = CouponsResponse.fromJson(response);
-      
+
       if (!couponsResponse.success) {
         throw ApiException(
+          errorType: ApiErrorType.badRequest,
           message: couponsResponse.message ?? 'Failed to load coupons',
         );
       }
@@ -82,6 +91,7 @@ class CouponRepositoryImpl implements CouponRepository {
       return couponsResponse.coupons.where((c) => c.isValid).toList();
     } catch (e) {
       throw ApiException(
+        errorType: ApiErrorType.badRequest,
         message: 'Failed to load coupons: ${e.toString()}',
       );
     }
@@ -97,10 +107,11 @@ class CouponRepositoryImpl implements CouponRepository {
           'code': code,
         },
       );
-      
+
       return response['success'] == 'success' || response['success'] == true;
     } catch (e) {
       throw ApiException(
+        errorType: ApiErrorType.badRequest,
         message: 'Failed to apply coupon: ${e.toString()}',
       );
     }

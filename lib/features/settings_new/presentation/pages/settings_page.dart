@@ -6,12 +6,12 @@ import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/Preferences.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:cabme/features/authentication_new/presentation/pages/login_page.dart';
+import 'package:cabme/features/payment_new/presentation/pages/wallet_page.dart';
 import 'package:cabme/features/ride_new/presentation/pages/active_rides_page.dart';
 import 'package:cabme/features/ride_new/presentation/pages/scheduled_rides_page.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/profile/profile_cubit.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/profile/profile_state.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/settings/settings_cubit.dart';
-import 'package:cabme/features/settings_new/presentation/cubit/settings/settings_state.dart';
 import 'package:cabme/features/settings_new/presentation/pages/profile_page.dart';
 import 'package:cabme/features/settings_new/presentation/pages/change_password_page.dart';
 // import 'package:cabme/features/payment/wallet/view/wallet_screen.dart'; // To be migrated
@@ -28,8 +28,7 @@ import 'package:get_it/get_it.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
-import 'package:cabme/features/authentication/model/user_model.dart';
-import 'package:cabme/features/payment/wallet/view/wallet_screen.dart'; // Keep old for now
+import 'package:cabme/features/authentication_new/data/models/user_model.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -144,7 +143,7 @@ class SettingsView extends StatelessWidget {
                     isDarkMode: isDarkMode,
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => WalletScreen()),
+                      MaterialPageRoute(builder: (context) => WalletPage()),
                     ),
                   ),
                   _buildDivider(isDarkMode),
@@ -203,13 +202,12 @@ class SettingsView extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LocalizationPage(
-                              isFromSettings: true)),
+                          builder: (context) =>
+                              const LocalizationPage(isFromSettings: true)),
                     ),
                   ),
                   _buildDivider(isDarkMode),
-                  _buildDarkModeToggle(
-                      context, isDarkMode, themeChange, l10n),
+                  _buildDarkModeToggle(context, isDarkMode, themeChange, l10n),
                   _buildDivider(isDarkMode),
                   _buildMenuItem(
                     context: context,
@@ -314,16 +312,13 @@ class SettingsView extends StatelessWidget {
 
   Widget _buildUserProfile(
       BuildContext context, UserModel userModel, bool isDarkMode) {
-    final name =
-        "${userModel.data?.prenom ?? ''} ${userModel.data?.nom ?? ''}".trim();
-    final contact = (userModel.data?.email != null &&
-            userModel.data!.email!.isNotEmpty &&
-            userModel.data!.email != 'null')
-        ? userModel.data!.email!
-        : (userModel.data?.phone != null &&
-                userModel.data!.phone!.isNotEmpty &&
-                userModel.data!.phone != 'null')
-            ? userModel.data!.phone!
+    final name = "${userModel.firstName} ${userModel.lastName}".trim();
+    final contact = (userModel.email.isNotEmpty && userModel.email != 'null')
+        ? userModel.email
+        : (userModel.phone != null &&
+                userModel.phone!.isNotEmpty &&
+                userModel.phone != 'null')
+            ? userModel.phone!
             : '';
 
     return Container(
@@ -462,12 +457,11 @@ class SettingsView extends StatelessWidget {
         height: _iconBox,
         width: _iconBox,
         decoration: BoxDecoration(
-          color: (textColor ?? AppThemeData.primary200)
-              .withValues(alpha: 0.10),
+          color: (textColor ?? AppThemeData.primary200).withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: (textColor ?? AppThemeData.primary200)
-                .withValues(alpha: 0.18),
+            color:
+                (textColor ?? AppThemeData.primary200).withValues(alpha: 0.18),
           ),
         ),
         child: Icon(icon, size: _iconSize, color: iconColor),
@@ -539,7 +533,7 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget _buildProfileImage(UserModel userModel, bool isDarkMode) {
-    final photoPath = userModel.data?.photoPath?.toString() ?? '';
+    final photoPath = userModel.photoPath?.toString() ?? '';
 
     if (photoPath.isEmpty || photoPath == 'null') {
       return Container(

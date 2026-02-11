@@ -1,4 +1,4 @@
-import 'package:cabme/features/authentication/model/user_model.dart';
+import 'package:cabme/features/authentication_new/data/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ProfileState extends Equatable {

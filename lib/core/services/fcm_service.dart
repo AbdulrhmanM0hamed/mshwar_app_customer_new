@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cabme/core/constant/constant.dart';
-import 'package:cabme/features/ride/ride/model/ride_model.dart';
-import 'package:cabme/features/ride/chat/view/conversation_screen.dart';
-import 'package:cabme/features/ride/ride/view/ride_details.dart';
+import 'package:cabme/features/ride_new/data/models/ride_model.dart';
+import 'package:cabme/features/ride_new/presentation/pages/chat_page.dart';
+import 'package:cabme/features/ride_new/presentation/pages/ride_details_page.dart';
+import 'package:cabme/features/ride_new/presentation/pages/ride_history_page.dart';
+import 'package:cabme/features/ride_new/presentation/pages/route_map_page.dart';
 import 'package:cabme/common/screens/botton_nav_bar.dart';
-import 'package:cabme/features/ride/ride/view/route_view_screen.dart';
 import 'package:cabme/service/api.dart';
 import 'package:cabme/core/utils/Preferences.dart';
 import 'package:cabme/common/widget/notification_dialog.dart';
@@ -220,37 +221,28 @@ class FCMService {
 
     if (data['status'] == "done") {
       if (_navigatorKey?.currentState != null) {
+        final messageData = jsonDecode(data['message']);
+        final rideId = messageData['orderId'].toString();
+
         await _navigatorKey!.currentState!.push(
           MaterialPageRoute(
-            builder: (context) => ConversationScreen(),
-            settings: RouteSettings(
-              arguments: {
-                'receiverId': int.parse(
-                  jsonDecode(data['message'])['senderId'].toString(),
-                ),
-                'orderId': int.parse(
-                  jsonDecode(data['message'])['orderId'].toString(),
-                ),
-                'receiverName':
-                    jsonDecode(data['message'])['senderName'].toString(),
-                'receiverPhoto':
-                    jsonDecode(data['message'])['senderPhoto'].toString(),
-              },
-            ),
+            builder: (context) => ChatPage(rideId: rideId),
           ),
         );
       }
     } else if (data['tag'] == 'driver_on_way' ||
         data['tag'] == 'driver_arrived' ||
         data['tag'] == 'driver_arrived_manual') {
-      final rideId = data['ride_id'];
+      final rideId = data['ride_id']?.toString();
       if (rideId != null && _navigatorKey?.currentState != null) {
         try {
           await _navigatorKey!.currentState!.push(
-            MaterialPageRoute(builder: (context) => BottomNavBar()),
+            MaterialPageRoute(
+              builder: (context) => RideDetailsPage(rideId: rideId),
+            ),
           );
         } catch (e) {
-          debugPrint('Error navigating to route screen: $e');
+          debugPrint('Error navigating to ride details: $e');
         }
       }
     } else if (data['statut'] == "confirmed" ||
@@ -264,12 +256,8 @@ class FCMService {
       if (_navigatorKey?.currentState != null) {
         await _navigatorKey!.currentState!.push(
           MaterialPageRoute(
-            builder: (context) => const RouteViewScreen(),
-            settings: RouteSettings(
-              arguments: {
-                'type': 'on_ride', // Removed .tr since we're not using GetX
-                'data': RideData.fromJson(data),
-              },
+            builder: (context) => RouteMapPage(
+              ride: RideModel.fromJson(data),
             ),
           ),
         );
@@ -278,10 +266,7 @@ class FCMService {
       if (_navigatorKey?.currentState != null) {
         await _navigatorKey!.currentState!.push(
           MaterialPageRoute(
-            builder: (context) => TripHistoryScreen(),
-            settings: RouteSettings(
-              arguments: {"rideData": RideData.fromJson(data)},
-            ),
+            builder: (context) => const RideHistoryPage(),
           ),
         );
       }
@@ -317,13 +302,13 @@ class FCMService {
   static Future<void> _updateFCMTokenDirectly(String token) async {
     try {
       final userModel = Constant.getUserData();
-      if (userModel.data == null) return;
+      if (userModel.id.isEmpty) return;
 
       final Map<String, dynamic> bodyParams = {
         'user_id': Preferences.getInt(Preferences.userId),
         'fcm_id': token,
         'device_id': "",
-        'user_cat': userModel.data!.userCat
+        'user_cat': userModel.userCat
       };
 
       await http.post(

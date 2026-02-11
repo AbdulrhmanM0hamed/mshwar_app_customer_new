@@ -1,7 +1,7 @@
 import 'package:cabme/core(new)/utils/widgets/custom_snackbar.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/otp/otp_cubit.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/otp/otp_state.dart';
-import 'package:cabme/features/authentication_new/data/di/auth_di.dart';
+import 'package:cabme/features/authentication_new/di/auth_service_locator.dart';
 import 'package:cabme/features/authentication_new/presentation/widgets/auth_widgets.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
@@ -89,9 +89,10 @@ class _PhoneAuthPageState extends State<PhoneAuthPage>
             );
           } else if (state is OtpSendSuccess) {
             Navigator.of(context).pop(); // Close loading
-            
-            CustomSnackbar.showSuccess(context: context, message: state.message);
-            
+
+            CustomSnackbar.showSuccess(
+                context: context, message: state.message);
+
             // Navigate to OTP page
             Navigator.push(
               context,
@@ -104,7 +105,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage>
             );
           } else if (state is OtpSendFailure) {
             Navigator.of(context).pop(); // Close loading
-            CustomSnackbar.showError(context: context, message: state.exception.message);
+            CustomSnackbar.showError(
+                context: context, message: state.exception.message);
           }
         },
         builder: (context, state) {
@@ -205,7 +207,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage>
                                             ? l10n.mobileLoginSubtitle
                                             : l10n.mobileSignupSubtitle,
                                         size: 15,
-                                        color: Colors.white.withValues(alpha: 0.9),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.9),
                                         height: 1.5,
                                       ),
                                     ],
@@ -232,7 +235,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage>
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.1),
+                                        color:
+                                            Colors.black.withValues(alpha: 0.1),
                                         blurRadius: 20,
                                         offset: const Offset(0, -5),
                                       ),
@@ -273,7 +277,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage>
                                           // Send OTP Button
                                           CustomButton(
                                             btnName: l10n.sendOtp,
-                                            ontap: () => _handleSendOTP(context),
+                                            ontap: () =>
+                                                _handleSendOTP(context),
                                           ),
 
                                           const SizedBox(height: 32),
@@ -451,19 +456,22 @@ class _PhoneAuthPageState extends State<PhoneAuthPage>
 
     // Validate phone number
     if (phoneNumber.isEmpty) {
-      CustomSnackbar.showError(context: context, message: l10n.pleaseEnterMobileNumber);
+      CustomSnackbar.showError(
+          context: context, message: l10n.pleaseEnterMobileNumber);
       return;
     }
 
     if (phoneNumber.length != 8) {
-      CustomSnackbar.showError(context: context, message: l10n.kuwaitNumberMustBe8Digits);
+      CustomSnackbar.showError(
+          context: context, message: l10n.kuwaitNumberMustBe8Digits);
       return;
     }
 
     // Check if number starts with valid prefix
     final kuwaitPhoneRegex = RegExp(r'^(41\d{6}|[5692]\d{7}|999\d{5})$');
     if (!kuwaitPhoneRegex.hasMatch(phoneNumber)) {
-      CustomSnackbar.showError(context: context, message: l10n.invalidKuwaitPhoneNumber);
+      CustomSnackbar.showError(
+          context: context, message: l10n.invalidKuwaitPhoneNumber);
       return;
     }
 

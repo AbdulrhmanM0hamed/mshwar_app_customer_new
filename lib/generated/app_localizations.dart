@@ -3153,6 +3153,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Report submitted'**
   String get reportSubmitted;
+
+  /// No description provided for @profileUpdateSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdateSuccessfully;
+
+  /// No description provided for @passwordUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated successfully'**
+  String get passwordUpdatedSuccessfully;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPassword;
+
+  /// No description provided for @contactUsDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.'**
+  String get contactUsDetails;
+
+  /// No description provided for @messageSentSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Message sent successfully'**
+  String get messageSentSuccessfully;
+
+  /// No description provided for @markAllAsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all as read'**
+  String get markAllAsRead;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get viewAll;
+
+  /// No description provided for @noNotificationsHere.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications here'**
+  String get noNotificationsHere;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get phoneNumber;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @noContentAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No content available'**
+  String get noContentAvailable;
+
+  /// No description provided for @subject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get subject;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get message;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @catAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get catAll;
+
+  /// No description provided for @catRide.
+  ///
+  /// In en, this message translates to:
+  /// **'Ride'**
+  String get catRide;
+
+  /// No description provided for @catBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcast'**
+  String get catBroadcast;
 }
 
 class _AppLocalizationsDelegate

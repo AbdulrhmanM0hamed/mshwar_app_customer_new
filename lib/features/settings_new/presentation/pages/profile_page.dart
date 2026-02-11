@@ -1,13 +1,15 @@
+import 'dart:io';
+
 import 'package:cabme/common/widget/button.dart';
 import 'package:cabme/common/widget/custom_app_bar.dart';
 import 'package:cabme/common/widget/text_field.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
-import 'package:cabme/features/authentication/model/user_model.dart';
+import 'package:cabme/features/authentication_new/data/models/user_model.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/profile/profile_cubit.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/profile/profile_state.dart';
 import 'package:cabme/generated/app_localizations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -91,7 +93,7 @@ class _ProfileViewState extends State<ProfileView> {
           if (state is ProfileUpdated) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(l10n.profileUpdatedSuccessfully),
+                content: Text(l10n.profileUpdateSuccessfully),
                 backgroundColor: AppThemeData.success300,
               ),
             );
@@ -122,10 +124,10 @@ class _ProfileViewState extends State<ProfileView> {
           if (user != null) {
             // Bind only if controllers are empty to avoid overwriting user input
             if (_firstNameController.text.isEmpty) {
-              _firstNameController.text = user.data?.prenom ?? '';
-              _lastNameController.text = user.data?.nom ?? '';
-              _emailController.text = user.data?.email ?? '';
-              _phoneController.text = user.data?.phone ?? '';
+              _firstNameController.text = user.firstName;
+              _lastNameController.text = user.lastName;
+              _emailController.text = user.email;
+              _phoneController.text = user.phone ?? '';
             }
           }
 
@@ -151,18 +153,18 @@ class _ProfileViewState extends State<ProfileView> {
                                     image: FileImage(_image!),
                                     fit: BoxFit.cover,
                                   )
-                                : (user?.data?.photoPath != null &&
-                                        user!.data!.photoPath!.isNotEmpty)
+                                : (user != null &&
+                                        user.photoPath != null &&
+                                        user.photoPath!.isNotEmpty)
                                     ? DecorationImage(
-                                        image: NetworkImage(
-                                            user.data!.photoPath!),
+                                        image: NetworkImage(user.photoPath!),
                                         fit: BoxFit.cover,
                                       )
                                     : null,
                           ),
                           child: (_image == null &&
-                                  (user?.data?.photoPath == null ||
-                                      user!.data!.photoPath!.isEmpty))
+                                  (user?.photoPath == null ||
+                                      user!.photoPath!.isEmpty))
                               ? Icon(
                                   Iconsax.user,
                                   size: 40,
@@ -203,21 +205,19 @@ class _ProfileViewState extends State<ProfileView> {
                   const SizedBox(height: 32),
                   CustomTextField(
                     controller: _firstNameController,
-                    hintText: l10n.firstName,
+                    text: l10n.firstName,
                     prefixIcon: const Icon(Iconsax.user),
-                    isDarkMode: isDarkMode,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
                     controller: _lastNameController,
-                    hintText: l10n.lastName,
+                    text: l10n.lastName,
                     prefixIcon: const Icon(Iconsax.user),
-                    isDarkMode: isDarkMode,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
                     controller: _phoneController,
-                    hintText: l10n.phoneNumber,
+                    text: l10n.phoneNumber,
                     prefixIcon: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
@@ -245,15 +245,13 @@ class _ProfileViewState extends State<ProfileView> {
                         ],
                       ),
                     ),
-                    isDarkMode: isDarkMode,
                     keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
                     controller: _emailController,
-                    hintText: l10n.email,
+                    text: l10n.email,
                     prefixIcon: const Icon(Iconsax.sms),
-                    isDarkMode: isDarkMode,
                     keyboardType: TextInputType.emailAddress,
                     readOnly: true,
                   ),

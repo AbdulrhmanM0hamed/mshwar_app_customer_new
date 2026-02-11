@@ -1,9 +1,8 @@
 import 'package:cabme/core(new)/utils/widgets/custom_snackbar.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/login/login_cubit.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/login/login_state.dart';
-import 'package:cabme/features/authentication_new/data/di/auth_di.dart';
+import 'package:cabme/features/authentication_new/di/auth_service_locator.dart';
 import 'package:cabme/features/authentication_new/presentation/widgets/auth_widgets.dart';
-import 'package:cabme/features/home/controller/home_controller.dart';
 import 'package:cabme/common/screens/botton_nav_bar.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
@@ -18,7 +17,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:get/get.dart';
 import 'forgot_password_page.dart';
 import 'phone_auth_page.dart';
 
@@ -55,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     } on PlatformException catch (e) {
       if (mounted) {
-        CustomSnackbar.showError(context: context, message: e.message ?? 'Permission error');
+        CustomSnackbar.showError(
+            context: context, message: e.message ?? 'Permission error');
       }
     }
   }
@@ -89,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
           } else if (state is LoginSuccess) {
             // Close loading
             Navigator.of(context).pop();
-            
+
             // Clear fields
             _emailController.clear();
             _passwordController.clear();
@@ -105,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
           } else if (state is LoginFailure) {
             // Close loading
             Navigator.of(context).pop();
-            
+
             // Show error
             CustomSnackbar.showError(
               context: context,
@@ -255,7 +254,8 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PhoneAuthPage(isLogin: true),
+                        builder: (context) =>
+                            const PhoneAuthPage(isLogin: true),
                       ),
                     );
                   },
@@ -283,12 +283,14 @@ class _LoginPageState extends State<LoginPage> {
 
     // Validation
     if (email.isEmpty) {
-      CustomSnackbar.showError(context: context, message: l10n.pleaseEnterEmailAddress);
+      CustomSnackbar.showError(
+          context: context, message: l10n.pleaseEnterEmailAddress);
       return;
     }
 
     if (password.isEmpty) {
-      CustomSnackbar.showError(context: context, message: l10n.pleaseEnterPassword);
+      CustomSnackbar.showError(
+          context: context, message: l10n.pleaseEnterPassword);
       return;
     }
 
@@ -303,17 +305,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _preloadHomeAndNavigate() async {
-    try {
-      // Delete existing controller if any and create fresh one
-      if (Get.isRegistered<HomeController>()) {
-        Get.delete<HomeController>(force: true);
-      }
-      final homeController = Get.put(HomeController(), permanent: true);
-      await homeController.setInitData(forceInit: true);
-    } catch (e) {
-      debugPrint('Error preloading home data: $e');
-    }
-
     // Navigate to home
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(

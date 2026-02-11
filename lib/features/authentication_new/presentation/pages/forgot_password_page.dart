@@ -1,7 +1,7 @@
 import 'package:cabme/core(new)/utils/widgets/custom_snackbar.dart';
+import 'package:cabme/features/authentication_new/di/auth_service_locator.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/otp/otp_cubit.dart';
 import 'package:cabme/features/authentication_new/presentation/cubit/otp/otp_state.dart';
-import 'package:cabme/features/authentication_new/data/di/auth_di.dart';
 import 'package:cabme/features/authentication_new/presentation/widgets/auth_widgets.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';

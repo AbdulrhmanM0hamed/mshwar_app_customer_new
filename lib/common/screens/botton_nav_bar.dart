@@ -2,11 +2,11 @@ import 'package:cabme/common/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:cabme/features/home/view/home_screen.dart';
-import 'package:cabme/features/ride/ride/view/normal_rides_screen.dart';
-import 'package:cabme/features/payment/wallet/view/wallet_screen.dart';
-import 'package:cabme/features/plans/subscription/view/subscription_list_screen.dart';
-import 'package:cabme/features/plans/package/view/package_list_screen.dart';
+import 'package:cabme/features/home_new/presentation/pages/home_page.dart';
+import 'package:cabme/features/ride_new/presentation/pages/ride_history_page.dart';
+import 'package:cabme/features/payment_new/presentation/pages/wallet_page.dart';
+import 'package:cabme/features/plans_new/presentation/pages/subscription_list_page.dart';
+import 'package:cabme/features/plans_new/presentation/pages/package_list_page.dart';
 import 'package:cabme/features/settings_new/presentation/pages/settings_page.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
@@ -16,11 +16,11 @@ class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
 
   final List<Widget> _screens = [
-    const HomeScreen(),
-    const NewRideScreen(showBackButton: false),
-    WalletScreen(showBackButton: false),
-    const SubscriptionListScreen(showBackButton: false),
-    const PackageListScreen(showBackButton: false),
+    const HomePage(),
+    const RideHistoryPage(),
+    const WalletPage(),
+    const SubscriptionListPage(),
+    const PackageListPage(),
     const SettingsPage(),
   ];
 
@@ -45,8 +45,8 @@ class BottomNavBar extends StatelessWidget {
             border: Border(
               top: BorderSide(
                 color: isDarkMode
-                    ? AppThemeData.grey800Dark.withValues(alpha:0.3)
-                    : AppThemeData.grey200.withValues(alpha:0.5),
+                    ? AppThemeData.grey800Dark.withValues(alpha: 0.3)
+                    : AppThemeData.grey200.withValues(alpha: 0.5),
                 width: 0.5,
               ),
             ),

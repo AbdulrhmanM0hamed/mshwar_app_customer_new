@@ -1,4 +1,4 @@
-import 'package:cabme/features/payment/payment/model/tax_model.dart';
+import 'package:cabme/features/payment_new/data/models/tax_model.dart';
 
 class SettingsModel {
   String? success;

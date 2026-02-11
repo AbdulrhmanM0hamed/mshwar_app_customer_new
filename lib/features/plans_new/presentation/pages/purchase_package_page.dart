@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../common/widget/button.dart';
 import '../../../../common/widget/custom_app_bar.dart';
 import '../../../../common/widget/custom_text.dart';
-import '../../../../common/widget/payment_method_selection.dart';
+import 'package:cabme/common/widget/payment_method_selection.dart';
 import '../../../../core/constant/show_toast_dialog.dart';
 import '../../../../core/themes/constant_colors.dart';
 import '../../../../core/utils/dark_theme_provider.dart';
@@ -28,14 +28,26 @@ class PurchasePackagePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => GetIt.instance<PackageCubit>(),
       child: Scaffold(
-        backgroundColor: isDark ? AppThemeData.surface50Dark : AppThemeData.surface50,
+        backgroundColor:
+            isDark ? AppThemeData.surface50Dark : AppThemeData.surface50,
         appBar: CustomAppBar(
           title: l10n.purchasePackage,
         ),
         body: BlocListener<PackageCubit, PackageState>(
           listener: (context, state) {
             if (state is PackagePurchased) {
-              ShowToastDialog.showToast(l10n.packagePurchaseInitiated);
+              final userPackage = state.package;
+              if (userPackage.paymentMethod == 'wallet' &&
+                  userPackage.paymentStatus == 'pending') {
+                context
+                    .read<PackageCubit>()
+                    .payWithWallet(userPackage.id, userPackage.totalPrice);
+              } else if (userPackage.paymentStatus == 'paid') {
+                ShowToastDialog.showToast(l10n.packagePurchasedSuccessfully);
+                Navigator.pop(context, true);
+              } else {
+                ShowToastDialog.showToast(l10n.packagePurchaseInitiated);
+              }
             } else if (state is PackagePurchaseError) {
               ShowToastDialog.showToast(state.message);
             } else if (state is PackagePaymentSuccess) {
@@ -63,7 +75,8 @@ class PurchasePackagePage extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppThemeData.primary200.withValues(alpha: 0.1),
+                            color:
+                                AppThemeData.primary200.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -79,12 +92,15 @@ class PurchasePackagePage extends StatelessWidget {
                           weight: FontWeight.bold,
                           color: isDark ? Colors.white : AppThemeData.grey900,
                         ),
-                        if (package.description != null && package.description!.isNotEmpty) ...[
+                        if (package.description != null &&
+                            package.description!.isNotEmpty) ...[
                           const SizedBox(height: 8),
                           CustomText(
                             text: package.description!,
                             size: 14,
-                            color: isDark ? AppThemeData.grey400Dark : AppThemeData.grey500,
+                            color: isDark
+                                ? AppThemeData.grey400Dark
+                                : AppThemeData.grey500,
                             align: TextAlign.center,
                           ),
                         ],
@@ -92,7 +108,9 @@ class PurchasePackagePage extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: isDark ? AppThemeData.grey300Dark : AppThemeData.grey100,
+                            color: isDark
+                                ? AppThemeData.grey300Dark
+                                : AppThemeData.grey100,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
@@ -105,7 +123,9 @@ class PurchasePackagePage extends StatelessWidget {
                               ),
                               Divider(
                                 height: 24,
-                                color: isDark ? AppThemeData.grey300Dark : AppThemeData.grey200,
+                                color: isDark
+                                    ? AppThemeData.grey300Dark
+                                    : AppThemeData.grey200,
                               ),
                               _buildDetailRow(
                                 l10n.pricePerKm,
@@ -143,20 +163,27 @@ class PurchasePackagePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomText(
-                              text: '${package.totalKm.toStringAsFixed(0)} KM × ${package.pricePerKm.toStringAsFixed(3)} KWD',
+                              text:
+                                  '${package.totalKm.toStringAsFixed(0)} KM × ${package.pricePerKm.toStringAsFixed(3)} KWD',
                               size: 14,
-                              color: isDark ? AppThemeData.grey400Dark : AppThemeData.grey500,
+                              color: isDark
+                                  ? AppThemeData.grey400Dark
+                                  : AppThemeData.grey500,
                             ),
                             CustomText(
                               text: package.formattedPrice,
                               size: 14,
-                              color: isDark ? AppThemeData.grey400Dark : AppThemeData.grey500,
+                              color: isDark
+                                  ? AppThemeData.grey400Dark
+                                  : AppThemeData.grey500,
                             ),
                           ],
                         ),
                         Divider(
                           height: 24,
-                          color: isDark ? AppThemeData.grey300Dark : AppThemeData.grey200,
+                          color: isDark
+                              ? AppThemeData.grey300Dark
+                              : AppThemeData.grey200,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,7 +192,8 @@ class PurchasePackagePage extends StatelessWidget {
                               text: l10n.totalAmount,
                               size: 18,
                               weight: FontWeight.bold,
-                              color: isDark ? Colors.white : AppThemeData.grey900,
+                              color:
+                                  isDark ? Colors.white : AppThemeData.grey900,
                             ),
                             CustomText(
                               text: package.formattedPrice,
@@ -182,12 +210,16 @@ class PurchasePackagePage extends StatelessWidget {
                 const SizedBox(height: 32),
                 BlocBuilder<PackageCubit, PackageState>(
                   builder: (context, state) {
-                    final isLoading = state is PackagePurchasing || state is PackagePaymentProcessing;
-                    
+                    final isLoading = state is PackagePurchasing ||
+                        state is PackagePaymentProcessing;
+
                     return CustomButton(
                       btnName: l10n.proceedToPayment,
-                      ontap: isLoading ? null : () => _showPaymentSelection(context),
-                      icon: Icon(Icons.shopping_cart, color: Colors.white, size: 20),
+                      ontap: isLoading
+                          ? null
+                          : () => _showPaymentSelection(context),
+                      icon: Icon(Icons.shopping_cart,
+                          color: Colors.white, size: 20),
                       borderRadius: 14,
                       isLoading: isLoading,
                     );
@@ -216,7 +248,8 @@ class PurchasePackagePage extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: (valueColor ?? AppThemeData.primary200).withValues(alpha: 0.1),
+            color:
+                (valueColor ?? AppThemeData.primary200).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -264,12 +297,10 @@ class PurchasePackagePage extends StatelessWidget {
 
     if (selectedMethod == null || !context.mounted) return;
 
-    if (selectedMethod.id == 'wallet') {
-      // TODO: Implement wallet payment
-      ShowToastDialog.showToast(l10n.walletPaymentNotImplemented);
-    } else if (selectedMethod.id == 'upayments') {
-      // TODO: Implement KNET payment
-      ShowToastDialog.showToast(l10n.knetPaymentNotImplemented);
+    if (context.mounted) {
+      context
+          .read<PackageCubit>()
+          .purchasePackage(package.id, selectedMethod.id);
     }
   }
 }

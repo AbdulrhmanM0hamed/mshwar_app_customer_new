@@ -4,12 +4,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cabme/core/constant/logdata.dart';
 import 'package:cabme/core/constant/show_toast_dialog.dart';
-import 'package:cabme/features/payment/payment/model/payment_setting_model.dart';
-import 'package:cabme/features/payment/payment/model/tax_model.dart';
-import 'package:cabme/features/authentication/model/user_model.dart';
-import 'package:cabme/features/ride/chat/view/conversation_screen.dart';
-import 'package:cabme/features/ride/ride/view/search_location_screen.dart';
-import 'package:cabme/features/ride/ride/controller/search_address_controller.dart';
+import 'package:cabme/features/payment_new/data/models/payment_gateway_config_model.dart';
+import 'package:cabme/features/payment_new/data/models/tax_model.dart';
+import 'package:cabme/features/authentication_new/data/models/user_model.dart';
 import 'package:cabme/service/api.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/common/widget/custom_text.dart';
@@ -84,16 +81,19 @@ class Constant {
   static UserModel getUserData() {
     final String user = Preferences.getString(Preferences.user);
     Map<String, dynamic> userMap = jsonDecode(user);
+    if (userMap.containsKey('data')) {
+      return UserModel.fromJson(userMap['data']);
+    }
     return UserModel.fromJson(userMap);
   }
 
-  static PaymentSettingModel getPaymentSetting() {
+  static PaymentSettingsModel getPaymentSetting() {
     final String user = Preferences.getString(Preferences.paymentSetting);
     if (user.isNotEmpty) {
       Map<String, dynamic> userMap = jsonDecode(user);
-      return PaymentSettingModel.fromJson(userMap);
+      return PaymentSettingsModel.fromJson(userMap);
     }
-    return PaymentSettingModel();
+    return const PaymentSettingsModel(success: false);
   }
 
   String amountShow({required String? amount}) {
@@ -453,28 +453,10 @@ class Constant {
 
   Future<PlacesDetailsResponse?> placeSelectAPI(
       BuildContext context, TextEditingController ctrl) async {
-    // Use custom search screen instead of PlacesAutocomplete.show() to avoid "powered by Google"
-    try {
-      final result = await Get.to(() => AddressSearchScreen());
-      if (result == null) {
-        return null;
-      }
-
-      // result is AddressSuggestion
-      final AddressSuggestion suggestion = result;
-      ctrl.text = suggestion.address;
-
-      // Get place details using placeId
-      if (suggestion.placeId != null && suggestion.placeId!.isNotEmpty) {
-        return await displayPredictionFromPlaceId(suggestion.placeId!);
-      }
-
-      // Fallback: search by address text
-      return await displayPredictionFromAddress(suggestion.address);
-    } catch (e) {
-      log('Error in placeSelectAPI: $e');
-      return null;
-    }
+    // Note: AddressSearchScreen and AddressSuggestion were part of the old ride module
+    // and are currently not present in the refactored project.
+    // Use LocationSearchWidget from home_new for updated location searching.
+    return null;
   }
 
   Future<PlacesDetailsResponse?> displayPredictionFromPlaceId(
@@ -803,4 +785,11 @@ class Url {
   Map<String, dynamic> toJson() {
     return {'mime': mime, 'url': url};
   }
+}
+
+class ChatVideoContainer {
+  Url videoUrl;
+  String thumbnailUrl;
+
+  ChatVideoContainer({required this.videoUrl, required this.thumbnailUrl});
 }

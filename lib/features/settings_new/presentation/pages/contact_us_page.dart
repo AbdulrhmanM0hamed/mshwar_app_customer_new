@@ -3,10 +3,10 @@ import 'package:cabme/common/widget/custom_app_bar.dart';
 import 'package:cabme/common/widget/text_field.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
-import 'package:cabme/features/authentication/model/user_model.dart';
+import 'package:cabme/features/authentication_new/data/models/user_model.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/contact_us/contact_us_cubit.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/contact_us/contact_us_state.dart';
-import 'package:cabme/features/settings_new/presentation/cubit/profile/profile_cubit.dart'; // Optional: to prepopulate data
+// Optional: to prepopulate data
 import 'package:cabme/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,11 +56,10 @@ class _ContactUsViewState extends State<ContactUsView> {
   void _prefillUserData() async {
     try {
       final UserModel? user = Constant.getUserData();
-      if (user != null && user.data != null) {
+      if (user != null) {
         setState(() {
-          _nameController.text =
-              "${user.data!.prenom ?? ''} ${user.data!.nom ?? ''}".trim();
-          _emailController.text = user.data!.email ?? '';
+          _nameController.text = "${user.firstName} ${user.lastName}".trim();
+          _emailController.text = user.email;
         });
       }
     } catch (e) {
@@ -118,49 +117,48 @@ class _ContactUsViewState extends State<ContactUsView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                   Text(
+                  Text(
                     l10n.contactUsDetails, // e.g., "We'd love to hear from you..."
                     style: TextStyle(
                       color: isDarkMode
                           ? AppThemeData.grey400Dark
                           : AppThemeData.grey500,
                       fontSize: 14,
-                      fontFamily: 'Cairo', // Assuming Cairo font based on other files
+                      fontFamily:
+                          'Cairo', // Assuming Cairo font based on other files
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   CustomTextField(
                     controller: _nameController,
-                    hintText: l10n.name,
+                    text: l10n.name,
                     prefixIcon: const Icon(Iconsax.user),
-                    isDarkMode: isDarkMode,
                     validationType: ValidationType.name,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
                     controller: _emailController,
-                    hintText: l10n.email,
+                    text: l10n.email,
                     prefixIcon: const Icon(Iconsax.sms),
-                    isDarkMode: isDarkMode,
                     validationType: ValidationType.email,
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
                     controller: _subjectController,
-                    hintText: l10n.subject,
+                    text: l10n.subject,
                     prefixIcon: const Icon(Iconsax.note_text),
-                    isDarkMode: isDarkMode,
-                    validationType: ValidationType.required, // Or create subject validation
+                    validationType:
+                        ValidationType.required, // Or create subject validation
                   ),
                   const SizedBox(height: 16),
                   CustomTextField(
                     controller: _messageController,
-                    hintText: l10n.message,
+                    text: l10n.message,
                     prefixIcon: const Icon(Iconsax.message_text),
-                    isDarkMode: isDarkMode,
                     maxLines: 5,
-                    validationType: ValidationType.required, // Or message validation
+                    validationType:
+                        ValidationType.required, // Or message validation
                   ),
                   const SizedBox(height: 32),
                   CustomButton(

@@ -1,0 +1,616 @@
+﻿{
+  "@@locale": "en",
+  "@@last_modified": "2025-11-13T13:30:00.000Z",
+  "@_comment": "Property Details Texts",
+  "error_no_internet_connection": "No internet connection",
+  "error_no_internet_connection_desc": "Please check your internet connection and try again",
+  "error_connection_timeout": "Connection timeout",
+  "error_connection_timeout_desc": "The connection took too long to establish. Please try again",
+  "error_receive_timeout": "Receive timeout",
+  "error_receive_timeout_desc": "The server took too long to respond. Please try again",
+  "error_send_timeout": "Send timeout",
+  "error_send_timeout_desc": "Failed to send data to the server. Please try again",
+  "error_server_error": "Server error",
+  "error_server_error_desc": "Something went wrong on the server. Please try again later",
+  "error_internal_server_error": "Internal server error",
+  "error_internal_server_error_desc": "The server encountered an internal error. Please try again later",
+  "error_bad_gateway": "Bad gateway",
+  "error_bad_gateway_desc": "The server received an invalid response. Please try again later",
+  "error_service_unavailable": "Service unavailable",
+  "error_service_unavailable_desc": "The service is temporarily unavailable. Please try again later",
+  "error_gateway_timeout": "Gateway timeout",
+  "error_gateway_timeout_desc": "The gateway timed out. Please try again later",
+  "error_bad_request": "Bad request",
+   "properties_empty_message_favourite" : "You have not added any properties to your favorites.",
+  "error_bad_request_desc": "The request contains invalid data. Please check your input",
+  "error_unauthorized": "Unauthorized",
+  "error_unauthorized_desc": "You are not authorized to access this resource. Please login again",
+  "error_forbidden": "Access denied",
+  "error_forbidden_desc": "You don't have permission to access this resource",
+  "error_not_found": "Not found",
+  "error_not_found_desc": "The requested resource was not found",
+  "error_method_not_allowed": "Method not allowed",
+  "error_method_not_allowed_desc": "This method is not allowed for this resource",
+  "error_not_acceptable": "Not acceptable",
+  "error_not_acceptable_desc": "The request is not acceptable",
+  "error_request_timeout": "Request timeout",
+  "error_request_timeout_desc": "The request timed out. Please try again",
+  "error_conflict": "Conflict",
+  "error_conflict_desc": "There is a conflict with the current state of the resource",
+  "error_gone": "Resource gone",
+  "error_gone_desc": "The requested resource is no longer available",
+  "error_length_required": "Length required",
+  "error_length_required_desc": "The request must specify the content length",
+  "error_precondition_failed": "Precondition failed",
+  "error_precondition_failed_desc": "One or more preconditions failed",
+  "error_payload_too_large": "Payload too large",
+  "error_payload_too_large_desc": "The request payload is too large",
+  "error_uri_too_long": "URI too long",
+  "error_uri_too_long_desc": "The request URI is too long",
+  
+  "@_comment_lead": "Lead Management Messages",
+  "lead_send_error": "An error occurred while sending the contact request",
+  "lead_info_collected": "Lead information collected successfully",
+  "lead_offline_mode": "Contact information saved offline",
+  "error_unsupported_media_type": "Unsupported media type",
+  "error_unsupported_media_type_desc": "The media type is not supported",
+  "error_range_not_satisfiable": "Range not satisfiable",
+  "error_range_not_satisfiable_desc": "The requested range cannot be satisfied",
+  "error_expectation_failed": "Expectation failed",
+  "error_expectation_failed_desc": "The expectation given in the request header field could not be met",
+  "error_too_many_requests": "Too many requests",
+  "error_too_many_requests_desc": "You have sent too many requests. Please try again later",
+  "error_unknown": "Unknown error",
+  "error_unknown_desc": "An unknown error occurred. Please try again",
+  "error_cancelled": "Request cancelled",
+  "error_cancelled_desc": "The request was cancelled",
+  "error_other": "Error occurred",
+  "error_other_desc": "An error occurred. Please try again",
+  "retry": "Retry",
+  "contact_support": "Contact Support",
+  "go_back": "Go Back",
+  "refresh": "Refresh",
+  "check_connection": "Check Connection",
+  "appTitle": "Mshwar",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "goBack": "Go Back",
+  "@goBack": {
+    "description": "Go back button text"
+  },
+  "contactSupport": "Contact Support",
+  "@contactSupport": {
+    "description": "Contact support button text"
+  },
+  "checkConnection": "Check Connection",
+  "@checkConnection": {
+    "description": "Check connection button text"
+  },
+  "errorNoInternet": "No Internet Connection",
+  "@errorNoInternet": {
+    "description": "No internet error title"
+  },
+  "errorNoInternetDesc": "Please check your internet connection and try again.",
+  "@errorNoInternetDesc": {
+    "description": "No internet error description"
+  },
+  "errorTimeout": "Request Timeout",
+  "@errorTimeout": {
+    "description": "Timeout error title"
+  },
+  "errorTimeoutDesc": "The request took too long to complete. Please try again.",
+  "@errorTimeoutDesc": {
+    "description": "Timeout error description"
+  },
+  "errorServerError": "Server Error",
+  "@errorServerError": {
+    "description": "Server error title"
+  },
+  "errorServerErrorDesc": "Something went wrong on our end. Please try again later.",
+  "@errorServerErrorDesc": {
+    "description": "Server error description"
+  },
+  "errorBadRequest": "Invalid Request",
+  "@errorBadRequest": {
+    "description": "Bad request error title"
+  },
+  "errorBadRequestDesc": "The request could not be understood. Please check your input.",
+  "@errorBadRequestDesc": {
+    "description": "Bad request error description"
+  },
+  "errorUnauthorized": "Unauthorized",
+  "@errorUnauthorized": {
+    "description": "Unauthorized error title"
+  },
+  "errorUnauthorizedDesc": "Please log in to continue.",
+  "@errorUnauthorizedDesc": {
+    "description": "Unauthorized error description"
+  },
+  "errorForbidden": "Access Denied",
+  "@errorForbidden": {
+    "description": "Forbidden error title"
+  },
+  "errorForbiddenDesc": "You don't have permission to access this resource.",
+  "@errorForbiddenDesc": {
+    "description": "Forbidden error description"
+  },
+  "errorNotFound": "Not Found",
+  "@errorNotFound": {
+    "description": "Not found error title"
+  },
+  "errorNotFoundDesc": "The requested resource could not be found.",
+  "@errorNotFoundDesc": {
+    "description": "Not found error description"
+  },
+  "errorMethodNotAllowed": "Method Not Allowed",
+  "@errorMethodNotAllowed": {
+    "description": "Method not allowed error title"
+  },
+  "errorMethodNotAllowedDesc": "This action is not allowed.",
+  "@errorMethodNotAllowedDesc": {
+    "description": "Method not allowed error description"
+  },
+  "errorNotAcceptable": "Not Acceptable",
+  "@errorNotAcceptable": {
+    "description": "Not acceptable error title"
+  },
+  "errorNotAcceptableDesc": "The request format is not acceptable.",
+  "@errorNotAcceptableDesc": {
+    "description": "Not acceptable error description"
+  },
+  "errorConflict": "Conflict",
+  "@errorConflict": {
+    "description": "Conflict error title"
+  },
+  "errorConflictDesc": "There was a conflict with the current state.",
+  "@errorConflictDesc": {
+    "description": "Conflict error description"
+  },
+  "errorGone": "Resource Gone",
+  "@errorGone": {
+    "description": "Gone error title"
+  },
+  "errorGoneDesc": "This resource is no longer available.",
+  "@errorGoneDesc": {
+    "description": "Gone error description"
+  },
+  "errorLengthRequired": "Length Required",
+  "@errorLengthRequired": {
+    "description": "Length required error title"
+  },
+  "errorLengthRequiredDesc": "The request length is required.",
+  "@errorLengthRequiredDesc": {
+    "description": "Length required error description"
+  },
+  "errorPreconditionFailed": "Precondition Failed",
+  "@errorPreconditionFailed": {
+    "description": "Precondition failed error title"
+  },
+  "errorPreconditionFailedDesc": "A required condition was not met.",
+  "@errorPreconditionFailedDesc": {
+    "description": "Precondition failed error description"
+  },
+  "errorPayloadTooLarge": "File Too Large",
+  "@errorPayloadTooLarge": {
+    "description": "Payload too large error title"
+  },
+  "errorPayloadTooLargeDesc": "The file you're trying to upload is too large.",
+  "@errorPayloadTooLargeDesc": {
+    "description": "Payload too large error description"
+  },
+  "errorUriTooLong": "URI Too Long",
+  "@errorUriTooLong": {
+    "description": "URI too long error title"
+  },
+  "errorUriTooLongDesc": "The request URL is too long.",
+  "@errorUriTooLongDesc": {
+    "description": "URI too long error description"
+  },
+  "errorUnsupportedMediaType": "Unsupported File Type",
+  "@errorUnsupportedMediaType": {
+    "description": "Unsupported media type error title"
+  },
+  "errorUnsupportedMediaTypeDesc": "This file type is not supported.",
+  "@errorUnsupportedMediaTypeDesc": {
+    "description": "Unsupported media type error description"
+  },
+  "errorRangeNotSatisfiable": "Range Not Satisfiable",
+  "@errorRangeNotSatisfiable": {
+    "description": "Range not satisfiable error title"
+  },
+  "errorRangeNotSatisfiableDesc": "The requested range is not available.",
+  "@errorRangeNotSatisfiableDesc": {
+    "description": "Range not satisfiable error description"
+  },
+  "errorExpectationFailed": "Expectation Failed",
+  "@errorExpectationFailed": {
+    "description": "Expectation failed error title"
+  },
+  "errorExpectationFailedDesc": "The server cannot meet the requirements.",
+  "@errorExpectationFailedDesc": {
+    "description": "Expectation failed error description"
+  },
+  "errorTooManyRequests": "Too Many Requests",
+  "@errorTooManyRequests": {
+    "description": "Too many requests error title"
+  },
+  "errorTooManyRequestsDesc": "You've made too many requests. Please wait and try again.",
+  "@errorTooManyRequestsDesc": {
+    "description": "Too many requests error description"
+  },
+  "errorCancelled": "Request Cancelled",
+  "@errorCancelled": {
+    "description": "Cancelled error title"
+  },
+  "errorCancelledDesc": "The request was cancelled.",
+  "@errorCancelledDesc": {
+    "description": "Cancelled error description"
+  },
+  "errorUnknown": "Something Went Wrong",
+  "@errorUnknown": {
+    "description": "Unknown error title"
+  },
+  "errorUnknownDesc": "An unexpected error occurred. Please try again.",
+  "@errorUnknownDesc": {
+    "description": "Unknown error description"
+  },
+  "errorOther": "Error Occurred",
+  "@errorOther": {
+    "description": "Other error title"
+  },
+  "errorOtherDesc": "An error occurred. Please try again.",
+  "description": "Other error description",
+  "yourJourneyOurPriority": "Your journey, our priority",
+  "version": "Version",
+  "poweredByMshwar": "Powered by Mshwar",
+
+  "welcomeBack": "Welcome back!",
+  "loginSubtitle": "Log in to your Mshwar account and continue your journey with seamless rides.",
+  "firstTimeInMshwar": "First time in Mshwar?",
+  "createAnAccount": "Create an account",
+  "emailAddress": "Email address",
+  "enterPassword": "Enter password",
+  "forgotPassword": "Forgot password",
+  "login": "Login",
+  "orContinueWith": "Or continue with",
+  "mobileNumber": "Mobile number",
+  "google": "Google",
+  "apple": "Apple",
+  "pleaseEnterEmailAddress": "Please enter email address",
+  "pleaseEnterPassword": "Please enter password",
+  "loading": "Loading...",
+
+  "logInWithMobile": "Log in with mobile",
+  "signUpWithMobile": "Sign up with mobile",
+  "mobileLoginSubtitle": "Enter your mobile number to securely log in and access your Mshwar account.",
+  "mobileSignupSubtitle": "Sign up using your mobile number for a fast and simple registration in Mshwar.",
+  "sendOtp": "Send OTP",
+  "alreadyBookRides": "Have you booked rides before?",
+  "pleaseEnterMobileNumber": "Please enter mobile number",
+  "phoneNumberIsRequired": "Phone number is required",
+  "kuwaitNumberMustBe8Digits": "Kuwait number must be 8 digits",
+  "invalidKuwaitPhoneNumber": "Invalid Kuwait phone number",
+  "codeSending": "Sending code",
+
+  "verifyYourOtp": "Verify your OTP",
+  "otpSubtitle": "Enter the one-time password sent to your mobile number to verify your account.",
+  "alreadyHaveAnAccount": "Already have an account?",
+  "logIn": "Log in",
+  "didntReceiveCode": "Didn�t receive the code?",
+  "resendCodeIn": "Resend code in ",
+  "resendOtp": "Resend OTP",
+  "verifyOtp": "Verify OTP",
+  "pleaseEnterCompleteOtp": "Please enter complete OTP",
+
+  "createYourAccount": "Create your account",
+  "signupSubtitle": "Sign up for a personalized Mshwar experience. Start booking rides in just a few taps.",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "password": "Password",
+  "confirmPassword": "Confirm password",
+  "signUp": "Sign up",
+  "firstNameRequired": "First name is required",
+  "lastNameRequired": "Last name is required",
+  "emailRequired": "Email is required",
+  "pleaseEnterValidEmail": "Please enter a valid email",
+  "passwordMustBeAtLeast6": "Password must be at least 6 characters",
+  "passwordsDoNotMatch": "Passwords do not match",
+
+  "enterValidEmailAddress": "Enter a valid email address",
+  "minCharacters": "Minimum {count} characters",
+  "reEnterYourPassword": "Re-enter your password",
+  "enter8DigitKuwaitMobileNumber": "Enter an 8-digit Kuwait mobile number",
+  "enterYourNameLettersOnly": "Enter your name (letters only)",
+  "thisFieldIsRequired": "This field is required",
+  "emailMustContainAt": "Email must contain @",
+  "emailMustContainDomain": "Email must contain a domain",
+  "invalidEmailFormat": "Invalid email format",
+  "validEmailAddress": "Valid email address",
+  "passwordMustBeAtLeastCharacters": "Password must be at least {count} characters",
+  "validPassword": "Valid password",
+  "passwordControllerNotProvided": "Password controller not provided",
+  "passwordsMatch": "Passwords match",
+  "kuwaitNumbersStartWith": "Kuwait numbers start with 5, 6, 9, 2, or 41",
+  "validKuwaitPhoneNumber": "Valid Kuwait phone number",
+  "nameMustBeAtLeast2Characters": "Name must be at least 2 characters",
+  "nameCanOnlyContainLetters": "Name can only contain letters",
+  "validName": "Valid name",
+
+  "forgotYourPassword": "Forgot your password?",
+  "forgotPasswordSubtitle": "Don�t worry! Enter your email or mobile number and we�ll help you reset your password.",
+  "sendResetLink": "Send reset link",
+  "pleaseEnterYourEmailAddress": "Please enter your email address",
+
+  "resetYourPassword": "Reset your password",
+  "resetPasswordSubtitle": "Enter the OTP sent to your email and set a new password.",
+  "checkEmailForOtp": "Check your email for OTP",
+  "newPassword": "New password",
+  "resetPassword": "Reset password",
+  "passwordMustBeAtLeast6Characters": "Password must be at least 6 characters",
+  "passwordsDoNotMatchValidation": "Passwords do not match",
+  "passwordChangedSuccessfully": "Password changed successfully!",
+  "pleaseTryAgainLater": "Please try again later",
+
+  "accountCreatedSuccessfully": "Account created\nsuccessfully!",
+  "signupSuccessSubtitle": "Welcome to Mshwar! Your account has been created successfully. Start booking rides now.",
+  "startExploring": "Start exploring",
+  "skipForNow": "Skip for now",
+
+  "pleaseWait": "Please wait",
+  "pleaseWaitDots": "Please wait...",
+  "somethingWentWrong": "Something went wrong. Please try again later",
+  
+  "yourJourneyOurPriority": "Your journey, our priority",
+  "poweredByMshwar": "Powered by Mshwar",
+  
+  "myProfile": "My Profile",
+  "saveDetails": "Save details",
+  "name": "Name",
+  "lastName": "Last name",
+  "enterMobileNumber": "Enter mobile number",
+  "email": "Email",
+  "emailNotValid": "Email not valid",
+  "required": "Required",
+  "tapToChangePhoto": "Tap to change photo",
+  "deleteAccount": "Delete account",
+  "areYouSureDeleteAccount": "Are you sure you want to delete account?",
+  "yes": "Yes",
+  "no": "No",
+  "changeInformation": "Change information",
+  "chooseSource": "Choose source",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "failedToPick": "Failed to pick",
+  
+  "rideManagement": "Ride Management",
+  "allRides": "All rides",
+  "scheduledRides": "Scheduled rides",
+  "accountPayments": "Account & Payments",
+  "changePassword": "Change password",
+  "appSettings": "App settings",
+  "notifications": "Notifications",
+  "termsConditions": "Terms & Conditions",
+  "privacyPolicy": "Privacy & Policy",
+  "feedbackSupport": "Feedback & Support",
+  "contactUs": "Contact us",
+  "rateTheApp": "Rate the app",
+  "darkMode": "Dark mode",
+  "areYouSureLogout": "Are you sure you want to log out?",
+  "serverError": "Server error. Please try again.",
+  "connectionTimeout": "Connection timeout. Please check your internet connection.",
+  "noInternetConnection": "No internet connection. Please check your network.",
+  "invalidServerResponse": "Invalid server response. Please try again.",
+  "anErrorOccurred": "An error occurred. Please try again.",
+  "unexpectedError": "Unexpected error. Please try again.",
+  "requestTimedOut": "Request timed out. Please try again.",
+  "otpSentToEmail": "OTP has been sent to your email!",
+  "otpSent": "OTP sent",
+  "otpSentSuccessfully": "OTP sent successfully",
+  "otpVerifiedSuccessfully": "OTP verified successfully",
+  "failedToResendOtp": "Failed to resend OTP. Please try again.",
+  "invalidOtp": "Invalid OTP. Please try again.",
+  "invalidOtpOrRequestFailed": "Invalid OTP or request failed",
+  "emailNotFound": "Email not found or invalid request",
+  "failedToVerifyUser": "Failed to verify user",
+  "unableToVerifyUser": "Unable to verify user. Please try again.",
+  "failedToGetProfile": "Failed to get profile",
+  "unableToFetchProfile": "Unable to fetch profile. Please try again.",
+  "invalidPhoneNumber": "Invalid phone number",
+  "tooManyAttempts": "Too many attempts. Please request OTP after some time",
+  "signInCancelled": "Sign in cancelled",
+
+  "changeLanguage": "Change language",
+  "selectLanguage": "Select language",
+  "chooseLanguageDesc": "Choose your preferred language to continue",
+  "skip": "Skip",
+  "skipDesc": "You can change your language anytime from settings",
+  "save": "Save",
+  "continuee": "Continue",
+  "languageChangeSuccessfully": "Language changed successfully",
+
+  "pressBackAgainToExit": "Press back again to exit",
+  "logOut": "Log out",
+  "areYouSureLogout": "Are you sure you want to log out?",
+  "cancel": "Cancel",
+
+  "home": "Home",
+  "ridesTitle": "Rides",
+  "allRides": "All rides",
+  "scheduledRides": "Scheduled rides",
+  "subscriptions": "Subscriptions",
+  "packages": "Packages",
+  "wallet": "Wallet",
+  "settingsTitle": "Settings",
+
+  "enterDestination": "Enter destination",
+  "departure": "Departure",
+  "pickUpLocation": "Pick-up location",
+  "destination": "Destination",
+  "whereYouWantToGo": "Where do you want to go?",
+  "whereDoYouWantToStop": "Where do you want to stop?",
+  "searchDestination": "Search destination",
+  "pleaseEnterPickupAddress": "Please enter pickup address",
+  "pleaseEnterDestinationAddress": "Please enter destination address",
+  "pleaseSelectVehicleType": "Please select vehicle type",
+  "classicRidesOnly": "Coming soon! ??\nCurrently we offer Classic rides only. Other vehicle types will be available soon!",
+  "unableToGetAddress": "Unable to get address information.",
+  "errorProcessingDestination": "Error processing destination",
+  "paymentError": "Payment error",
+  "stop": "Stop",
+
+  "selectPaymentMethod": "Select payment method",
+  "totalAmount": "Total amount",
+  "discount": "Discount",
+  "confirmPay": "Confirm & Pay",
+  "cash": "Cash",
+  "knetCreditCardOthers": "KNET, credit card & others",
+
+  "bookingConfirmed": "Booking confirmed",
+  "bookingConfirmedExclamation": "Booking confirmed!",
+  "rideSuccessfullyBookedMessage": "Your ride has been successfully booked. Sit back and relax, your driver is on the way.",
+  "trackRide": "Track ride",
+  "backToHome": "Back to home",
+
+  "walletBalance": "Wallet balance",
+  "transactionHistory": "Transaction history",
+  "transactions": "Transactions",
+  "transactionNotFound": "Transaction not found.",
+  "topUpAmount": "Top up amount",
+  "addAmount": "Add amount",
+
+  "noNotifications": "No notifications",
+  "youHaveNoNotificationsYet": "You have no notifications yet",
+  "retry": "Retry",
+
+  "accept": "Accept",
+  "decline": "Decline",
+  "permissionDenied": "Permission denied",
+  "done": "Done",
+
+  "verificationCode": "Verification code",
+  "confirmNewPassword": "Confirm new password",
+  "pleaseEnterVerificationCode": "Please enter verification code",
+  "passwordResetSuccessfully": "Password reset successfully",
+  "resetCodeSentSuccessfully": "Reset code sent successfully",
+  "loginSuccessful": "Login successful",
+  "codeSending": "Sending code",
+  "alreadyBookRides": "Already book rides?",
+  "rememberYourPassword": "Remember your password?",
+
+  "bookRide": "Book ride",
+  "whereToGo": "Where to go?",
+  "pickupLocation": "Pickup location",
+  "dropoffLocation": "Dropoff location",
+  "confirmLocation": "Confirm location",
+  "searchLocation": "Search location",
+  "useCurrentLocation": "Use current location",
+  "noResultsFound": "No results found",
+  "selectVehicle": "Select vehicle",
+  "vehicle": "Vehicle",
+  "passengers": "Passengers",
+  "change": "Change",
+  "numberOfPassengers": "Number of passengers",
+  "scheduleRide": "Schedule ride",
+  "scheduledFor": "Scheduled for",
+  "continueToPayment": "Continue to payment",
+  "pleaseSelectVehicle": "Please select a vehicle",
+  "paymentMethod": "Payment method",
+  "totalFare": "Total fare",
+  "confirmBooking": "Confirm booking",
+  "pleaseSelectPaymentMethod": "Please select a payment method",
+  "yourRideHasBeenBooked": "Your ride has been booked successfully",
+  "bookingId": "Booking ID",
+  "estimatedArrival": "Estimated arrival",
+  "otp": "OTP",
+  "driverDetails": "Driver details",
+  "rides": "rides",
+  "priceSummary": "Price summary",
+  "basePrice": "Base price",
+  "distancePrice": "Distance price",
+  "timePrice": "Time price",
+  "packageDiscount": "Package discount",
+  "total": "Total",
+  "pickup": "Pickup",
+  "dropoff": "Dropoff",
+
+  "@_comment_multi_stop": "Multi-Stop Feature",
+  "stops": "Stops",
+  "addStop": "Add Stop",
+  "removeStop": "Remove Stop",
+  "stop": "Stop",
+  "noStopsAdded": "No stops added yet",
+  "searchLocation": "Search Location",
+  "enterLocation": "Enter location",
+  "noResultsFound": "No results found",
+
+  "@_comment_package": "Package KM Feature",
+  "usePackageKm": "Use Package KM",
+  "packageKmAvailable": "Package KM Available",
+  "packageKmToUse": "Package KM to Use",
+  "packageKmRemaining": "Remaining KM",
+  "packageKmDiscountInfo": "Your package KM will be used for this ride",
+
+  "@_comment_coupon": "Coupon Feature",
+  "haveCouponCode": "Have a Coupon Code?",
+  "enterCouponCode": "Enter Coupon Code",
+  "applyCoupon": "Apply Coupon",
+  "removeCoupon": "Remove Coupon",
+  "couponApplied": "Coupon Applied",
+  "couponDiscount": "Coupon Discount",
+  "invalidCoupon": "Invalid Coupon Code",
+  "couponCodeRemoved": "Coupon code removed",
+
+  "@_comment_wallet": "Wallet Feature",
+  "walletBalance": "Wallet Balance",
+  "insufficientBalance": "Insufficient Wallet Balance",
+  "addFunds": "Add Funds to Wallet",
+
+  "@_comment_pending_payment": "Pending Payment Feature",
+  "pendingPayment": "Pending Payment",
+  "pendingPaymentMessage": "You have a pending payment. Please complete it to continue booking rides.",
+  "amountDue": "Amount Due",
+  "payNow": "Pay Now",
+  "later": "Later",
+  "packages": "Packages",
+  "buyPackages": "Buy Packages",
+  "myPackages": "My Packages",
+  "noPackagesAvailable": "No Packages Available",
+  "noPackagesAvailableDesc": "There are no KM packages available for purchase at the moment.",
+  "noPackagesPurchased": "No Packages Purchased",
+  "noPackagesPurchasedDesc": "You haven't purchased any KM packages yet. Buy one to save on your rides!",
+  "buyMorePackages": "Buy More Packages",
+  "buyMorePackagesDesc": "You can buy the same package multiple times!",
+  "availableKm": "Available KM",
+  "usedKm": "Used KM",
+  "totalKm": "Total KM",
+  "remaining": "remaining",
+  "used": "used",
+  "purchased": "Purchased",
+  "purchasePackage": "Purchase Package",
+  "totalKilometers": "Total Kilometers",
+  "pricePerKm": "Price per KM",
+  "priceSummary": "Price Summary",
+  "totalAmount": "Total Amount",
+  "proceedToPayment": "Proceed to Payment",
+  "invalidPackagePrice": "Invalid package price",
+  "packagePrice": "Package Price",
+  "packagePurchaseInitiated": "Package purchase initiated",
+  "packagePurchasedSuccessfully": "Package purchased successfully!",
+  "subscriptions": "Subscriptions",
+  "noSubscriptionsYet": "No Subscriptions Yet",
+  "noSubscriptionsYetDesc": "Create your first ride subscription for regular commutes",
+  "subscriptionsNotAvailable": "Subscriptions Not Available",
+  "subscriptionsNotAvailableDesc": "Subscription service is not available at the moment. Please check back later.",
+  "distance": "Distance",
+  "trips": "Trips",
+  "price": "Price",
+  "buyNow": "Buy Now",
+  "totalPrice": "Total Price",
+  "walletPaymentNotImplemented": "Wallet payment not implemented yet",
+  "knetPaymentNotImplemented": "KNET payment not implemented yet"
+}

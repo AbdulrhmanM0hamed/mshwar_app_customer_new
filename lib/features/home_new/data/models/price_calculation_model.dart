@@ -32,26 +32,38 @@ class PriceCalculationModel {
   });
 
   factory PriceCalculationModel.fromJson(Map<String, dynamic> json) {
+    // Handle variations in backend response field names
+    final data = json['data'] ?? json;
+
     return PriceCalculationModel(
-      basePrice: double.parse(json['base_price']?.toString() ?? '0.0'),
-      distancePrice: double.parse(json['distance_price']?.toString() ?? '0.0'),
-      timePrice: double.parse(json['time_price']?.toString() ?? '0.0'),
-      totalPrice: double.parse(json['total_price']?.toString() ?? '0.0'),
-      discount: double.parse(json['discount']?.toString() ?? '0.0'),
-      finalPrice: double.parse(json['final_price']?.toString() ?? '0.0'),
-      distance: double.parse(json['distance']?.toString() ?? '0.0'),
-      distanceUnit: json['distance_unit']?.toString() ?? 'km',
-      duration: json['duration']?.toString() ?? '',
-      couponCode: json['coupon_code']?.toString(),
-      couponDiscount: json['coupon_discount'] != null
-          ? double.parse(json['coupon_discount'].toString())
+      basePrice: double.parse(data['base_price']?.toString() ??
+          data['base_fare']?.toString() ??
+          '0.0'),
+      distancePrice: double.parse(data['distance_price']?.toString() ?? '0.0'),
+      timePrice: double.parse(data['time_price']?.toString() ?? '0.0'),
+      totalPrice: double.parse(data['total_price']?.toString() ??
+          data['total_fare']?.toString() ??
+          data['fare']?.toString() ??
+          '0.0'),
+      discount: double.parse(data['discount']?.toString() ?? '0.0'),
+      finalPrice: double.parse(data['final_price']?.toString() ??
+          data['total_fare']?.toString() ??
+          data['fare']?.toString() ??
+          '0.0'),
+      distance: double.parse(data['distance']?.toString() ?? '0.0'),
+      distanceUnit: data['distance_unit']?.toString() ?? 'km',
+      duration: data['duration']?.toString() ?? '',
+      couponCode: data['coupon_code']?.toString(),
+      couponDiscount: data['coupon_discount'] != null
+          ? double.parse(data['coupon_discount'].toString())
           : null,
-      canUsePackage: json['can_use_package'] == true,
-      packageKmAvailable: json['package_km_available'] != null
-          ? double.parse(json['package_km_available'].toString())
+      canUsePackage:
+          data['can_use_package'] == true || data['can_use_package'] == 'true',
+      packageKmAvailable: data['package_km_available'] != null
+          ? double.parse(data['package_km_available'].toString())
           : null,
-      packageKmRequired: json['package_km_required'] != null
-          ? double.parse(json['package_km_required'].toString())
+      packageKmRequired: data['package_km_required'] != null
+          ? double.parse(data['package_km_required'].toString())
           : null,
     );
   }
@@ -70,42 +82,9 @@ class PriceCalculationModel {
       if (couponCode != null) 'coupon_code': couponCode,
       if (couponDiscount != null) 'coupon_discount': couponDiscount,
       'can_use_package': canUsePackage,
-      if (packageKmAvailable != null) 'package_km_available': packageKmAvailable,
+      if (packageKmAvailable != null)
+        'package_km_available': packageKmAvailable,
       if (packageKmRequired != null) 'package_km_required': packageKmRequired,
     };
-  }
-
-  PriceCalculationModel copyWith({
-    double? basePrice,
-    double? distancePrice,
-    double? timePrice,
-    double? totalPrice,
-    double? discount,
-    double? finalPrice,
-    double? distance,
-    String? distanceUnit,
-    String? duration,
-    String? couponCode,
-    double? couponDiscount,
-    bool? canUsePackage,
-    double? packageKmAvailable,
-    double? packageKmRequired,
-  }) {
-    return PriceCalculationModel(
-      basePrice: basePrice ?? this.basePrice,
-      distancePrice: distancePrice ?? this.distancePrice,
-      timePrice: timePrice ?? this.timePrice,
-      totalPrice: totalPrice ?? this.totalPrice,
-      discount: discount ?? this.discount,
-      finalPrice: finalPrice ?? this.finalPrice,
-      distance: distance ?? this.distance,
-      distanceUnit: distanceUnit ?? this.distanceUnit,
-      duration: duration ?? this.duration,
-      couponCode: couponCode ?? this.couponCode,
-      couponDiscount: couponDiscount ?? this.couponDiscount,
-      canUsePackage: canUsePackage ?? this.canUsePackage,
-      packageKmAvailable: packageKmAvailable ?? this.packageKmAvailable,
-      packageKmRequired: packageKmRequired ?? this.packageKmRequired,
-    );
   }
 }

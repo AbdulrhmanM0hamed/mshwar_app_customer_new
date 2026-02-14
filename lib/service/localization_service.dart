@@ -1,11 +1,7 @@
-import 'package:cabme/core/lang/app_ar.dart';
-import 'package:cabme/core/lang/app_en.dart';
-import 'package:cabme/core/lang/app_ur.dart';
 import 'package:cabme/core/utils/Preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class LocalizationService extends Translations {
+class LocalizationService {
   // Default locale
   static const locale = Locale('en', 'US');
 
@@ -47,27 +43,10 @@ class LocalizationService extends Translations {
     return locale.languageCode == 'ar' || locale.languageCode == 'ur';
   }
 
-  // Keys and their translations
-  // Translations are separated maps in `lang` file
-  @override
-  Map<String, Map<String, String>> get keys => {
-        'en': enUS,
-        'ar': arAE,
-        'ur': urPK,
-      };
-
   // Gets locale from language, and updates the locale
-  void changeLocale(String lang) {
-    Locale newLocale;
-    if (lang == 'ar') {
-      newLocale = const Locale('ar', 'AE');
-    } else if (lang == 'ur') {
-      newLocale = const Locale('ur', 'PK');
-    } else if (lang == 'en') {
-      newLocale = const Locale('en', 'US');
-    } else {
-      newLocale = Locale(lang);
-    }
-    Get.updateLocale(newLocale);
+  // Since we're not using GetX anymore, this now just saves to preferences.
+  // The app should be restarted (SplashScreen) to apply change fully.
+  Future<void> changeLocale(String lang) async {
+    await Preferences.setString(Preferences.languageCodeKey, lang);
   }
 }

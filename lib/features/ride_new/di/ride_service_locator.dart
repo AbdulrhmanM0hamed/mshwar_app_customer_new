@@ -1,4 +1,5 @@
-import 'package:get_it/get_it.dart';
+import '../../../core(new)/network/app_state_service.dart';
+import '../../../service_locator.dart';
 import '../../../core(new)/network/api_service.dart';
 import '../data/repositories/ride_repository.dart';
 import '../data/repositories/chat_repository.dart';
@@ -9,8 +10,6 @@ import '../presentation/cubit/ride_history/ride_history_cubit.dart';
 import '../presentation/cubit/chat/chat_cubit.dart';
 import '../presentation/cubit/review/review_cubit.dart';
 import '../presentation/cubit/complaint/complaint_cubit.dart';
-
-final getIt = GetIt.instance;
 
 /// Setup all dependencies for Ride feature
 /// Call this in main.dart after core dependencies are registered
@@ -26,6 +25,7 @@ void _registerRepositories() {
     getIt.registerLazySingleton<RideRepository>(
       () => RideRepositoryImpl(
         apiService: getIt<ApiService>(),
+        appStateService: getIt<AppStateService>(),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cabme/core(new)/errors/api_error_type.dart';
 import 'package:cabme/core(new)/errors/api_exception.dart';
 import 'package:cabme/core(new)/network/api_service.dart';
@@ -15,6 +16,7 @@ import '../models/phone_check_request.dart';
 import '../models/register_request.dart';
 import '../models/register_response.dart';
 import '../models/user_model.dart';
+import '../services/social_auth_service.dart';
 
 /// Auth Repository Interface
 abstract class AuthRepository {
@@ -27,6 +29,9 @@ abstract class AuthRepository {
   Future<ApiResult<OtpResponse>> resendOtp(String phone);
   Future<ApiResult<void>> sendResetPasswordOtp(String email);
   Future<ApiResult<void>> resetPassword(ForgotPasswordRequest request);
+  Future<ApiResult<LoginResponse>> socialLogin(PhoneCheckRequest request);
+  Future<ApiResult<UserCredential?>> signInWithGoogle();
+  Future<ApiResult<Map<String, dynamic>?>> signInWithApple();
   Future<void> saveUserData(UserModel user);
   Future<void> logout();
 }
@@ -35,8 +40,10 @@ abstract class AuthRepository {
 class AuthRepositoryImpl implements AuthRepository {
   final ApiService _apiService;
   final AppStateService _appStateService;
+  final SocialAuthService _socialAuthService;
 
-  AuthRepositoryImpl(this._apiService, this._appStateService);
+  AuthRepositoryImpl(
+      this._apiService, this._appStateService, this._socialAuthService);
 
   @override
   Future<ApiResult<LoginResponse>> login(LoginRequest request) async {
@@ -99,8 +106,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<ApiResult<UserModel>> getUserByPhone(
-      PhoneCheckRequest request) async {
+  Future<ApiResult<UserModel>> getUserByPhone(PhoneCheckRequest request) async {
     try {
       final result = await _apiService.safePost<Map<String, dynamic>>(
         API.getProfileByPhone,
@@ -122,6 +128,64 @@ class AuthRepositoryImpl implements AuthRepository {
         },
         failure: (error) => ApiResult.failure(error),
       );
+    } catch (e) {
+      return ApiResult.failure(ApiException(
+        errorType: ApiErrorType.unknown,
+        message: e.toString(),
+      ));
+    }
+  }
+
+  @override
+  Future<ApiResult<LoginResponse>> socialLogin(
+      PhoneCheckRequest request) async {
+    try {
+      final result = await _apiService.safePost<Map<String, dynamic>>(
+        API.getProfileByPhone,
+        data: request.toJson(),
+      );
+
+      return result.when(
+        success: (data) {
+          final response = LoginResponse.fromJson(data);
+          if (response.isSuccess && response.user != null) {
+            saveUserData(response.user!);
+            return ApiResult.success(response);
+          } else {
+            return ApiResult.failure(ApiException(
+              errorType: ApiErrorType.badRequest,
+              message: response.error ?? 'Social login failed',
+            ));
+          }
+        },
+        failure: (error) => ApiResult.failure(error),
+      );
+    } catch (e) {
+      return ApiResult.failure(ApiException(
+        errorType: ApiErrorType.unknown,
+        message: e.toString(),
+      ));
+    }
+  }
+
+  @override
+  Future<ApiResult<UserCredential?>> signInWithGoogle() async {
+    try {
+      final credential = await _socialAuthService.signInWithGoogle();
+      return ApiResult.success(credential);
+    } catch (e) {
+      return ApiResult.failure(ApiException(
+        errorType: ApiErrorType.unknown,
+        message: e.toString(),
+      ));
+    }
+  }
+
+  @override
+  Future<ApiResult<Map<String, dynamic>?>> signInWithApple() async {
+    try {
+      final credential = await _socialAuthService.signInWithApple();
+      return ApiResult.success(credential);
     } catch (e) {
       return ApiResult.failure(ApiException(
         errorType: ApiErrorType.unknown,
@@ -275,17 +339,20 @@ class AuthRepositoryImpl implements AuthRepository {
     // Save to Preferences
     Preferences.setInt(Preferences.userId, int.parse(user.id));
     Preferences.setString(Preferences.user, jsonEncode(user.toJson()));
-    
+
     if (user.accessToken != null) {
       Preferences.setString(Preferences.accesstoken, user.accessToken!);
       API.header['accesstoken'] = user.accessToken!;
     }
-    
+
     if (user.adminCommission != null) {
-      Preferences.setString(
-          Preferences.admincommission, user.adminCommission!);
+      Preferences.setString(Preferences.admincommission, user.adminCommission!);
     }
-    
+
+    if (user.amount != null) {
+      Preferences.setString(Preferences.walletBalance, user.amount!);
+    }
+
     Preferences.setBoolean(Preferences.isLogin, true);
 
     // Save to AppStateService
@@ -294,8 +361,10 @@ class AuthRepositoryImpl implements AuthRepository {
       await _appStateService.saveTokens(
         accessToken: user.accessToken!,
         refreshToken: user.accessToken!, // Using same token as refresh
-        accessTokenExpiresAt: DateTime.now().add(const Duration(days: 30)).toIso8601String(),
-        refreshTokenExpiresAt: DateTime.now().add(const Duration(days: 60)).toIso8601String(),
+        accessTokenExpiresAt:
+            DateTime.now().add(const Duration(days: 30)).toIso8601String(),
+        refreshTokenExpiresAt:
+            DateTime.now().add(const Duration(days: 60)).toIso8601String(),
       );
     }
   }
@@ -308,11 +377,11 @@ class AuthRepositoryImpl implements AuthRepository {
     Preferences.setString(Preferences.user, '');
     Preferences.setString(Preferences.accesstoken, '');
     Preferences.setString(Preferences.admincommission, '');
-    
+
     // Clear AppStateService
     await _appStateService.setLoggedIn(false);
     await _appStateService.clearTokens();
-    
+
     // Clear API header
     API.header.remove('accesstoken');
   }

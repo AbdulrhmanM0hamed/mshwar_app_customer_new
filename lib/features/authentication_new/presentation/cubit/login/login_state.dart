@@ -46,3 +46,23 @@ class GetUserByPhoneFailure extends LoginState {
 
   GetUserByPhoneFailure(this.exception);
 }
+
+class UserNotFound extends LoginState {
+  final String phone;
+
+  UserNotFound(this.phone);
+}
+
+class SocialLoginUserNotFound extends LoginState {
+  final String email;
+  final String firstName;
+  final String lastName;
+  final String loginType;
+
+  SocialLoginUserNotFound({
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.loginType,
+  });
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import '../../../../service_locator.dart';
 import '../../../../common/widget/custom_app_bar.dart';
 import '../../../../common/widget/custom_text.dart';
 import '../../../../core/themes/constant_colors.dart';
@@ -22,7 +22,7 @@ class SubscriptionListPage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider(
-      create: (context) => GetIt.instance<SubscriptionCubit>()
+      create: (context) => getIt<SubscriptionCubit>()
         ..loadSettings()
         ..loadUserSubscriptions(),
       child: Scaffold(
@@ -47,7 +47,8 @@ class SubscriptionListPage extends StatelessWidget {
         ),
         body: BlocBuilder<SubscriptionCubit, SubscriptionState>(
           builder: (context, state) {
-            if (state is SubscriptionSettingsLoading || state is SubscriptionsLoading) {
+            if (state is SubscriptionSettingsLoading ||
+                state is SubscriptionsLoading) {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(32),
@@ -98,7 +99,9 @@ class SubscriptionListPage extends StatelessWidget {
                       CustomText(
                         text: state.message,
                         size: 16,
-                        color: themeChange.getThem() ? Colors.white70 : Colors.black54,
+                        color: themeChange.getThem()
+                            ? Colors.white70
+                            : Colors.black54,
                         align: TextAlign.center,
                       ),
                     ],
@@ -112,7 +115,8 @@ class SubscriptionListPage extends StatelessWidget {
         ),
         floatingActionButton: BlocBuilder<SubscriptionCubit, SubscriptionState>(
           builder: (context, state) {
-            if (state is SubscriptionSettingsLoaded && state.settings.isAvailable) {
+            if (state is SubscriptionSettingsLoaded &&
+                state.settings.isAvailable) {
               return FloatingActionButton(
                 onPressed: () {
                   // TODO: Navigate to create subscription page
@@ -166,7 +170,8 @@ class SubscriptionListPage extends StatelessWidget {
     );
   }
 
-  Widget _buildUnavailableView(BuildContext context, DarkThemeProvider themeChange) {
+  Widget _buildUnavailableView(
+      BuildContext context, DarkThemeProvider themeChange) {
     final l10n = AppLocalizations.of(context)!;
 
     return Center(

@@ -4,7 +4,6 @@ import 'package:cabme/core/themes/button_them.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CustomDialogBox extends StatefulWidget {
@@ -12,7 +11,12 @@ class CustomDialogBox extends StatefulWidget {
   final Image img;
   final Function() onPress;
 
-  const CustomDialogBox({super.key, required this.title, required this.descriptions, required this.img, required this.onPress});
+  const CustomDialogBox(
+      {super.key,
+      required this.title,
+      required this.descriptions,
+      required this.img,
+      required this.onPress});
 
   @override
   _CustomDialogBoxState createState() => _CustomDialogBoxState();
@@ -27,7 +31,9 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
         borderRadius: BorderRadius.circular(20),
       ),
       elevation: 0,
-      backgroundColor: themeChange.getThem() ? AppThemeData.surface50Dark : AppThemeData.surface50,
+      backgroundColor: themeChange.getThem()
+          ? AppThemeData.surface50Dark
+          : AppThemeData.surface50,
       child: contentBox(context, themeChange.getThem()),
     );
   }
@@ -37,10 +43,12 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
       padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
+          color:
+              isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
-            BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+            BoxShadow(
+                color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
           ]),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -48,13 +56,18 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           CircleAvatar(
             backgroundColor: Colors.transparent,
             radius: 45,
-            child: ClipRRect(borderRadius: const BorderRadius.all(Radius.circular(45)), child: widget.img),
+            child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(45)),
+                child: widget.img),
           ),
           Visibility(
             visible: widget.title.isNotEmpty,
             child: Text(
               widget.title,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, fontFamily: 'Cairo'),
+              style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Cairo'),
             ),
           ),
           const SizedBox(
@@ -73,7 +86,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           ),
           ButtonThem.buildButton(
             context,
-            title: 'Close'.tr,
+            title: 'Close',
             btnWidthRatio: 0.8,
             btnColor: AppThemeData.primary200,
             txtColor: Colors.white,

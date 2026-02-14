@@ -1140,6 +1140,30 @@ class AppLocalizationsUr extends AppLocalizations {
   String get dropoff => 'Dropoff';
 
   @override
+  String get selected => 'Selected';
+
+  @override
+  String get tapToSelect => 'Tap to select';
+
+  @override
+  String get family => 'Family';
+
+  @override
+  String get classic => 'Classic';
+
+  @override
+  String get familyRideDescription =>
+      'Family ride: Comfortable trips with extra space.';
+
+  @override
+  String get classicRideDescription =>
+      'Comfortable commute at an affordable price';
+
+  @override
+  String get reliableTransportationService =>
+      'Reliable transportation service.';
+
+  @override
   String get stops => 'اسٹاپ';
 
   @override

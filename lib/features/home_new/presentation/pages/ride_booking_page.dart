@@ -1,3 +1,4 @@
+import 'package:cabme/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +22,13 @@ import 'booking_success_page.dart';
 class RideBookingPage extends StatefulWidget {
   final LocationModel departure;
   final LocationModel destination;
+  final List<LocationModel>? stops;
 
   const RideBookingPage({
     super.key,
     required this.departure,
     required this.destination,
+    this.stops,
   });
 
   @override
@@ -52,20 +55,17 @@ class _RideBookingPageState extends State<RideBookingPage> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: isDarkMode
-            ? AppThemeData.surface50Dark
-            : AppThemeData.surface50,
+        backgroundColor:
+            isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
         appBar: AppBar(
-          backgroundColor: isDarkMode
-              ? AppThemeData.surface50Dark
-              : AppThemeData.surface50,
+          backgroundColor:
+              isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
           elevation: 0,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: isDarkMode
-                  ? AppThemeData.grey900Dark
-                  : AppThemeData.grey900,
+              color:
+                  isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
             ),
             onPressed: () => Navigator.pop(context),
           ),
@@ -73,9 +73,7 @@ class _RideBookingPageState extends State<RideBookingPage> {
             text: l10n.bookRide,
             size: 18,
             weight: FontWeight.bold,
-            color: isDarkMode
-                ? AppThemeData.grey900Dark
-                : AppThemeData.grey900,
+            color: isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
           ),
         ),
         body: BlocConsumer<RideCubit, RideState>(
@@ -109,6 +107,7 @@ class _RideBookingPageState extends State<RideBookingPage> {
                   RouteInfoWidget(
                     departure: widget.departure,
                     destination: widget.destination,
+                    stops: widget.stops,
                   ),
 
                   const SizedBox(height: 24),
@@ -174,9 +173,7 @@ class _RideBookingPageState extends State<RideBookingPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDarkMode
-            ? AppThemeData.grey200Dark
-            : AppThemeData.grey200,
+        color: isDarkMode ? AppThemeData.grey200Dark : AppThemeData.grey200,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: AppThemeData.primary200,
@@ -244,9 +241,7 @@ class _RideBookingPageState extends State<RideBookingPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDarkMode
-            ? AppThemeData.grey200Dark
-            : AppThemeData.grey200,
+        color: isDarkMode ? AppThemeData.grey200Dark : AppThemeData.grey200,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -255,9 +250,7 @@ class _RideBookingPageState extends State<RideBookingPage> {
           CustomText(
             text: l10n.numberOfPassengers,
             size: 16,
-            color: isDarkMode
-                ? AppThemeData.grey900Dark
-                : AppThemeData.grey900,
+            color: isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
           ),
           Row(
             children: [
@@ -306,9 +299,7 @@ class _RideBookingPageState extends State<RideBookingPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDarkMode
-            ? AppThemeData.grey200Dark
-            : AppThemeData.grey200,
+        color: isDarkMode ? AppThemeData.grey200Dark : AppThemeData.grey200,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -344,9 +335,8 @@ class _RideBookingPageState extends State<RideBookingPage> {
             CustomText(
               text: '${l10n.scheduledFor}: ${_formatDateTime(_scheduledTime!)}',
               size: 14,
-              color: isDarkMode
-                  ? AppThemeData.grey500Dark
-                  : AppThemeData.grey500,
+              color:
+                  isDarkMode ? AppThemeData.grey500Dark : AppThemeData.grey500,
             ),
           ],
         ],
@@ -405,6 +395,7 @@ class _RideBookingPageState extends State<RideBookingPage> {
         builder: (context) => PaymentSelectionPage(
           departure: widget.departure,
           destination: widget.destination,
+          stops: widget.stops,
           vehicleCategoryId: selectedVehicle.id ?? '',
           numberOfPassengers: _numberOfPassengers,
           scheduledTime: _scheduledTime,

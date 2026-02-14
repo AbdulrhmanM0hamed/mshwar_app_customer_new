@@ -5,6 +5,9 @@ import 'package:cabme/common/screens/botton_nav_bar.dart';
 import 'package:cabme/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:cabme/features/settings_new/presentation/cubit/settings/settings_cubit.dart';
+import 'package:cabme/service_locator.dart';
+import 'dart:developer';
 
 class SignupSuccessPage extends StatefulWidget {
   const SignupSuccessPage({super.key});
@@ -53,7 +56,7 @@ class _SignupSuccessPageState extends State<SignupSuccessPage>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -176,14 +179,7 @@ class _SignupSuccessPageState extends State<SignupSuccessPage>
                       opacity: _fadeAnimation,
                       child: CustomButton(
                         btnName: l10n.startExploring,
-                        ontap: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => BottomNavBar(),
-                            ),
-                            (route) => false,
-                          );
-                        },
+                        ontap: () => _preloadAndNavigate(context),
                         buttonColor: Colors.white,
                         textColor: AppThemeData.primary200,
                       ),
@@ -195,14 +191,7 @@ class _SignupSuccessPageState extends State<SignupSuccessPage>
                     FadeTransition(
                       opacity: _fadeAnimation,
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => BottomNavBar(),
-                            ),
-                            (route) => false,
-                          );
-                        },
+                        onPressed: () => _preloadAndNavigate(context),
                         child: CustomText(
                           text: l10n.skipForNow,
                           size: 14,
@@ -220,5 +209,27 @@ class _SignupSuccessPageState extends State<SignupSuccessPage>
         ),
       ),
     );
+  }
+
+  Future<void> _preloadAndNavigate(BuildContext context) async {
+    try {
+      final settingsCubit = getIt<SettingsCubit>();
+      await settingsCubit.loadSettings();
+
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => BottomNavBar()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      log('Error preloading data: $e');
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => BottomNavBar()),
+          (route) => false,
+        );
+      }
+    }
   }
 }

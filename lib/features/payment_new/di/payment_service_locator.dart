@@ -1,4 +1,4 @@
-import 'package:get_it/get_it.dart';
+import '../../../service_locator.dart';
 import '../../../core(new)/network/api_service.dart';
 import '../data/repositories/payment_repository.dart';
 import '../data/repositories/wallet_repository.dart';
@@ -6,8 +6,6 @@ import '../data/repositories/coupon_repository.dart';
 import '../presentation/cubit/payment/payment_cubit.dart';
 import '../presentation/cubit/wallet/wallet_cubit.dart';
 import '../presentation/cubit/coupon/coupon_cubit.dart';
-
-final getIt = GetIt.instance;
 
 /// Setup all dependencies for Payment feature
 /// Call this in main.dart after core dependencies are registered

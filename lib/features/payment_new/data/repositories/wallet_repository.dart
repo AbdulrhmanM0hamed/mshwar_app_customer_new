@@ -7,7 +7,8 @@ import '../models/payment_response_model.dart';
 abstract class WalletRepository {
   Future<WalletModel> getWalletBalance(String userId);
   Future<PaymentResponseModel> addFunds(AddFundsRequestModel request);
-  Future<List<TransactionModel>> getTransactionHistory(String userId, {int? limit, int? offset});
+  Future<List<TransactionModel>> getTransactionHistory(String userId,
+      {int? limit, int? offset});
   Future<bool> withdrawFunds(String userId, double amount);
   Future<WalletModel> refreshBalance(String userId);
 }
@@ -21,10 +22,13 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<WalletModel> getWalletBalance(String userId) async {
     try {
       final response = await apiService.get(
-        '/wallet/balance',
-        queryParameters: {'user_id': userId},
+        'wallet',
+        queryParameters: {
+          'id_user': userId,
+          'user_cat': 'user_app',
+        },
       );
-      
+
       if (response['success'] == 'success' && response['data'] != null) {
         return WalletModel.fromJson(response['data']);
       }
@@ -39,10 +43,10 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<PaymentResponseModel> addFunds(AddFundsRequestModel request) async {
     try {
       final response = await apiService.post(
-        '/wallet/add-funds',
+        'amount',
         data: request.toJson(),
       );
-      
+
       return PaymentResponseModel.fromJson(response);
     } catch (e) {
       throw Exception('Failed to add funds: $e');
@@ -57,16 +61,16 @@ class WalletRepositoryImpl implements WalletRepository {
   }) async {
     try {
       final queryParams = <String, dynamic>{
-        'user_id': userId,
+        'id_user_app': userId,
         if (limit != null) 'limit': limit.toString(),
         if (offset != null) 'offset': offset.toString(),
       };
 
       final response = await apiService.get(
-        '/wallet/transactions',
+        'transaction',
         queryParameters: queryParams,
       );
-      
+
       if (response['success'] == 'success' && response['data'] != null) {
         List<dynamic> data = response['data'];
         return data.map((json) => TransactionModel.fromJson(json)).toList();
@@ -88,7 +92,7 @@ class WalletRepositoryImpl implements WalletRepository {
           'amount': amount.toString(),
         },
       );
-      
+
       return response['success'] == 'success' || response['success'] == true;
     } catch (e) {
       throw Exception('Failed to withdraw funds: $e');

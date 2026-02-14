@@ -10,7 +10,6 @@ import 'package:cabme/generated/app_localizations.dart';
 import 'package:cabme/service/localization_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -134,13 +133,22 @@ class _LocalizationPageState extends State<LocalizationPage> {
                       Preferences.languageCodeKey, _selectedLanguage);
                   LocalizationService().changeLocale(_selectedLanguage);
 
-                  if (widget.isFromSettings) {
-                    // Re-initialize app to apply changes fully (especially RTL)
-                     Get.offAll(() => const SplashScreen()); 
-                     // Or just pop if updates are reactive. But usually locale change needs deeper reset.
-                  } else {
-                    // Navigate to next screen (Login or Onboarding)
-                    Get.offAll(() => const LoginPage()); // Assuming LoginPage exists and is the next step
+                  if (context.mounted) {
+                    if (widget.isFromSettings) {
+                      // Re-initialize app to apply changes fully (especially RTL)
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const SplashScreen()),
+                        (route) => false,
+                      );
+                    } else {
+                      // Navigate to next screen (Login or Onboarding)
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
+                        (route) => false,
+                      );
+                    }
                   }
                 },
               ),
@@ -172,7 +180,7 @@ class _LocalizationPageState extends State<LocalizationPage> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppThemeData.primary200.withValues(alpha:0.1)
+                  ? AppThemeData.primary200.withValues(alpha: 0.1)
                   : isDarkMode
                       ? AppThemeData.grey800Dark
                       : Colors.white,
@@ -204,9 +212,10 @@ class _LocalizationPageState extends State<LocalizationPage> {
                     child: CachedNetworkImage(
                       imageUrl: lang['flag']!,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                      errorWidget: (context, url, error) => const Icon(Icons.flag),
+                      placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2)),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.flag),
                     ),
                   ),
                 ),
@@ -246,7 +255,8 @@ class _LocalizationPageState extends State<LocalizationPage> {
                       shape: BoxShape.circle,
                       color: AppThemeData.primary200,
                     ),
-                    child: const Icon(Icons.check, size: 12, color: Colors.white),
+                    child:
+                        const Icon(Icons.check, size: 12, color: Colors.white),
                   ),
               ],
             ),

@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'dio_client.dart';
 
 class ApiService {
-  final DioClient _dioClient = DioClient.instance;
+  DioClient get _dioClient => DioClient.instance;
 
   // GET request with error handling
   Future<T> get<T>(
@@ -130,12 +130,15 @@ class ApiService {
     return await ApiHelper.safeApiCall<T>(() async {
       // Log request details for packages endpoint
       if (endpoint.contains('package')) {
-        developer.log('========== PACKAGES REQUEST ==========', name: 'ApiService');
+        developer.log('========== PACKAGES REQUEST ==========',
+            name: 'ApiService');
         developer.log('[ApiService] Endpoint: $endpoint', name: 'ApiService');
-        developer.log('[ApiService] Query Parameters: $queryParameters', name: 'ApiService');
-        developer.log('[ApiService] Custom Headers: $headers', name: 'ApiService');
+        developer.log('[ApiService] Query Parameters: $queryParameters',
+            name: 'ApiService');
+        developer.log('[ApiService] Custom Headers: $headers',
+            name: 'ApiService');
       }
-      
+
       final response = await _dioClient.get(
         endpoint,
         queryParameters: queryParameters,
@@ -144,23 +147,35 @@ class ApiService {
 
       // Log raw response for packages endpoint
       if (endpoint.contains('package')) {
-        developer.log('========== PACKAGES RESPONSE ==========', name: 'ApiService');
-        developer.log('[ApiService] Status: ${response.statusCode}', name: 'ApiService');
-        developer.log('[ApiService] Response type: ${response.data.runtimeType}', name: 'ApiService');
+        developer.log('========== PACKAGES RESPONSE ==========',
+            name: 'ApiService');
+        developer.log('[ApiService] Status: ${response.statusCode}',
+            name: 'ApiService');
+        developer.log(
+            '[ApiService] Response type: ${response.data.runtimeType}',
+            name: 'ApiService');
         if (response.data is Map) {
           final data = response.data as Map;
-          developer.log('[ApiService] Response keys: ${data.keys}', name: 'ApiService');
-          developer.log('[ApiService] Full response: $data', name: 'ApiService');
+          developer.log('[ApiService] Response keys: ${data.keys}',
+              name: 'ApiService');
+          developer.log('[ApiService] Full response: $data',
+              name: 'ApiService');
           if (data.containsKey('data') && data['data'] is Map) {
             final innerData = data['data'] as Map;
-            developer.log('[ApiService] Inner data keys: ${innerData.keys}', name: 'ApiService');
+            developer.log('[ApiService] Inner data keys: ${innerData.keys}',
+                name: 'ApiService');
             if (innerData.containsKey('companies')) {
-              developer.log('[ApiService] Companies type: ${innerData['companies'].runtimeType}', name: 'ApiService');
-              developer.log('[ApiService] Companies content: ${innerData['companies']}', name: 'ApiService');
+              developer.log(
+                  '[ApiService] Companies type: ${innerData['companies'].runtimeType}',
+                  name: 'ApiService');
+              developer.log(
+                  '[ApiService] Companies content: ${innerData['companies']}',
+                  name: 'ApiService');
             }
           }
         }
-        developer.log('======================================', name: 'ApiService');
+        developer.log('======================================',
+            name: 'ApiService');
       }
 
       if (fromJson != null) {

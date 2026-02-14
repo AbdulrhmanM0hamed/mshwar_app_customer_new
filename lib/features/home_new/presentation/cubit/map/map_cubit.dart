@@ -154,6 +154,18 @@ class MapCubit extends Cubit<MapState> {
     );
   }
 
+  Future<void> zoomIn() async {
+    if (_mapController != null) {
+      await _mapController!.animateCamera(CameraUpdate.zoomIn());
+    }
+  }
+
+  Future<void> zoomOut() async {
+    if (_mapController != null) {
+      await _mapController!.animateCamera(CameraUpdate.zoomOut());
+    }
+  }
+
   void reset() {
     _markers.clear();
     _polylinePoints.clear();

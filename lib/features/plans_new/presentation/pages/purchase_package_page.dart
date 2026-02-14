@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import '../../../../service_locator.dart';
 import '../../../../common/widget/button.dart';
 import '../../../../common/widget/custom_app_bar.dart';
 import '../../../../common/widget/custom_text.dart';
@@ -26,7 +26,7 @@ class PurchasePackagePage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider(
-      create: (context) => GetIt.instance<PackageCubit>(),
+      create: (context) => getIt<PackageCubit>(),
       child: Scaffold(
         backgroundColor:
             isDark ? AppThemeData.surface50Dark : AppThemeData.surface50,

@@ -5,7 +5,6 @@ import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/service/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:http/http.dart' as http;
 import 'splash_screen.dart';
@@ -92,11 +91,12 @@ class _ServerDownScreenState extends State<ServerDownScreen>
         debugPrint('✅ Server is back UP! Navigating to SplashScreen');
         _isNavigating = true;
         timer.cancel();
-        Get.offAll(
-          () => const SplashScreen(),
-          transition: Transition.fadeIn,
-          duration: const Duration(milliseconds: 500),
-        );
+        if (context.mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const SplashScreen()),
+            (route) => false,
+          );
+        }
       } else {
         debugPrint('❌ Server still down (status: ${response.statusCode})');
       }
@@ -110,6 +110,12 @@ class _ServerDownScreenState extends State<ServerDownScreen>
   void dispose() {
     _serverCheckTimer?.cancel();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Pre-cache or update anything that depends on context
   }
 
   @override
@@ -189,8 +195,8 @@ class _ServerDownScreenState extends State<ServerDownScreen>
         shape: BoxShape.circle,
         gradient: RadialGradient(
           colors: [
-            AppThemeData.error200.withValues(alpha:0.15),
-            AppThemeData.error200.withValues(alpha:0.05),
+            AppThemeData.error200.withValues(alpha: 0.15),
+            AppThemeData.error200.withValues(alpha: 0.05),
           ],
         ),
       ),
@@ -203,7 +209,7 @@ class _ServerDownScreenState extends State<ServerDownScreen>
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: AppThemeData.error200.withValues(alpha:0.2),
+                color: AppThemeData.error200.withValues(alpha: 0.2),
                 width: 2,
               ),
             ),
@@ -222,7 +228,7 @@ class _ServerDownScreenState extends State<ServerDownScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppThemeData.error200.withValues(alpha:0.08),
+            color: AppThemeData.error200.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -234,7 +240,7 @@ class _ServerDownScreenState extends State<ServerDownScreen>
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppThemeData.error200.withValues(alpha:0.1),
+              color: AppThemeData.error200.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -274,7 +280,7 @@ class _ServerDownScreenState extends State<ServerDownScreen>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha:0.6),
+        color: Colors.white.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppThemeData.grey200, width: 1),
       ),
@@ -343,7 +349,7 @@ class _ServerDownScreenState extends State<ServerDownScreen>
       },
       boxShadow: [
         BoxShadow(
-          color: AppThemeData.error200.withValues(alpha:0.3),
+          color: AppThemeData.error200.withValues(alpha: 0.3),
           blurRadius: 12,
           offset: const Offset(0, 4),
         ),
@@ -352,8 +358,9 @@ class _ServerDownScreenState extends State<ServerDownScreen>
   }
 
   void _handleSubmitReport() {
-    Get.dialog<void>(
-      Dialog(
+    showDialog<void>(
+      context: context,
+      builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -366,7 +373,7 @@ class _ServerDownScreenState extends State<ServerDownScreen>
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: AppThemeData.error200.withValues(alpha:0.1),
+                  color: AppThemeData.error200.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -396,7 +403,7 @@ class _ServerDownScreenState extends State<ServerDownScreen>
               CustomButton(
                 btnName: 'Close',
                 buttonColor: AppThemeData.error200,
-                ontap: () => Get.back<void>(),
+                ontap: () => Navigator.of(context).pop(),
               ),
             ],
           ),

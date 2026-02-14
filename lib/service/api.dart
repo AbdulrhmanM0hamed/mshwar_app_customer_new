@@ -51,9 +51,9 @@ class API {
   static String get resetPasswordOtp => "${baseUrl}resert-password";
   static String get getProfileByPhone => "${baseUrl}profilebyphone";
   static String get getExistingUserOrNot => "${baseUrl}existing-user";
-   //static String get updateUserNic => "${baseUrl}update-user-nic";
+  //static String get updateUserNic => "${baseUrl}update-user-nic";
   static String get uploadUserPhoto => "${baseUrl}user-photo";
- //  static String get updateUserEmail => "${baseUrl}update-user-email";
+  //  static String get updateUserEmail => "${baseUrl}update-user-email";
   static String get changePassword => "${baseUrl}update-user-mdp";
   static String get updatePreName => "${baseUrl}user-pre-name";
   static String get updateLastName => "${baseUrl}user-name";
@@ -65,7 +65,7 @@ class API {
   static String get wallet => "${baseUrl}wallet";
   static String get amount => "${baseUrl}amount";
   static String get getFcmToken => "${baseUrl}fcm-token";
-   //static String get deleteFavouriteRide => "${baseUrl}delete-favorite-ride";
+  //static String get deleteFavouriteRide => "${baseUrl}delete-favorite-ride";
   static String get rejectRide => "${baseUrl}set-rejected-requete";
   // static String getCommissionUrl({required driverId}) {
   //   return "$baseApiUrl/calculate-commission/$driverId";
@@ -75,18 +75,18 @@ class API {
   static String get userPendingPayment => "${baseUrl}user-pending-payment";
   // static String get scheduleRide => "$baseApiUrl/schedule-rides";
   static String get scheduleRide => "${baseUrl}requete-register";
-   //static String get setFavouriteRide => "${baseUrl}favorite-ride";
+  //static String get setFavouriteRide => "${baseUrl}favorite-ride";
   static String get getVehicleCategory => "${baseUrl}Vehicle-category";
   static String get driverDetails => "${baseUrl}driver";
   static String get getPaymentMethod => "${baseUrl}payment-method";
   static String get bookRides => "${baseUrl}requete-register";
   static String get userAllRides => "${baseUrl}user-all-rides";
   static String get userScheduledRides => "${baseUrl}user-scheduled-rides";
-   //static String get newRide => "${baseUrl}requete-userapp";
+  //static String get newRide => "${baseUrl}requete-userapp";
   static String get confirmedRide => "${baseUrl}user-confirmation";
- //  static String get onRide => "${baseUrl}user-ride";
- //  static String get completedRide => "${baseUrl}user-complete";
- // static String get canceledRide => "${baseUrl}user-cancel";
+  //  static String get onRide => "${baseUrl}user-ride";
+  //  static String get completedRide => "${baseUrl}user-complete";
+  // static String get canceledRide => "${baseUrl}user-cancel";
   static String get driverConfirmRide => "${baseUrl}driver-confirm";
   static String get feelSafeAtDestination => "${baseUrl}feel-safe";
   static String get sos => "${baseUrl}storesos";
@@ -139,7 +139,7 @@ class API {
   static String get cancelPackage => "${baseUrl}packages/cancel";
 
   /* Broadcast Notifications */
-   //static String get getBroadcastNotifications => "${baseUrl}broadcast-user";
+  //static String get getBroadcastNotifications => "${baseUrl}broadcast-user";
 
   /* Professional Notification System */
   static String getNotifications({int? limit, int? offset, bool? unreadOnly}) {

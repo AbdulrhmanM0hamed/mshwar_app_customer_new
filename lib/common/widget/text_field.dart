@@ -2,7 +2,6 @@ import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -213,47 +212,46 @@ class _CustomTextFieldState extends State<CustomTextField>
 
     if (!value.contains('@')) {
       _isValid = false;
-      _errorMessage = 'email_must_contain_at'.tr;
+      _errorMessage = 'Email must contain @';
     } else if (!value.contains('.')) {
       _isValid = false;
-      _errorMessage = 'email_must_contain_domain'.tr;
+      _errorMessage = 'Email must contain a domain';
     } else if (!emailRegex.hasMatch(value)) {
       _isValid = false;
-      _errorMessage = 'invalid_email_format'.tr;
+      _errorMessage = 'Invalid email format';
     } else {
       _isValid = true;
       _errorMessage = null;
-      _successMessage = 'valid_email_address'.tr;
+      _successMessage = 'Valid email address';
     }
   }
 
   void _validatePassword(String value) {
     if (value.length < widget.minPasswordLength) {
       _isValid = false;
-      _errorMessage = 'password_must_be_at_least_characters'
-          .tr
-          .replaceAll('{count}', widget.minPasswordLength.toString());
+      _errorMessage =
+          'Password must be at least ${widget.minPasswordLength} characters';
     } else {
       _isValid = true;
       _errorMessage = null;
-      _successMessage = 'valid_password'.tr;
+      _successMessage = 'Valid password';
     }
   }
 
   void _validateConfirmPassword(String value) {
     if (widget.passwordController == null) {
       _isValid = false;
-      _errorMessage = 'password_controller_not_provided'.tr;
+      _errorMessage = 'Password controller not provided';
       return;
     }
 
     if (value != widget.passwordController!.text) {
       _isValid = false;
-      _errorMessage = 'passwords_do_not_match'.tr;
+      _errorMessage = 'Passwords do not match';
     } else {
       _isValid = true;
       _errorMessage = null;
-      _successMessage = 'passwords_match'.tr;
+      _successMessage = 'Passwords match';
     }
   }
 
@@ -263,17 +261,17 @@ class _CustomTextFieldState extends State<CustomTextField>
 
     if (value.length < 8) {
       _isValid = false;
-      _errorMessage = 'kuwait_number_must_be_8_digits'.tr;
+      _errorMessage = 'Kuwait number must be 8 digits';
     } else if (value.length > 8) {
       _isValid = false;
-      _errorMessage = 'kuwait_number_must_be_8_digits'.tr;
+      _errorMessage = 'Kuwait number must be 8 digits';
     } else if (!kuwaitPhoneRegex.hasMatch(value)) {
       _isValid = false;
-      _errorMessage = 'kuwait_numbers_start_with'.tr;
+      _errorMessage = 'Kuwait numbers start with 5, 6, 9, 2, or 41';
     } else {
       _isValid = true;
       _errorMessage = null;
-      _successMessage = 'valid_kuwait_phone_number'.tr;
+      _successMessage = 'Valid Kuwait phone number';
     }
   }
 
@@ -282,21 +280,21 @@ class _CustomTextFieldState extends State<CustomTextField>
 
     if (value.trim().length < 2) {
       _isValid = false;
-      _errorMessage = 'name_must_be_at_least_2_characters'.tr;
+      _errorMessage = 'Name must be at least 2 characters';
     } else if (!nameRegex.hasMatch(value)) {
       _isValid = false;
-      _errorMessage = 'name_can_only_contain_letters'.tr;
+      _errorMessage = 'Name can only contain letters';
     } else {
       _isValid = true;
       _errorMessage = null;
-      _successMessage = 'valid_name'.tr;
+      _successMessage = 'Valid name';
     }
   }
 
   void _validateRequired(String value) {
     if (value.trim().isEmpty) {
       _isValid = false;
-      _errorMessage = 'this_field_is_required'.tr;
+      _errorMessage = 'This field is required';
     } else {
       _isValid = true;
       _errorMessage = null;
@@ -336,7 +334,7 @@ class _CustomTextFieldState extends State<CustomTextField>
   // ============================================
   Color _getDefaultFillColor(bool isDarkMode) {
     return isDarkMode
-        ? AppThemeData.grey300Dark.withValues(alpha:0.5)
+        ? AppThemeData.grey300Dark.withValues(alpha: 0.5)
         : Colors.white;
   }
 
@@ -566,7 +564,7 @@ class _CustomTextFieldState extends State<CustomTextField>
                     child: Text(
                       _isValid
                           ? (_successMessage ?? '')
-                          : (_errorMessage ?? 'Invalid input'.tr),
+                          : (_errorMessage ?? 'Invalid input'),
                       style: TextStyle(
                         fontSize: 12,
                         color: _isValid
@@ -595,19 +593,17 @@ class _CustomTextFieldState extends State<CustomTextField>
   String _getHelperText() {
     switch (widget.validationType) {
       case ValidationType.email:
-        return 'enter_valid_email_address'.tr;
+        return 'Enter a valid email address';
       case ValidationType.password:
-        return 'min_characters'
-            .tr
-            .replaceAll('{count}', widget.minPasswordLength.toString());
+        return 'Min ${widget.minPasswordLength} characters';
       case ValidationType.confirmPassword:
-        return 're_enter_your_password'.tr;
+        return 'Re-enter your password';
       case ValidationType.phone:
-        return 'enter_8_digit_kuwait_mobile_number'.tr;
+        return 'Enter 8-digit Kuwait mobile number';
       case ValidationType.name:
-        return 'enter_your_name_letters_only'.tr;
+        return 'Enter your name (letters only)';
       case ValidationType.required:
-        return 'this_field_is_required'.tr;
+        return 'This field is required';
       case ValidationType.none:
         return '';
     }

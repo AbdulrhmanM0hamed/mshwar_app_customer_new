@@ -4,14 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppStateService {
   // Non-sensitive keys (SharedPreferences)
-  static const String _isOnboardingCompletedKey = 'is_onboarding_completed';
-  static const String _isLoggedInKey = 'is_logged_in';
+  static const String _isOnboardingCompletedKey = 'isFinishOnBoardingKey';
+  static const String _isLoggedInKey = 'isLogin';
   static const String _rememberMeKey = 'remember_me';
   static const String _savedEmailKey = 'saved_email';
   static const String _hasLoggedOutKey = 'has_logged_out';
   static const String _fcmTokenKey = 'fcm_token';
   static const String _userTypeKey = 'user_type';
-  static const String _userIdKey = 'user_id';
+  static const String _userIdKey = 'userId';
 
   // Sensitive keys (Secure Storage) ⚠️
   static const String _savedPasswordKey = 'saved_password';
@@ -23,11 +23,14 @@ class AppStateService {
 
   // Guest favorites keys (SharedPreferences - not sensitive)
   static const String _guestFavoriteVendorsKey = 'guest_favorite_vendors';
-  static const String _guestFavoriteVendorDataKey = 'guest_favorite_vendor_data';
+  static const String _guestFavoriteVendorDataKey =
+      'guest_favorite_vendor_data';
   static const String _guestFavoritePropertiesKey = 'guest_favorite_properties';
-  static const String _guestFavoritePropertyDataKey = 'guest_favorite_property_data';
+  static const String _guestFavoritePropertyDataKey =
+      'guest_favorite_property_data';
   static const String _guestFavoriteProjectsKey = 'guest_favorite_projects';
-  static const String _guestFavoriteProjectDataKey = 'guest_favorite_project_data';
+  static const String _guestFavoriteProjectDataKey =
+      'guest_favorite_project_data';
 
   final SharedPreferences _prefs;
   final FlutterSecureStorage _secureStorage;
@@ -50,10 +53,12 @@ class AppStateService {
   /// Initialize cached values from secure storage
   Future<void> init() async {
     _cachedAccessToken = await _secureStorage.read(key: _accessTokenKey);
+    // Fallback to SharedPreferences if not in SecureStorage (for old login compatibility)
+    _cachedAccessToken ??= _prefs.getString('accesstoken');
+
     _cachedRefreshToken = await _secureStorage.read(key: _refreshTokenKey);
     _cachedPassword = await _secureStorage.read(key: _savedPasswordKey);
   }
-
 
   // ==================== Onboarding State ====================
 
@@ -147,7 +152,6 @@ class AppStateService {
     await _prefs.remove(_fcmTokenKey);
   }
 
-
   // ==================== Token Management (Secure) ====================
 
   Future<void> saveTokens({
@@ -160,10 +164,12 @@ class AppStateService {
     // Save tokens securely
     await _secureStorage.write(key: _accessTokenKey, value: accessToken);
     await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
-    await _secureStorage.write(key: _accessTokenExpiresAtKey, value: accessTokenExpiresAt);
-    await _secureStorage.write(key: _refreshTokenExpiresAtKey, value: refreshTokenExpiresAt);
+    await _secureStorage.write(
+        key: _accessTokenExpiresAtKey, value: accessTokenExpiresAt);
+    await _secureStorage.write(
+        key: _refreshTokenExpiresAtKey, value: refreshTokenExpiresAt);
     await _secureStorage.write(key: _tokenTypeKey, value: tokenType);
-    
+
     // Update cache
     _cachedAccessToken = accessToken;
     _cachedRefreshToken = refreshToken;
@@ -180,6 +186,7 @@ class AppStateService {
   /// Get access token async (if cache is empty)
   Future<String?> getAccessTokenAsync() async {
     _cachedAccessToken ??= await _secureStorage.read(key: _accessTokenKey);
+    _cachedAccessToken ??= _prefs.getString('accesstoken');
     return _cachedAccessToken;
   }
 
@@ -209,7 +216,7 @@ class AppStateService {
     await _secureStorage.delete(key: _tokenTypeKey);
     await _prefs.remove(_userTypeKey);
     await _prefs.remove(_userIdKey);
-    
+
     // Clear cache
     _cachedAccessToken = null;
     _cachedRefreshToken = null;
@@ -256,7 +263,6 @@ class AppStateService {
   bool isBroker() {
     return getUserType() == 'broker';
   }
-
 
   // ==================== Token Expiry ====================
 
@@ -342,7 +348,6 @@ class AppStateService {
     await clearTokens();
   }
 
-
   // ==================== Guest Vendor Favorites ====================
 
   List<int> getGuestFavoriteVendorIds() {
@@ -383,13 +388,15 @@ class AppStateService {
     if (dataJson == null) return {};
     try {
       final Map<String, dynamic> data = jsonDecode(dataJson);
-      return data.map((key, value) => MapEntry(int.parse(key), value as Map<String, dynamic>));
+      return data.map((key, value) =>
+          MapEntry(int.parse(key), value as Map<String, dynamic>));
     } catch (e) {
       return {};
     }
   }
 
-  Future<void> saveGuestFavoriteVendorData(int vendorId, Map<String, dynamic> vendorData) async {
+  Future<void> saveGuestFavoriteVendorData(
+      int vendorId, Map<String, dynamic> vendorData) async {
     final data = getGuestFavoriteVendorData();
     data[vendorId] = vendorData;
     final jsonData = data.map((key, value) => MapEntry(key.toString(), value));
@@ -411,7 +418,6 @@ class AppStateService {
   bool hasGuestFavoritesToSync() {
     return getGuestFavoriteVendorIds().isNotEmpty;
   }
-
 
   // ==================== Guest Property Favorites ====================
 
@@ -453,13 +459,15 @@ class AppStateService {
     if (dataJson == null) return {};
     try {
       final Map<String, dynamic> data = jsonDecode(dataJson);
-      return data.map((key, value) => MapEntry(int.parse(key), value as Map<String, dynamic>));
+      return data.map((key, value) =>
+          MapEntry(int.parse(key), value as Map<String, dynamic>));
     } catch (e) {
       return {};
     }
   }
 
-  Future<void> saveGuestFavoritePropertyData(int propertyId, Map<String, dynamic> propertyData) async {
+  Future<void> saveGuestFavoritePropertyData(
+      int propertyId, Map<String, dynamic> propertyData) async {
     final data = getGuestFavoritePropertyData();
     data[propertyId] = propertyData;
     final jsonData = data.map((key, value) => MapEntry(key.toString(), value));
@@ -481,7 +489,6 @@ class AppStateService {
   bool hasGuestPropertyFavoritesToSync() {
     return getGuestFavoritePropertyIds().isNotEmpty;
   }
-
 
   // ==================== Guest Project Favorites ====================
 
@@ -523,13 +530,15 @@ class AppStateService {
     if (dataJson == null) return {};
     try {
       final Map<String, dynamic> data = jsonDecode(dataJson);
-      return data.map((key, value) => MapEntry(int.parse(key), value as Map<String, dynamic>));
+      return data.map((key, value) =>
+          MapEntry(int.parse(key), value as Map<String, dynamic>));
     } catch (e) {
       return {};
     }
   }
 
-  Future<void> saveGuestFavoriteProjectData(int projectId, Map<String, dynamic> projectData) async {
+  Future<void> saveGuestFavoriteProjectData(
+      int projectId, Map<String, dynamic> projectData) async {
     final data = getGuestFavoriteProjectData();
     data[projectId] = projectData;
     final jsonData = data.map((key, value) => MapEntry(key.toString(), value));

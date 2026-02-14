@@ -1,6 +1,5 @@
 import 'package:cabme/common/widget/custom_text.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:cabme/features/home_new/presentation/pages/home_page.dart';
 import 'package:cabme/features/ride_new/presentation/pages/ride_history_page.dart';
@@ -10,10 +9,19 @@ import 'package:cabme/features/plans_new/presentation/pages/package_list_page.da
 import 'package:cabme/features/settings_new/presentation/pages/settings_page.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
+import 'package:cabme/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class BottomNavBar extends StatelessWidget {
-  BottomNavBar({super.key});
+class BottomNavBar extends StatefulWidget {
+  final int initialIndex;
+  const BottomNavBar({super.key, this.initialIndex = 0});
+
+  @override
+  State<BottomNavBar> createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  late int _currentIndex;
 
   final List<Widget> _screens = [
     const HomePage(),
@@ -25,101 +33,108 @@ class BottomNavBar extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
+  void _updateIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     final isDarkMode = themeChange.getThem();
-
-    Get.put(BottomNavController(initialIndex: 0));
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: GetX<BottomNavController>(
-        builder: (controller) => IndexedStack(
-          index: controller.currentIndex.value,
-          children: _screens,
-        ),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
       ),
-      bottomNavigationBar: GetX<BottomNavController>(
-        builder: (controller) => Container(
-          decoration: BoxDecoration(
-            color: isDarkMode ? AppThemeData.surface50Dark : Colors.white,
-            border: Border(
-              top: BorderSide(
-                color: isDarkMode
-                    ? AppThemeData.grey800Dark.withValues(alpha: 0.3)
-                    : AppThemeData.grey200.withValues(alpha: 0.5),
-                width: 0.5,
-              ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: isDarkMode ? AppThemeData.surface50Dark : Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: isDarkMode
+                  ? AppThemeData.grey800Dark.withAlpha(76)
+                  : AppThemeData.grey200.withAlpha(127),
+              width: 0.5,
             ),
           ),
-          child: SafeArea(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavItem(
-                    context: context,
-                    icon: Iconsax.home,
-                    activeIcon: Iconsax.home,
-                    label: 'Home'.tr,
-                    index: 0,
-                    currentIndex: controller.currentIndex.value,
-                    onTap: () => controller.updateIndex(0),
-                    isDarkMode: isDarkMode,
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Iconsax.car,
-                    activeIcon: Iconsax.car,
-                    label: 'Rides'.tr,
-                    index: 1,
-                    currentIndex: controller.currentIndex.value,
-                    onTap: () => controller.updateIndex(1),
-                    isDarkMode: isDarkMode,
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Iconsax.wallet_2,
-                    activeIcon: Iconsax.wallet_2,
-                    label: 'Wallet'.tr,
-                    index: 2,
-                    currentIndex: controller.currentIndex.value,
-                    onTap: () => controller.updateIndex(2),
-                    isDarkMode: isDarkMode,
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Iconsax.calendar_1,
-                    activeIcon: Iconsax.calendar_1,
-                    label: 'Subs'.tr,
-                    index: 3,
-                    currentIndex: controller.currentIndex.value,
-                    onTap: () => controller.updateIndex(3),
-                    isDarkMode: isDarkMode,
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Iconsax.box,
-                    activeIcon: Iconsax.box,
-                    label: 'Pkgs'.tr,
-                    index: 4,
-                    currentIndex: controller.currentIndex.value,
-                    onTap: () => controller.updateIndex(4),
-                    isDarkMode: isDarkMode,
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Iconsax.setting_2,
-                    activeIcon: Iconsax.setting_2,
-                    label: 'Settings'.tr,
-                    index: 5,
-                    currentIndex: controller.currentIndex.value,
-                    onTap: () => controller.updateIndex(5),
-                    isDarkMode: isDarkMode,
-                  ),
-                ],
-              ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(
+                  context: context,
+                  icon: Iconsax.home,
+                  activeIcon: Iconsax.home,
+                  label: l10n.home,
+                  index: 0,
+                  currentIndex: _currentIndex,
+                  onTap: () => _updateIndex(0),
+                  isDarkMode: isDarkMode,
+                ),
+                _buildNavItem(
+                  context: context,
+                  icon: Iconsax.car,
+                  activeIcon: Iconsax.car,
+                  label: l10n.ridesTitle,
+                  index: 1,
+                  currentIndex: _currentIndex,
+                  onTap: () => _updateIndex(1),
+                  isDarkMode: isDarkMode,
+                ),
+                _buildNavItem(
+                  context: context,
+                  icon: Iconsax.wallet_2,
+                  activeIcon: Iconsax.wallet_2,
+                  label: l10n.wallet,
+                  index: 2,
+                  currentIndex: _currentIndex,
+                  onTap: () => _updateIndex(2),
+                  isDarkMode: isDarkMode,
+                ),
+                _buildNavItem(
+                  context: context,
+                  icon: Iconsax.calendar_1,
+                  activeIcon: Iconsax.calendar_1,
+                  label: l10n.subscriptions,
+                  index: 3,
+                  currentIndex: _currentIndex,
+                  onTap: () => _updateIndex(3),
+                  isDarkMode: isDarkMode,
+                ),
+                _buildNavItem(
+                  context: context,
+                  icon: Iconsax.box,
+                  activeIcon: Iconsax.box,
+                  label: l10n.packages,
+                  index: 4,
+                  currentIndex: _currentIndex,
+                  onTap: () => _updateIndex(4),
+                  isDarkMode: isDarkMode,
+                ),
+                _buildNavItem(
+                  context: context,
+                  icon: Iconsax.setting_2,
+                  activeIcon: Iconsax.setting_2,
+                  label: l10n.settingsTitle,
+                  index: 5,
+                  currentIndex: _currentIndex,
+                  onTap: () => _updateIndex(5),
+                  isDarkMode: isDarkMode,
+                ),
+              ],
             ),
           ),
         ),
@@ -203,15 +218,5 @@ class BottomNavBar extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class BottomNavController extends GetxController {
-  final RxInt currentIndex;
-
-  BottomNavController({int initialIndex = 0}) : currentIndex = initialIndex.obs;
-
-  void updateIndex(int index) {
-    currentIndex.value = index;
   }
 }

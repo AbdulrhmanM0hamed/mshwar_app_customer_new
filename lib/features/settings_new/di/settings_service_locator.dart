@@ -1,3 +1,4 @@
+import '../../../service_locator.dart';
 import 'package:cabme/core(new)/network/api_service.dart';
 import 'package:cabme/features/settings_new/data/repositories/settings_repository.dart';
 import 'package:cabme/features/settings_new/data/repositories/notification_repository.dart';
@@ -5,9 +6,6 @@ import 'package:cabme/features/settings_new/presentation/cubit/profile/profile_c
 import 'package:cabme/features/settings_new/presentation/cubit/settings/settings_cubit.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/contact_us/contact_us_cubit.dart';
 import 'package:cabme/features/settings_new/presentation/cubit/notification/notification_cubit.dart';
-import 'package:get_it/get_it.dart';
-
-final getIt = GetIt.instance;
 
 void setupSettingsDependencies() {
   _registerRepositories();

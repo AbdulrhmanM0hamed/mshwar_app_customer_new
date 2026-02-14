@@ -11,14 +11,18 @@ import 'package:cabme/common/widget/button.dart';
 import 'package:cabme/common/widget/text_field.dart';
 import 'package:cabme/common/widget/custom_text.dart';
 import 'package:cabme/generated/app_localizations.dart';
+import 'package:cabme/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:cabme/features/settings_new/presentation/cubit/settings/settings_cubit.dart';
+import 'dart:developer';
 import 'forgot_password_page.dart';
 import 'phone_auth_page.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -101,6 +105,24 @@ class _LoginPageState extends State<LoginPage> {
 
             // Preload home screen data before navigating
             _preloadHomeAndNavigate();
+          } else if (state is SocialLoginUserNotFound) {
+            // Close loading
+            Navigator.of(context).pop();
+
+            // Navigate to register page with pre-filled data
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RegisterPage(
+                  phoneNumber:
+                      '', // Will be entered by user or handled differently
+                  email: state.email,
+                  firstName: state.firstName,
+                  lastName: state.lastName,
+                  loginType: state.loginType,
+                ),
+              ),
+            );
           } else if (state is LoginFailure) {
             // Close loading
             Navigator.of(context).pop();
@@ -247,6 +269,43 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 24),
 
+                // Social Login Buttons
+                // Row(
+                //   children: [
+                //     // Google Login
+                //     Expanded(
+                //       child: CustomButton(
+                //         btnName: 'Google',
+                //         ontap: () =>
+                //             context.read<LoginCubit>().loginWithGoogle(),
+                //         isOutlined: true,
+                //         icon: Image.asset(
+                //           'assets/icons/google.png',
+                //           width: 20,
+                //           height: 20,
+                //         ),
+                //       ),
+                //     ),
+                //     const SizedBox(width: 16),
+                //     // Apple Login
+                //     Expanded(
+                //       child: CustomButton(
+                //         btnName: 'Apple',
+                //         ontap: () =>
+                //             context.read<LoginCubit>().loginWithApple(),
+                //         isOutlined: true,
+                //         icon: Icon(
+                //           Icons.apple,
+                //           color: isDarkMode ? Colors.white : Colors.black,
+                //           size: 24,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+
+                // const SizedBox(height: 24),
+
                 // Mobile Number Button
                 CustomButton(
                   btnName: l10n.mobileNumber,
@@ -305,12 +364,27 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _preloadHomeAndNavigate() async {
-    // Navigate to home
-    if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => BottomNavBar()),
-        (route) => false,
-      );
+    try {
+      // Create SettingsCubit and load settings
+      final settingsCubit = getIt<SettingsCubit>();
+      await settingsCubit.loadSettings();
+
+      // Navigate to home
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => BottomNavBar()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      log('Error preloading data: $e');
+      // Still navigate even if preloading fails, but maybe show an error
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => BottomNavBar()),
+          (route) => false,
+        );
+      }
     }
   }
 }

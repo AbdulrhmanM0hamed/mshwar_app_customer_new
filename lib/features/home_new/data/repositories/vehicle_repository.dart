@@ -14,7 +14,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
   @override
   Future<List<VehicleCategoryModel>> getVehicleCategories() async {
     try {
-      final response = await apiService.get('/vehicle-categories');
+      final response = await apiService.get('Vehicle-category');
 
       if (response['success'] == 'success' && response['data'] != null) {
         List<dynamic> data = response['data'];
@@ -24,7 +24,8 @@ class VehicleRepositoryImpl implements VehicleRepository {
             .toList();
       }
 
-      throw Exception(response['message'] ?? 'Failed to load vehicle categories');
+      throw Exception(
+          response['message'] ?? 'Failed to load vehicle categories');
     } catch (e) {
       throw Exception('Failed to get vehicle categories: $e');
     }

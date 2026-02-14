@@ -1,4 +1,5 @@
 import '../../../../core(new)/network/api_service.dart';
+import '../../../../core(new)/network/app_state_service.dart';
 import '../models/subscription_model.dart';
 
 abstract class SubscriptionRepository {
@@ -9,19 +10,24 @@ abstract class SubscriptionRepository {
   Future<SubscriptionPriceModel> calculatePrice(Map<String, dynamic> data);
   Future<SubscriptionModel> createSubscription(Map<String, dynamic> data);
   Future<SubscriptionModel> payWithWallet(String subscriptionId, double amount);
-  Future<bool> confirmPayment(String subscriptionId, String transactionId, String paymentMethod);
+  Future<bool> confirmPayment(
+      String subscriptionId, String transactionId, String paymentMethod);
   Future<bool> cancelSubscription(String subscriptionId, String reason);
 }
 
 class SubscriptionRepositoryImpl implements SubscriptionRepository {
   final ApiService apiService;
+  final AppStateService appStateService;
 
-  SubscriptionRepositoryImpl({required this.apiService});
+  SubscriptionRepositoryImpl({
+    required this.apiService,
+    required this.appStateService,
+  });
 
   @override
   Future<SubscriptionSettingsModel> getSettings() async {
     try {
-      final response = await apiService.get('/subscription-settings');
+      final response = await apiService.get('subscription/settings');
 
       if (response['success'] == 'success' && response['data'] != null) {
         return SubscriptionSettingsModel.fromJson(response['data']);
@@ -36,13 +42,16 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   @override
   Future<List<SubscriptionModel>> getUserSubscriptions({String? status}) async {
     try {
-      final queryParams = <String, dynamic>{};
+      final userId = appStateService.getUserId();
+      final queryParams = <String, dynamic>{
+        'user_id': userId,
+      };
       if (status != null && status.isNotEmpty) {
         queryParams['status'] = status;
       }
 
       final response = await apiService.get(
-        '/user-subscriptions',
+        'subscription/user-subscriptions',
         queryParameters: queryParams,
       );
 
@@ -60,14 +69,20 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   @override
   Future<List<SubscriptionRideModel>> getUpcomingRides({int limit = 10}) async {
     try {
+      final userId = appStateService.getUserId();
       final response = await apiService.get(
-        '/subscription-upcoming-rides',
-        queryParameters: {'limit': limit},
+        'subscription/upcoming-rides',
+        queryParameters: {
+          'user_id': userId,
+          'limit': limit,
+        },
       );
 
       if (response['success'] == 'success' && response['data'] != null) {
         List<dynamic> data = response['data'];
-        return data.map((json) => SubscriptionRideModel.fromJson(json)).toList();
+        return data
+            .map((json) => SubscriptionRideModel.fromJson(json))
+            .toList();
       }
 
       throw Exception(response['message'] ?? 'Failed to load rides');
@@ -77,10 +92,11 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   }
 
   @override
-  Future<SubscriptionModel> getSubscriptionDetails(String subscriptionId) async {
+  Future<SubscriptionModel> getSubscriptionDetails(
+      String subscriptionId) async {
     try {
       final response = await apiService.get(
-        '/subscription-details',
+        'subscription/details',
         queryParameters: {'subscription_id': subscriptionId},
       );
 
@@ -95,9 +111,11 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   }
 
   @override
-  Future<SubscriptionPriceModel> calculatePrice(Map<String, dynamic> data) async {
+  Future<SubscriptionPriceModel> calculatePrice(
+      Map<String, dynamic> data) async {
     try {
-      final response = await apiService.post('/subscription-calculate-price', data: data);
+      final response =
+          await apiService.post('subscription/calculate-price', data: data);
 
       if (response['success'] == 'success' && response['data'] != null) {
         return SubscriptionPriceModel.fromJson(response['data']);
@@ -110,9 +128,10 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   }
 
   @override
-  Future<SubscriptionModel> createSubscription(Map<String, dynamic> data) async {
+  Future<SubscriptionModel> createSubscription(
+      Map<String, dynamic> data) async {
     try {
-      final response = await apiService.post('/subscription-create', data: data);
+      final response = await apiService.post('subscription/create', data: data);
 
       if (response['success'] == 'success' && response['data'] != null) {
         return SubscriptionModel.fromJson(response['data']);
@@ -125,10 +144,11 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   }
 
   @override
-  Future<SubscriptionModel> payWithWallet(String subscriptionId, double amount) async {
+  Future<SubscriptionModel> payWithWallet(
+      String subscriptionId, double amount) async {
     try {
       final response = await apiService.post(
-        '/subscription-pay-wallet',
+        'subscription/pay-wallet',
         data: {
           'subscription_id': subscriptionId,
           'amount': amount,
@@ -146,10 +166,11 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   }
 
   @override
-  Future<bool> confirmPayment(String subscriptionId, String transactionId, String paymentMethod) async {
+  Future<bool> confirmPayment(
+      String subscriptionId, String transactionId, String paymentMethod) async {
     try {
       final response = await apiService.post(
-        '/subscription-confirm-payment',
+        'subscription/confirm-payment',
         data: {
           'subscription_id': subscriptionId,
           'transaction_id': transactionId,
@@ -167,7 +188,7 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
   Future<bool> cancelSubscription(String subscriptionId, String reason) async {
     try {
       final response = await apiService.post(
-        '/subscription-cancel',
+        'subscription/cancel',
         data: {
           'subscription_id': subscriptionId,
           'cancellation_reason': reason,

@@ -8,6 +8,7 @@ import 'package:cabme/features/authentication_new/presentation/widgets/auth_widg
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:cabme/generated/app_localizations.dart';
+import 'package:cabme/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';

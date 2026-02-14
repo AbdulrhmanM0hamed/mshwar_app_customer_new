@@ -2,7 +2,6 @@ import 'package:cabme/common/widget/custom_text.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class RadioButtonCustom extends StatelessWidget {
@@ -41,7 +40,7 @@ class RadioButtonCustom extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? (isDarkMode
-                    ? AppThemeData.primary200.withValues(alpha:0.15)
+                    ? AppThemeData.primary200.withValues(alpha: 0.15)
                     : AppThemeData.primary50)
                 : (isDarkMode ? AppThemeData.surface50Dark : Colors.white),
             borderRadius: BorderRadius.circular(12),
@@ -56,14 +55,14 @@ class RadioButtonCustom extends StatelessWidget {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: AppThemeData.primary200.withValues(alpha:0.1),
+                      color: AppThemeData.primary200.withValues(alpha: 0.1),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
                   ]
                 : [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha:0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 4,
                       offset: const Offset(0, 1),
                     ),
@@ -77,9 +76,9 @@ class RadioButtonCustom extends StatelessWidget {
                 height: 56,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppThemeData.primary200.withValues(alpha:0.1)
+                      ? AppThemeData.primary200.withValues(alpha: 0.1)
                       : (isDarkMode
-                          ? AppThemeData.grey200Dark.withValues(alpha:0.3)
+                          ? AppThemeData.grey200Dark.withValues(alpha: 0.3)
                           : AppThemeData.grey100),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -100,7 +99,7 @@ class RadioButtonCustom extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      text: name.tr,
+                      text: name,
                       color: isSelected
                           ? AppThemeData.primary200
                           : (isDarkMode
@@ -112,7 +111,7 @@ class RadioButtonCustom extends StatelessWidget {
                     if (subName != null) ...[
                       const SizedBox(height: 4),
                       CustomText(
-                        text: subName?.tr ?? '',
+                        text: subName ?? '',
                         color: isDarkMode
                             ? AppThemeData.grey500Dark
                             : AppThemeData.grey500,

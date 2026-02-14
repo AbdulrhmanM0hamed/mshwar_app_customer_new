@@ -1,13 +1,14 @@
-import 'package:cabme/common/widget/button.dart';
-import 'package:cabme/common/widget/custom_text.dart';
-import 'package:cabme/core/themes/constant_colors.dart';
-import 'package:cabme/core/utils/dark_theme_provider.dart';
-import 'package:cabme/generated/app_localizations.dart';
+import 'package:cabme/core/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../common/widget/button.dart';
+import '../../../../common/widget/custom_text.dart';
+import '../../../../core/themes/constant_colors.dart';
+import '../../../../core/utils/dark_theme_provider.dart';
 import 'package:provider/provider.dart';
+import '../../../../generated/app_localizations.dart';
 
-/// Driver Notification Popup - Shows when driver is on the way or has arrived
 class DriverNotificationPopup extends StatelessWidget {
   final String title;
   final String message;
@@ -26,9 +27,9 @@ class DriverNotificationPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final themeChange = Provider.of<DarkThemeProvider>(context);
     final isDarkMode = themeChange.getThem();
-    final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -129,7 +130,7 @@ class DriverNotificationPopup extends StatelessWidget {
             const SizedBox(height: 24),
             // OK Button
             CustomButton(
-              btnName: l10n.ok,
+              btnName: localizations.ok,
               ontap: () {
                 Navigator.of(context).pop();
               },
@@ -140,7 +141,6 @@ class DriverNotificationPopup extends StatelessWidget {
     );
   }
 
-  /// Show the notification popup
   static Future<void> show({
     required BuildContext context,
     required String title,

@@ -995,5 +995,13 @@
   "pleaseEnterReason": "الرجاء إدخال سبب",
   "doYouWantToCancel": "هل تريد إلغاء هذا الحجز؟",
   "iDoNotFeelSafe": "لا أشعر بالأمان",
-  "reportSubmitted": "تم تقديم التقرير"
+  "reportSubmitted": "تم تقديم التقرير",
+  "selected": "تم الاختيار",
+  "tapToSelect": "اضغط للاختيار",
+  "family": "عائلي",
+  "classic": "كلاسيك",
+  "familyRideDescription": "رحلة عائلية: رحلات مريحة مع مساحة إضافية.",
+  "classicRideDescription": "تنقل مريح بسعر مناسب",
+  "reliableTransportationService": "خدمة نقل موثوقة."
+
 }

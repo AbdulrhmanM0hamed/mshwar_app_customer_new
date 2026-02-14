@@ -4,7 +4,6 @@ import 'package:cabme/core/config/app_initialization.dart';
 import 'package:cabme/core/cubit/theme_cubit.dart';
 import 'package:cabme/features/splash/splash_screen.dart';
 import 'package:cabme/service/localization_service.dart';
-import 'package:cabme/core/themes/styles.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:cabme/generated/app_localizations.dart';
 import 'package:device_preview/device_preview.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 /// Firebase background message handler
 /// Handles incoming FCM messages when app is in background or terminated
@@ -52,8 +52,13 @@ class MyApp extends StatelessWidget {
       themeProvider: themeProvider,
     );
 
-    return BlocProvider<ThemeCubit>(
-      create: (context) => ThemeCubit(themeProvider),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DarkThemeProvider>.value(value: themeProvider),
+        BlocProvider<ThemeCubit>(
+          create: (context) => ThemeCubit(themeProvider),
+        ),
+      ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, themeState) {
           final currentLocale = DevicePreview.locale(context) ??
@@ -68,7 +73,11 @@ class MyApp extends StatelessWidget {
             // Theme configuration
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: ThemeMode.system,
+            themeMode: themeState.isDark
+                ? ThemeMode.dark
+                : themeState.isLight
+                    ? ThemeMode.light
+                    : ThemeMode.system,
 
             // Device Preview
             locale: currentLocale,

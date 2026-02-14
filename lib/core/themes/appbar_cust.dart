@@ -2,7 +2,6 @@ import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:get/get.dart'; 
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -38,7 +37,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
         centerTitle: false,
         titleSpacing: 4,
         title: Text(
-          title, // Localization if using GetX
+          title,
           style: TextStyle(
             fontSize: 18,
             fontFamily: AppThemeData.medium,
@@ -52,7 +51,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
             ? leading
             : (leading == null)
                 ? IconButton(
-                    onPressed: onClick ?? () => Get.back(),
+                    onPressed: onClick ?? () => Navigator.of(context).pop(),
                     icon: Icon(
                       Icons.arrow_back_ios,
                       color: textColor ??

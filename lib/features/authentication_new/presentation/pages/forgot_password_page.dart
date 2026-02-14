@@ -9,6 +9,7 @@ import 'package:cabme/common/widget/button.dart';
 import 'package:cabme/common/widget/text_field.dart';
 import 'package:cabme/common/widget/custom_text.dart';
 import 'package:cabme/generated/app_localizations.dart';
+import 'package:cabme/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';

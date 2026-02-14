@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'package:cabme/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
 import 'package:cabme/core/constant/constant.dart';
@@ -94,9 +94,11 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
   bool isLoading = true;
 
   @override
-  void initState() {
-    super.initState();
-    _loadPaymentMethods();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isLoading) {
+      _loadPaymentMethods();
+    }
   }
 
   Future<void> _loadPaymentMethods() async {
@@ -115,43 +117,27 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
         final data = json.decode(response.body);
         if (data['success'] == 'success' && data['data'] != null) {
           walletBalance = data['data']['amount']?.toString() ?? "0.0";
-
-          // Also update cached user data with fresh balance
-          // try {
-          //   final userData = Constant.getUserData();
-          //   // userData.data?.amount = walletBalance;
-          //   // Preferences.setString(
-          //   //     Preferences.user, json.encode(userData.toJson()));
-          // } catch (_) {}
         } else {
-          // Fallback to cached data
-          // final userData = Constant.getUserData();
           walletBalance = "0.0";
         }
       } else {
-        // Fallback to cached data
-        // final userData = Constant.getUserData();
         walletBalance = "0.0";
       }
     } catch (e) {
-      // Fallback to cached data on error
-      try {
-        // final userData = Constant.getUserData();
-        walletBalance = "0.0";
-      } catch (_) {
-        walletBalance = "0.0";
-      }
+      walletBalance = "0.0";
     }
 
     // Build available payment methods based on admin settings
-    availablePaymentMethods = _buildPaymentMethodsList();
+    if (mounted) {
+      availablePaymentMethods = _buildPaymentMethodsList(context);
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  List<PaymentMethodItem> _buildPaymentMethodsList() {
+  List<PaymentMethodItem> _buildPaymentMethodsList(BuildContext context) {
     List<PaymentMethodItem> methods = [];
     final allowed = widget.allowedMethods;
 
@@ -164,8 +150,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.wallet?.isEnabled == true && isAllowed("wallet")) {
       methods.add(PaymentMethodItem(
         id: "wallet",
-        name: paymentSettings.wallet?.credentials['libelle'] ?? "Wallet".tr,
-        description: "${"Balance".tr}: $walletBalance ${widget.currency}",
+        name: paymentSettings.wallet?.credentials['libelle'] ?? "Wallet",
+        description: "Balance: $walletBalance ${widget.currency}",
         icon: Iconsax.wallet_3,
         iconColor: Colors.green,
         paymentMethodId:
@@ -179,8 +165,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
         !widget.excludeCash) {
       methods.add(PaymentMethodItem(
         id: "cash",
-        name: paymentSettings.cash?.credentials['libelle'] ?? "Cash".tr,
-        description: "Pay cash to driver".tr,
+        name: paymentSettings.cash?.credentials['libelle'] ?? "Cash",
+        description: "Pay cash to driver",
         icon: Iconsax.money,
         iconColor: Colors.orange,
         paymentMethodId:
@@ -192,8 +178,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.stripe?.isEnabled == true && isAllowed("stripe")) {
       methods.add(PaymentMethodItem(
         id: "stripe",
-        name: paymentSettings.stripe?.credentials['libelle'] ?? "Card".tr,
-        description: "Credit or Debit card".tr,
+        name: paymentSettings.stripe?.credentials['libelle'] ?? "Card",
+        description: "Credit or Debit card",
         icon: Iconsax.card,
         iconColor: Colors.purple,
         paymentMethodId:
@@ -205,8 +191,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.paypal?.isEnabled == true && isAllowed("paypal")) {
       methods.add(PaymentMethodItem(
         id: "paypal",
-        name: paymentSettings.paypal?.credentials['libelle'] ?? "PayPal".tr,
-        description: "Pay with PayPal".tr,
+        name: paymentSettings.paypal?.credentials['libelle'] ?? "PayPal",
+        description: "Pay with PayPal",
         icon: Iconsax.money_recive,
         iconColor: Colors.blue.shade800,
         paymentMethodId:
@@ -218,8 +204,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.razorpay?.isEnabled == true && isAllowed("razorpay")) {
       methods.add(PaymentMethodItem(
         id: "razorpay",
-        name: paymentSettings.razorpay?.credentials['libelle'] ?? "RazorPay".tr,
-        description: "Pay with RazorPay".tr,
+        name: paymentSettings.razorpay?.credentials['libelle'] ?? "RazorPay",
+        description: "Pay with RazorPay",
         icon: Iconsax.card_pos,
         iconColor: Colors.indigo,
         paymentMethodId:
@@ -231,8 +217,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.paystack?.isEnabled == true && isAllowed("paystack")) {
       methods.add(PaymentMethodItem(
         id: "paystack",
-        name: paymentSettings.paystack?.credentials['libelle'] ?? "PayStack".tr,
-        description: "Pay with PayStack".tr,
+        name: paymentSettings.paystack?.credentials['libelle'] ?? "PayStack",
+        description: "Pay with PayStack",
         icon: Iconsax.card_tick,
         iconColor: Colors.teal,
         paymentMethodId:
@@ -246,8 +232,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
       methods.add(PaymentMethodItem(
         id: "flutterwave",
         name: paymentSettings.flutterwave?.credentials['libelle'] ??
-            "FlutterWave".tr,
-        description: "Pay with FlutterWave".tr,
+            "FlutterWave",
+        description: "Pay with FlutterWave",
         icon: Iconsax.flash,
         iconColor: Colors.amber,
         paymentMethodId:
@@ -262,8 +248,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
       methods.add(PaymentMethodItem(
         id: "mercadopago",
         name: paymentSettings.mercadopago?.credentials['libelle'] ??
-            "MercadoPago".tr,
-        description: "Pay with MercadoPago".tr,
+            "MercadoPago",
+        description: "Pay with MercadoPago",
         icon: Iconsax.money_send,
         iconColor: Colors.lightBlue,
         paymentMethodId:
@@ -276,8 +262,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.payfast?.isEnabled == true && isAllowed("payfast")) {
       methods.add(PaymentMethodItem(
         id: "payfast",
-        name: paymentSettings.payfast?.credentials['libelle'] ?? "PayFast".tr,
-        description: "Pay with PayFast".tr,
+        name: paymentSettings.payfast?.credentials['libelle'] ?? "PayFast",
+        description: "Pay with PayFast",
         icon: Iconsax.card_receive,
         iconColor: Colors.cyan,
         paymentMethodId:
@@ -289,8 +275,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.xendit?.isEnabled == true && isAllowed("xendit")) {
       methods.add(PaymentMethodItem(
         id: "xendit",
-        name: paymentSettings.xendit?.credentials['libelle'] ?? "Xendit".tr,
-        description: "Pay with Xendit".tr,
+        name: paymentSettings.xendit?.credentials['libelle'] ?? "Xendit",
+        description: "Pay with Xendit",
         icon: Iconsax.card_add,
         iconColor: Colors.deepPurple,
         paymentMethodId:
@@ -303,9 +289,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
         isAllowed("orangepay")) {
       methods.add(PaymentMethodItem(
         id: "orangepay",
-        name: paymentSettings.orangepay?.credentials['libelle'] ??
-            "Orange Pay".tr,
-        description: "Pay with Orange Pay".tr,
+        name: paymentSettings.orangepay?.credentials['libelle'] ?? "Orange Pay",
+        description: "Pay with Orange Pay",
         icon: Iconsax.mobile,
         iconColor: Colors.deepOrange,
         paymentMethodId:
@@ -317,8 +302,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
     if (paymentSettings.midtrans?.isEnabled == true && isAllowed("midtrans")) {
       methods.add(PaymentMethodItem(
         id: "midtrans",
-        name: paymentSettings.midtrans?.credentials['libelle'] ?? "Midtrans".tr,
-        description: "Pay with Midtrans".tr,
+        name: paymentSettings.midtrans?.credentials['libelle'] ?? "Midtrans",
+        description: "Pay with Midtrans",
         icon: Iconsax.card_slash,
         iconColor: Colors.blueGrey,
         paymentMethodId:
@@ -331,8 +316,8 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
         isAllowed("upayments")) {
       methods.add(PaymentMethodItem(
         id: "upayments",
-        name: "KNET / Apple Pay".tr,
-        description: "Pay with KNET, Apple Pay, Cards".tr,
+        name: "KNET / Apple Pay",
+        description: "Pay with KNET, Apple Pay, Cards",
         icon: Iconsax.card,
         iconColor: Colors.blue,
         paymentMethodId:
@@ -345,6 +330,7 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: BoxDecoration(
@@ -390,7 +376,7 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  "select_payment_method".tr,
+                  l10n.selectPaymentMethod,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -466,7 +452,7 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              "No payment methods available".tr,
+                              "No payment methods available",
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey[600],
@@ -474,7 +460,7 @@ class _PaymentSelectionSheetState extends State<_PaymentSelectionSheet> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "Please contact support".tr,
+                              "Please contact support",
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey[500],

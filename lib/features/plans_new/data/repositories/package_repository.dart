@@ -1,21 +1,29 @@
 import '../../../../core(new)/network/api_service.dart';
+import '../../../../core(new)/network/app_state_service.dart';
 import '../models/package_model.dart';
 
 abstract class PackageRepository {
   Future<List<PackageModel>> getAvailablePackages();
   Future<List<UserPackageModel>> getUserPackages({String? status});
   Future<List<UserPackageModel>> getUsablePackages();
-  Future<UserPackageModel> purchasePackage(String packageId, String paymentMethod);
+  Future<UserPackageModel> purchasePackage(
+      String packageId, String paymentMethod);
   Future<UserPackageModel> payWithWallet(String userPackageId, double amount);
-  Future<bool> confirmPayment(String userPackageId, String transactionId, String paymentMethod);
+  Future<bool> confirmPayment(
+      String userPackageId, String transactionId, String paymentMethod);
   Future<bool> cancelPackage(String userPackageId);
-  Future<bool> applyToRide(String userPackageId, String rideId, double kmToDeduct);
+  Future<bool> applyToRide(
+      String userPackageId, String rideId, double kmToDeduct);
 }
 
 class PackageRepositoryImpl implements PackageRepository {
   final ApiService apiService;
+  final AppStateService appStateService;
 
-  PackageRepositoryImpl({required this.apiService});
+  PackageRepositoryImpl({
+    required this.apiService,
+    required this.appStateService,
+  });
 
   @override
   Future<List<PackageModel>> getAvailablePackages() async {
@@ -36,13 +44,16 @@ class PackageRepositoryImpl implements PackageRepository {
   @override
   Future<List<UserPackageModel>> getUserPackages({String? status}) async {
     try {
-      final queryParams = <String, dynamic>{};
+      final userId = appStateService.getUserId();
+      final queryParams = <String, dynamic>{
+        'user_id': userId,
+      };
       if (status != null && status.isNotEmpty) {
         queryParams['status'] = status;
       }
 
       final response = await apiService.get(
-        '/user-packages',
+        'packages/user-packages',
         queryParameters: queryParams,
       );
 
@@ -60,7 +71,11 @@ class PackageRepositoryImpl implements PackageRepository {
   @override
   Future<List<UserPackageModel>> getUsablePackages() async {
     try {
-      final response = await apiService.get('/usable-packages');
+      final userId = appStateService.getUserId();
+      final response = await apiService.get(
+        'packages/usable',
+        queryParameters: {'user_id': userId},
+      );
 
       if (response['success'] == 'success' && response['data'] != null) {
         List<dynamic> data = response['data'];
@@ -74,11 +89,14 @@ class PackageRepositoryImpl implements PackageRepository {
   }
 
   @override
-  Future<UserPackageModel> purchasePackage(String packageId, String paymentMethod) async {
+  Future<UserPackageModel> purchasePackage(
+      String packageId, String paymentMethod) async {
     try {
+      final userId = appStateService.getUserId();
       final response = await apiService.post(
-        '/purchase-package',
+        'packages/purchase',
         data: {
+          'user_id': userId,
           'package_id': packageId,
           'payment_method': paymentMethod,
         },
@@ -95,11 +113,14 @@ class PackageRepositoryImpl implements PackageRepository {
   }
 
   @override
-  Future<UserPackageModel> payWithWallet(String userPackageId, double amount) async {
+  Future<UserPackageModel> payWithWallet(
+      String userPackageId, double amount) async {
     try {
+      final userId = appStateService.getUserId();
       final response = await apiService.post(
-        '/package-pay-wallet',
+        'packages/pay-wallet',
         data: {
+          'user_id': userId,
           'user_package_id': userPackageId,
           'amount': amount,
         },
@@ -116,10 +137,11 @@ class PackageRepositoryImpl implements PackageRepository {
   }
 
   @override
-  Future<bool> confirmPayment(String userPackageId, String transactionId, String paymentMethod) async {
+  Future<bool> confirmPayment(
+      String userPackageId, String transactionId, String paymentMethod) async {
     try {
       final response = await apiService.post(
-        '/package-confirm-payment',
+        'packages/confirm-payment',
         data: {
           'user_package_id': userPackageId,
           'transaction_id': transactionId,
@@ -136,9 +158,13 @@ class PackageRepositoryImpl implements PackageRepository {
   @override
   Future<bool> cancelPackage(String userPackageId) async {
     try {
+      final userId = appStateService.getUserId();
       final response = await apiService.post(
-        '/cancel-package',
-        data: {'user_package_id': userPackageId},
+        'packages/cancel',
+        data: {
+          'user_id': userId,
+          'user_package_id': userPackageId,
+        },
       );
 
       return response['success'] == 'success';
@@ -148,11 +174,14 @@ class PackageRepositoryImpl implements PackageRepository {
   }
 
   @override
-  Future<bool> applyToRide(String userPackageId, String rideId, double kmToDeduct) async {
+  Future<bool> applyToRide(
+      String userPackageId, String rideId, double kmToDeduct) async {
     try {
+      final userId = appStateService.getUserId();
       final response = await apiService.post(
-        '/apply-package-to-ride',
+        'packages/apply-to-ride',
         data: {
+          'user_id': userId,
           'user_package_id': userPackageId,
           'ride_id': rideId,
           'km_to_deduct': kmToDeduct,

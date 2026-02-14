@@ -24,12 +24,12 @@ class RegisterRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      'nom': firstName,
-      'prenom': lastName,
+      'firstname': firstName,
+      'lastname': lastName,
       'email': email,
       'phone': phone,
       'password': password,
-      'user_cat': userCat,
+      'account_type': userCat,
       'login_type': loginType,
       if (fcmToken != null) 'fcm_id': fcmToken,
       if (country != null) 'country': country,

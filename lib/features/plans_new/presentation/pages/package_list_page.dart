@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import '../../../../service_locator.dart';
 import '../../../../common/widget/custom_app_bar.dart';
 import '../../../../common/widget/custom_text.dart';
 import '../../../../core/themes/constant_colors.dart';
@@ -26,13 +26,14 @@ class PackageListPage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider(
-      create: (context) => GetIt.instance<PackageCubit>()
+      create: (context) => getIt<PackageCubit>()
         ..loadAvailablePackages()
         ..loadUserPackages(),
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          backgroundColor: isDark ? AppThemeData.surface50Dark : AppThemeData.surface50,
+          backgroundColor:
+              isDark ? AppThemeData.surface50Dark : AppThemeData.surface50,
           appBar: CustomAppBar(
             title: l10n.packages,
             showBackButton: showBackButton,
@@ -105,7 +106,8 @@ class _AvailablePackagesTab extends StatelessWidget {
                   CustomText(
                     text: state.message,
                     size: 16,
-                    color: themeChange.getThem() ? Colors.white70 : Colors.black54,
+                    color:
+                        themeChange.getThem() ? Colors.white70 : Colors.black54,
                     align: TextAlign.center,
                   ),
                 ],
@@ -169,7 +171,8 @@ class _AvailablePackagesTab extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PurchasePackagePage(package: package),
+                        builder: (context) =>
+                            PurchasePackagePage(package: package),
                       ),
                     );
                   },
@@ -213,7 +216,8 @@ class _MyPackagesTab extends StatelessWidget {
                   CustomText(
                     text: state.message,
                     size: 16,
-                    color: themeChange.getThem() ? Colors.white70 : Colors.black54,
+                    color:
+                        themeChange.getThem() ? Colors.white70 : Colors.black54,
                     align: TextAlign.center,
                   ),
                 ],
@@ -338,7 +342,9 @@ class _BuyMoreCard extends StatelessWidget {
                     CustomText(
                       text: l10n.buyMorePackagesDesc,
                       size: 12,
-                      color: isDark ? AppThemeData.grey400Dark : AppThemeData.grey500,
+                      color: isDark
+                          ? AppThemeData.grey400Dark
+                          : AppThemeData.grey500,
                     ),
                   ],
                 ),

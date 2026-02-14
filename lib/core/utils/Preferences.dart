@@ -12,6 +12,7 @@ class Preferences {
   static const currency = "currency";
   static const accesstoken = "accesstoken";
   static const admincommission = "adminCommission";
+  static const walletBalance = "walletBalance";
 
   static late SharedPreferences pref;
 

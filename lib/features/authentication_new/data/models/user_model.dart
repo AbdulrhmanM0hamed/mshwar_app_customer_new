@@ -16,6 +16,8 @@ class UserModel {
   final String? country;
   final String? gender;
   final String? age;
+  final String? amount;
+  final String? deviceId;
 
   UserModel({
     required this.id,
@@ -34,6 +36,8 @@ class UserModel {
     this.country,
     this.gender,
     this.age,
+    this.amount,
+    this.deviceId,
   });
 
   /// Full name getter
@@ -63,6 +67,8 @@ class UserModel {
       country: json['country']?.toString(),
       gender: json['gender']?.toString(),
       age: json['age']?.toString(),
+      amount: json['amount']?.toString(),
+      deviceId: json['device_id']?.toString(),
     );
   }
 
@@ -84,6 +90,8 @@ class UserModel {
       'country': country,
       'gender': gender,
       'age': age,
+      'amount': amount,
+      'device_id': deviceId,
     };
   }
 
@@ -105,6 +113,8 @@ class UserModel {
     String? country,
     String? gender,
     String? age,
+    String? amount,
+    String? deviceId,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -123,6 +133,8 @@ class UserModel {
       country: country ?? this.country,
       gender: gender ?? this.gender,
       age: age ?? this.age,
+      amount: amount ?? this.amount,
+      deviceId: deviceId ?? this.deviceId,
     );
   }
 }

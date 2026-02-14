@@ -4,7 +4,6 @@ import 'package:cabme/core/themes/button_them.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CustomAlertDialog extends StatefulWidget {
@@ -41,13 +40,17 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+          padding:
+              const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: themeChange.getThem() ? AppThemeData.surface50Dark : AppThemeData.surface50,
+              color: themeChange.getThem()
+                  ? AppThemeData.surface50Dark
+                  : AppThemeData.surface50,
               borderRadius: BorderRadius.circular(0),
               boxShadow: const [
-                BoxShadow(color: Colors.black, offset: Offset(0, 5), blurRadius: 10),
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 5), blurRadius: 10),
               ]),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -58,7 +61,9 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: AppThemeData.semiBold,
-                  color: themeChange.getThem() ? AppThemeData.grey900Dark : AppThemeData.grey900,
+                  color: themeChange.getThem()
+                      ? AppThemeData.grey900Dark
+                      : AppThemeData.grey900,
                 ),
               ),
               const SizedBox(
@@ -69,7 +74,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                   Expanded(
                     child: ButtonThem.buildButton(
                       context,
-                      title: 'Yes'.tr,
+                      title: 'Yes',
                       btnWidthRatio: 0.8,
                       onPress: widget.onPressPositive,
                     ),
@@ -80,9 +85,11 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                   Expanded(
                     child: ButtonThem.buildBorderButton(
                       context,
-                      title: 'No'.tr,
+                      title: 'No',
                       btnWidthRatio: 0.8,
-                      btnColor: themeChange.getThem() ? AppThemeData.surface50Dark : AppThemeData.surface50,
+                      btnColor: themeChange.getThem()
+                          ? AppThemeData.surface50Dark
+                          : AppThemeData.surface50,
                       txtColor: AppThemeData.primary200,
                       btnBorderColor: AppThemeData.primary200,
                       onPress: widget.onPressNegative,

@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/google_maps_webservice_places.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -80,6 +79,10 @@ class Constant {
 
   static UserModel getUserData() {
     final String user = Preferences.getString(Preferences.user);
+    if (user.isEmpty) {
+      return UserModel.fromJson(
+          {}); // Fix: Use fromJson to handle required fields
+    }
     Map<String, dynamic> userMap = jsonDecode(user);
     if (userMap.containsKey('data')) {
       return UserModel.fromJson(userMap['data']);
@@ -157,7 +160,7 @@ class Constant {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomText(
-                text: msg.tr,
+                text: msg,
                 align: TextAlign.center,
                 color: themeChange.getThem()
                     ? AppThemeData.grey300Dark
@@ -233,7 +236,7 @@ class Constant {
 
     uploadTask.snapshotEvents.listen((event) {
       ShowToastDialog.showLoader(
-          '${'Uploading image'.tr} ${(event.bytesTransferred.toDouble() / 1000).toStringAsFixed(2)} /${(event.totalBytes.toDouble() / 1000).toStringAsFixed(2)} KB');
+          'Uploading image ${(event.bytesTransferred.toDouble() / 1000).toStringAsFixed(2)} /${(event.totalBytes.toDouble() / 1000).toStringAsFixed(2)} KB');
     });
     uploadTask.whenComplete(() {}).catchError((onError) {
       ShowToastDialog.closeLoader();
@@ -259,7 +262,7 @@ class Constant {
     UploadTask uploadTask = upload.putFile(compressedVideo, metadata);
     uploadTask.snapshotEvents.listen((event) {
       ShowToastDialog.showLoader(
-          '${'Uploading video'.tr} ${(event.bytesTransferred.toDouble() / 1000).toStringAsFixed(2)} /${(event.totalBytes.toDouble() / 1000).toStringAsFixed(2)} KB');
+          'Uploading video ${(event.bytesTransferred.toDouble() / 1000).toStringAsFixed(2)} /${(event.totalBytes.toDouble() / 1000).toStringAsFixed(2)} KB');
     });
     var storageRef = (await uploadTask.whenComplete(() {})).ref;
     var downloadUrl = await storageRef.getDownloadURL();
@@ -273,8 +276,7 @@ class Constant {
     ShowToastDialog.closeLoader();
     return ChatVideoContainer(
         videoUrl: Url(
-            url: downloadUrl.toString(),
-            mime: metaData.contentType ?? 'video'.tr),
+            url: downloadUrl.toString(), mime: metaData.contentType ?? 'video'),
         thumbnailUrl: thumbnailDownloadUrl);
   }
 
@@ -636,7 +638,7 @@ class Constant {
   Future<dynamic> getDurationDistance(
       {required LatLng departureLatLong,
       required LatLng destinationLatLong}) async {
-    ShowToastDialog.showLoader("please_wait".tr);
+    ShowToastDialog.showLoader("please_wait");
     double originLat, originLong, destLat, destLong;
     originLat = departureLatLong.latitude;
     originLong = departureLatLong.longitude;
@@ -736,7 +738,7 @@ class Constant {
 
   Future<String?> getAmount() async {
     try {
-      ShowToastDialog.showLoader("please_wait".tr);
+      ShowToastDialog.showLoader("please_wait");
       final response = await http.get(
           Uri.parse(
               "${API.wallet}?id_user=${Preferences.getInt(Preferences.userId)}&user_cat=user_app"),

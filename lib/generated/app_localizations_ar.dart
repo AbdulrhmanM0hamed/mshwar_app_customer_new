@@ -1125,6 +1125,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dropoff => 'التوصيل';
 
   @override
+  String get selected => 'تم الاختيار';
+
+  @override
+  String get tapToSelect => 'اضغط للاختيار';
+
+  @override
+  String get family => 'عائلي';
+
+  @override
+  String get classic => 'كلاسيك';
+
+  @override
+  String get familyRideDescription =>
+      'رحلة عائلية: رحلات مريحة مع مساحة إضافية.';
+
+  @override
+  String get classicRideDescription => 'تنقل مريح بسعر مناسب';
+
+  @override
+  String get reliableTransportationService => 'خدمة نقل موثوقة.';
+
+  @override
   String get stops => 'التوقفات';
 
   @override

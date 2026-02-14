@@ -1,6 +1,9 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:geocoding/geocoding.dart' hide Location;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_google_places_hoc081098/google_maps_webservice_places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import '../../../../core/constant/constant.dart';
 import '../models/location_model.dart';
 
 abstract class LocationRepository {
@@ -95,39 +98,73 @@ class LocationRepositoryImpl implements LocationRepository {
         return [];
       }
 
-      List<Location> locations = await locationFromAddress(query);
+      String apiKey = Constant.kGoogleApiKey ?? '';
+      // Fallback if not set
+      if (apiKey.isEmpty || apiKey == 'null') {
+        apiKey = 'AIzaSyCvUrBOS0y4FDS6kAhkZhLRjTHtudwG43c';
+      }
+
+      final places = GoogleMapsPlaces(
+        apiKey: apiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders(),
+      );
+
+      final response = await places.autocomplete(
+        query,
+        language: 'en',
+        components: [Component(Component.country, "kw")], // Kuwait
+      );
+
+      if (!response.isOkay) {
+        return [];
+      }
 
       List<LocationModel> results = [];
-      for (Location location in locations) {
-        try {
-          List<Placemark> placemarks = await placemarkFromCoordinates(
-            location.latitude,
-            location.longitude,
-          );
-
-          if (placemarks.isNotEmpty) {
-            Placemark place = placemarks[0];
-            String address =
-                '${place.street}, ${place.locality}, ${place.country}';
-
-            results.add(
-              LocationModel(
-                latitude: location.latitude,
-                longitude: location.longitude,
-                address: address,
-                placeName: place.name,
-              ),
-            );
-          }
-        } catch (e) {
-          // Skip this location if geocoding fails
-          continue;
-        }
+      for (var prediction in response.predictions) {
+        results.add(
+          LocationModel(
+            latitude:
+                0, // Lat/Lng will be fetched when selected to save API calls
+            longitude: 0,
+            address: prediction.description ?? '',
+            placeName: prediction.structuredFormatting?.mainText ?? '',
+            placeId: prediction.placeId, // Store placeId to fetch details later
+          ),
+        );
       }
 
       return results;
     } catch (e) {
       throw Exception('Failed to search location: $e');
+    }
+  }
+
+  // Helper method to get details by place ID (can be added to interface if needed)
+  Future<LocationModel?> getPlaceDetails(String placeId) async {
+    try {
+      String apiKey = Constant.kGoogleApiKey ?? '';
+      if (apiKey.isEmpty || apiKey == 'null') {
+        apiKey = 'AIzaSyCvUrBOS0y4FDS6kAhkZhLRjTHtudwG43c';
+      }
+
+      final places = GoogleMapsPlaces(
+        apiKey: apiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders(),
+      );
+
+      final detail = await places.getDetailsByPlaceId(placeId);
+      if (detail.isOkay && detail.result.geometry != null) {
+        final loc = detail.result.geometry!.location;
+        return LocationModel(
+          latitude: loc.lat,
+          longitude: loc.lng,
+          address: detail.result.formattedAddress ?? '',
+          placeName: detail.result.name,
+        );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
   }
 

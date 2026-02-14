@@ -2236,6 +2236,48 @@ abstract class AppLocalizations {
   /// **'Dropoff'**
   String get dropoff;
 
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
+
+  /// No description provided for @tapToSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select'**
+  String get tapToSelect;
+
+  /// No description provided for @family.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get family;
+
+  /// No description provided for @classic.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic'**
+  String get classic;
+
+  /// No description provided for @familyRideDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Family ride: Comfortable trips with extra space.'**
+  String get familyRideDescription;
+
+  /// No description provided for @classicRideDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Comfortable commute at an affordable price'**
+  String get classicRideDescription;
+
+  /// No description provided for @reliableTransportationService.
+  ///
+  /// In en, this message translates to:
+  /// **'Reliable transportation service.'**
+  String get reliableTransportationService;
+
   /// No description provided for @stops.
   ///
   /// In en, this message translates to:

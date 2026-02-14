@@ -11,12 +11,15 @@ import 'package:cabme/features/authentication_new/presentation/widgets/auth_widg
 import 'package:cabme/common/screens/botton_nav_bar.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:cabme/generated/app_localizations.dart';
+import 'package:cabme/service_locator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
+import 'package:cabme/features/settings_new/presentation/cubit/settings/settings_cubit.dart';
+import 'dart:developer';
 import 'login_page.dart';
 import 'register_page.dart';
 
@@ -168,15 +171,27 @@ class _OtpPageState extends State<OtpPage> {
                   ),
                 );
               } else if (state is GetUserByPhoneSuccess) {
-                Navigator.of(context).pop(); // Close loading
+                // Close loading
+                Navigator.of(context).pop();
 
                 CustomSnackbar.showSuccess(
-                  context: context,
-                  message: l10n.loginSuccessful,
-                );
+                    context: context,
+                    message: AppLocalizations.of(context)!.loginSuccessful);
 
-                // Preload home and navigate
                 _preloadHomeAndNavigate();
+              } else if (state is UserNotFound) {
+                // Close loading
+                Navigator.of(context).pop();
+
+                // User does not exist, redirect to registration
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RegisterPage(
+                      phoneNumber: state.phone,
+                    ),
+                  ),
+                );
               } else if (state is GetUserByPhoneFailure) {
                 Navigator.of(context).pop(); // Close loading
                 CustomSnackbar.showError(
@@ -331,12 +346,27 @@ class _OtpPageState extends State<OtpPage> {
   }
 
   Future<void> _preloadHomeAndNavigate() async {
-    // Navigate to home
-    if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => BottomNavBar()),
-        (route) => false,
-      );
+    try {
+      // Create SettingsCubit and load settings
+      final settingsCubit = getIt<SettingsCubit>();
+      await settingsCubit.loadSettings();
+
+      // Navigate to home
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => BottomNavBar()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      log('Error preloading data: $e');
+      // Still navigate even if preloading fails
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => BottomNavBar()),
+          (route) => false,
+        );
+      }
     }
   }
 }

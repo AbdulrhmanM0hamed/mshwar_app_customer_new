@@ -10,6 +10,7 @@ import '../../data/models/location_model.dart';
 class RouteInfoWidget extends StatelessWidget {
   final LocationModel departure;
   final LocationModel destination;
+  final List<LocationModel>? stops;
   final String? distance;
   final String? duration;
 
@@ -17,6 +18,7 @@ class RouteInfoWidget extends StatelessWidget {
     super.key,
     required this.departure,
     required this.destination,
+    this.stops,
     this.distance,
     this.duration,
   });
@@ -30,81 +32,121 @@ class RouteInfoWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDarkMode
-            ? AppThemeData.grey200Dark
-            : AppThemeData.grey200,
+        color: isDarkMode ? AppThemeData.grey200Dark : AppThemeData.grey200,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isDarkMode
-              ? AppThemeData.grey300Dark
-              : AppThemeData.grey300,
+          color: isDarkMode ? AppThemeData.grey300Dark : AppThemeData.grey300,
         ),
       ),
       child: Column(
         children: [
           // Departure
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: AppThemeData.success200.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Iconsax.location,
-                  color: AppThemeData.success200,
-                  size: 18,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: l10n.pickup,
-                      size: 12,
-                      color: isDarkMode
-                          ? AppThemeData.grey500Dark
-                          : AppThemeData.grey500,
-                    ),
-                    const SizedBox(height: 2),
-                    CustomText(
-                      text: departure.address,
-                      size: 14,
-                      weight: FontWeight.w600,
-                      color: isDarkMode
-                          ? AppThemeData.grey900Dark
-                          : AppThemeData.grey900,
-                      maxLines: 2,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          _buildStopItem(
+            context: context,
+            label: l10n.pickup,
+            address: departure.address,
+            iconColor: AppThemeData.success200,
+            isDarkMode: isDarkMode,
+            isFirst: true,
           ),
 
-          // Divider with dots
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
+          // Intermediate Stops
+          if (stops != null && stops!.isNotEmpty)
+            ...stops!.asMap().entries.map((entry) {
+              return _buildStopItem(
+                context: context,
+                label: "${l10n.stop} ${entry.key + 1}",
+                address: entry.value.address,
+                iconColor: AppThemeData.primary200,
+                isDarkMode: isDarkMode,
+              );
+            }),
+
+          // Destination
+          _buildStopItem(
+            context: context,
+            label: l10n.dropoff,
+            address: destination.address,
+            iconColor: AppThemeData.error200,
+            isDarkMode: isDarkMode,
+            isLast: true,
+            distance: distance,
+            duration: duration,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStopItem({
+    required BuildContext context,
+    required String label,
+    required String address,
+    required Color iconColor,
+    required bool isDarkMode,
+    bool isFirst = false,
+    bool isLast = false,
+    String? distance,
+    String? duration,
+  }) {
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
               children: [
-                const SizedBox(width: 15),
                 Container(
-                  width: 2,
-                  height: 30,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
-                    color: isDarkMode
-                        ? AppThemeData.grey300Dark
-                        : AppThemeData.grey300,
+                    color: iconColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Iconsax.location,
+                    color: iconColor,
+                    size: 18,
                   ),
                 ),
-                const SizedBox(width: 12),
-                if (distance != null || duration != null)
-                  Expanded(
-                    child: Row(
+                if (!isLast)
+                  Container(
+                    width: 2,
+                    height: 30,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      color: isDarkMode
+                          ? AppThemeData.grey300Dark
+                          : AppThemeData.grey300,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(
+                    text: label,
+                    size: 12,
+                    color: isDarkMode
+                        ? AppThemeData.grey500Dark
+                        : AppThemeData.grey500,
+                  ),
+                  const SizedBox(height: 2),
+                  CustomText(
+                    text: address,
+                    size: 14,
+                    weight: FontWeight.w600,
+                    color: isDarkMode
+                        ? AppThemeData.grey900Dark
+                        : AppThemeData.grey900,
+                    maxLines: 2,
+                  ),
+                  if (isLast && (distance != null || duration != null)) ...[
+                    const SizedBox(height: 8),
+                    Row(
                       children: [
                         if (distance != null) ...[
                           Icon(
@@ -116,7 +158,7 @@ class RouteInfoWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           CustomText(
-                            text: distance!,
+                            text: distance,
                             size: 12,
                             color: isDarkMode
                                 ? AppThemeData.grey500Dark
@@ -135,7 +177,7 @@ class RouteInfoWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           CustomText(
-                            text: duration!,
+                            text: duration,
                             size: 12,
                             color: isDarkMode
                                 ? AppThemeData.grey500Dark
@@ -144,56 +186,13 @@ class RouteInfoWidget extends StatelessWidget {
                         ],
                       ],
                     ),
-                  ),
-              ],
-            ),
-          ),
-
-          // Destination
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: AppThemeData.error200.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Iconsax.location,
-                  color: AppThemeData.error200,
-                  size: 18,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: l10n.dropoff,
-                      size: 12,
-                      color: isDarkMode
-                          ? AppThemeData.grey500Dark
-                          : AppThemeData.grey500,
-                    ),
-                    const SizedBox(height: 2),
-                    CustomText(
-                      text: destination.address,
-                      size: 14,
-                      weight: FontWeight.w600,
-                      color: isDarkMode
-                          ? AppThemeData.grey900Dark
-                          : AppThemeData.grey900,
-                      maxLines: 2,
-                    ),
                   ],
-                ),
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

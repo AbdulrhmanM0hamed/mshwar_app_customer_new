@@ -1,12 +1,11 @@
-import 'package:get_it/get_it.dart';
+import '../../../service_locator.dart';
 import '../../../core(new)/network/api_service.dart';
 import '../../../core(new)/network/app_state_service.dart';
 import '../data/repositories/auth_repository.dart';
 import '../presentation/cubit/login/login_cubit.dart';
 import '../presentation/cubit/register/register_cubit.dart';
 import '../presentation/cubit/otp/otp_cubit.dart';
-
-final getIt = GetIt.instance;
+import '../data/services/social_auth_service.dart';
 
 /// Setup all dependencies for Authentication feature
 /// Call this in main.dart after core dependencies are registered
@@ -17,12 +16,18 @@ void setupAuthDependencies() {
 
 /// Register all repositories
 void _registerRepositories() {
+  // Social Auth Service
+  if (!getIt.isRegistered<SocialAuthService>()) {
+    getIt.registerLazySingleton<SocialAuthService>(() => SocialAuthService());
+  }
+
   // Auth Repository
   if (!getIt.isRegistered<AuthRepository>()) {
     getIt.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
         getIt<ApiService>(),
         getIt<AppStateService>(),
+        getIt<SocialAuthService>(),
       ),
     );
   }

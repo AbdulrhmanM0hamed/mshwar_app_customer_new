@@ -15,29 +15,32 @@ class RideCubit extends Cubit<RideState> {
   String? get lastBookingId => _lastBookingId;
 
   Future<void> calculatePrice({
+    required String vehicleName,
+    required String distance,
     required double departureLat,
     required double departureLng,
     required double destinationLat,
     required double destinationLng,
-    required String vehicleCategoryId,
-    String? couponCode,
-    bool usePackageKm = false,
   }) async {
     try {
       emit(RideCalculating());
 
-      final calculation = await repository.calculatePrice(
+      final response = await repository.calculatePrice(
+        vehicleName: vehicleName,
+        distance: distance,
         departureLat: departureLat,
         departureLng: departureLng,
         destinationLat: destinationLat,
         destinationLng: destinationLng,
-        vehicleCategoryId: vehicleCategoryId,
-        couponCode: couponCode,
-        usePackageKm: usePackageKm,
       );
 
-      _lastCalculation = calculation;
-      emit(RidePriceCalculated(calculation));
+      if (response['status'] == true) {
+        final calculation = PriceCalculationModel.fromJson(response);
+        _lastCalculation = calculation;
+        emit(RidePriceCalculated(calculation));
+      } else {
+        emit(RideError(response['message'] ?? 'Failed to calculate price'));
+      }
     } catch (e) {
       emit(RideError(e.toString()));
     }
@@ -47,7 +50,6 @@ class RideCubit extends Cubit<RideState> {
     required double latitude,
     required double longitude,
     required String vehicleCategoryId,
-    double radiusKm = 10.0,
   }) async {
     try {
       emit(RideFindingDrivers());
@@ -56,7 +58,6 @@ class RideCubit extends Cubit<RideState> {
         latitude: latitude,
         longitude: longitude,
         vehicleCategoryId: vehicleCategoryId,
-        radiusKm: radiusKm,
       );
 
       if (drivers.isEmpty) {

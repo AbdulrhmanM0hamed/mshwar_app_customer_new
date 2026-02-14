@@ -2,7 +2,6 @@ import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
@@ -32,8 +31,13 @@ class TextFieldThem {
       maxLength: maxLength,
       enabled: enabled,
       textInputAction: TextInputAction.done,
-      decoration:
-          InputDecoration(counterText: "", labelText: labelText, hintText: title, contentPadding: contentPadding, suffixIcon: Icon(icon), border: const UnderlineInputBorder()),
+      decoration: InputDecoration(
+          counterText: "",
+          labelText: labelText,
+          hintText: title,
+          contentPadding: contentPadding,
+          suffixIcon: Icon(icon),
+          border: const UnderlineInputBorder()),
     );
   }
 
@@ -63,7 +67,9 @@ class TextFieldThem {
         enabled: enabled,
         style: TextStyle(
           fontSize: 16,
-          color: themeChange.getThem() ? AppThemeData.grey900Dark : AppThemeData.grey900,
+          color: themeChange.getThem()
+              ? AppThemeData.grey900Dark
+              : AppThemeData.grey900,
           fontFamily: AppThemeData.regular,
         ),
         textInputAction: TextInputAction.done,
@@ -73,28 +79,48 @@ class TextFieldThem {
             suffixIcon: suffix,
             counterText: "",
             contentPadding: const EdgeInsets.all(14),
-            fillColor: themeChange.getThem() ? AppThemeData.surface50Dark : AppThemeData.surface50,
+            fillColor: themeChange.getThem()
+                ? AppThemeData.surface50Dark
+                : AppThemeData.surface50,
             filled: true,
             focusedBorder: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(0)),
-              borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.grey300Dark : AppThemeData.grey300, width: 0.8),
+              borderSide: BorderSide(
+                  color: themeChange.getThem()
+                      ? AppThemeData.grey300Dark
+                      : AppThemeData.grey300,
+                  width: 0.8),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(0)),
-              borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.grey300Dark : AppThemeData.grey300, width: 0.8),
+              borderSide: BorderSide(
+                  color: themeChange.getThem()
+                      ? AppThemeData.grey300Dark
+                      : AppThemeData.grey300,
+                  width: 0.8),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(0)),
-              borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.grey300Dark : AppThemeData.grey300, width: 0.8),
+              borderSide: BorderSide(
+                  color: themeChange.getThem()
+                      ? AppThemeData.grey300Dark
+                      : AppThemeData.grey300,
+                  width: 0.8),
             ),
             border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(0)),
-              borderSide: BorderSide(color: themeChange.getThem() ? AppThemeData.grey300Dark : AppThemeData.grey300, width: 0.8),
+              borderSide: BorderSide(
+                  color: themeChange.getThem()
+                      ? AppThemeData.grey300Dark
+                      : AppThemeData.grey300,
+                  width: 0.8),
             ),
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 16,
-              color: themeChange.getThem() ? AppThemeData.grey400Dark : AppThemeData.grey400,
+              color: themeChange.getThem()
+                  ? AppThemeData.grey400Dark
+                  : AppThemeData.grey400,
               fontFamily: AppThemeData.regular,
             )));
   }
@@ -153,7 +179,10 @@ class TextFieldWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-        color: borderColor ?? (themeChange.getThem() ? AppThemeData.grey200Dark : AppThemeData.grey400Dark),
+        color: borderColor ??
+            (themeChange.getThem()
+                ? AppThemeData.grey200Dark
+                : AppThemeData.grey400Dark),
         width: width,
       )),
       child: TextFormField(
@@ -171,7 +200,7 @@ class TextFieldWidget extends StatelessWidget {
         cursorColor: AppThemeData.primary200,
         obscureText: !obscureText,
         keyboardType: textInputType,
-        onTapOutside: (v){
+        onTapOutside: (v) {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         textCapitalization: TextCapitalization.sentences,
@@ -183,7 +212,10 @@ class TextFieldWidget extends StatelessWidget {
         inputFormatters: inputFormatters,
         style: TextStyle(
           fontSize: 16,
-          color: textColor ?? (themeChange.getThem() ? AppThemeData.grey900Dark : AppThemeData.grey900),
+          color: textColor ??
+              (themeChange.getThem()
+                  ? AppThemeData.grey900Dark
+                  : AppThemeData.grey900),
           fontFamily: fontFamily ?? AppThemeData.medium,
         ),
         decoration: InputDecoration(
@@ -191,7 +223,9 @@ class TextFieldWidget extends StatelessWidget {
           suffixIcon: suffix,
           counterText: "",
           contentPadding: contentPadding ?? const EdgeInsets.all(14),
-          fillColor: themeChange.getThem() ? AppThemeData.surface50Dark : AppThemeData.surface50,
+          fillColor: themeChange.getThem()
+              ? AppThemeData.surface50Dark
+              : AppThemeData.surface50,
           filled: true,
           focusedBorder: UnderlineInputBorder(
             borderRadius: const BorderRadius.only(),
@@ -204,7 +238,9 @@ class TextFieldWidget extends StatelessWidget {
           hintText: hintText,
           hintStyle: TextStyle(
             fontSize: 16,
-            color: themeChange.getThem() ? AppThemeData.grey500Dark : AppThemeData.grey500,
+            color: themeChange.getThem()
+                ? AppThemeData.grey500Dark
+                : AppThemeData.grey500,
             fontFamily: AppThemeData.regular,
           ),
         ),
@@ -242,17 +278,18 @@ class MobileTextFieldWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-        color: themeChange.getThem() ? AppThemeData.grey300Dark : AppThemeData.grey300,
+        color: themeChange.getThem()
+            ? AppThemeData.grey300Dark
+            : AppThemeData.grey300,
         width: 0.8,
       )),
-      child: 
-      IntlPhoneField(
+      child: IntlPhoneField(
         textAlign: TextAlign.start,
         flagsButtonPadding: const EdgeInsets.symmetric(horizontal: 10),
         readOnly: isReadOnly,
         initialValue: controller?.text,
         onChanged: onChanged,
-        invalidNumberMessage: "number invalid".tr,
+        invalidNumberMessage: "number invalid",
         showDropdownIcon: false,
         disableLengthCheck: true,
         decoration: InputDecoration(
@@ -265,7 +302,7 @@ class MobileTextFieldWidget extends StatelessWidget {
               width: 0.8,
             ),
           ),
-          hintText: hintText?.tr,
+          hintText: hintText,
           isDense: true,
         ),
       ),
@@ -329,7 +366,9 @@ class TextFieldWidgetBorder extends StatelessWidget {
       textInputAction: TextInputAction.done,
       style: TextStyle(
         fontSize: 16,
-        color: themeChange.getThem() ? AppThemeData.grey900Dark : AppThemeData.grey900,
+        color: themeChange.getThem()
+            ? AppThemeData.grey900Dark
+            : AppThemeData.grey900,
         fontFamily: AppThemeData.regular,
       ),
       decoration: InputDecoration(
@@ -337,47 +376,66 @@ class TextFieldWidgetBorder extends StatelessWidget {
         suffixIcon: suffix,
         counterText: "",
         contentPadding: contentPadding,
-        fillColor: themeChange.getThem() ? AppThemeData.surface50Dark : AppThemeData.surface50,
+        fillColor: themeChange.getThem()
+            ? AppThemeData.surface50Dark
+            : AppThemeData.surface50,
         filled: true,
         focusedBorder: OutlineInputBorder(
           borderRadius: radius,
           borderSide: BorderSide(
-            color: borderColor ?? (themeChange.getThem() ? AppThemeData.grey200Dark : AppThemeData.grey200),
+            color: borderColor ??
+                (themeChange.getThem()
+                    ? AppThemeData.grey200Dark
+                    : AppThemeData.grey200),
             width: 0.7,
           ),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: radius,
           borderSide: BorderSide(
-            color: borderColor ?? (themeChange.getThem() ? AppThemeData.grey200Dark : AppThemeData.grey200),
+            color: borderColor ??
+                (themeChange.getThem()
+                    ? AppThemeData.grey200Dark
+                    : AppThemeData.grey200),
             width: 0.7,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: radius,
           borderSide: BorderSide(
-            color: borderColor ?? (themeChange.getThem() ? AppThemeData.grey200Dark : AppThemeData.grey200),
+            color: borderColor ??
+                (themeChange.getThem()
+                    ? AppThemeData.grey200Dark
+                    : AppThemeData.grey200),
             width: 0.7,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: radius,
           borderSide: BorderSide(
-            color: borderColor ?? (themeChange.getThem() ? AppThemeData.grey200Dark : AppThemeData.grey200),
+            color: borderColor ??
+                (themeChange.getThem()
+                    ? AppThemeData.grey200Dark
+                    : AppThemeData.grey200),
             width: 0.7,
           ),
         ),
         border: OutlineInputBorder(
           borderRadius: radius,
           borderSide: BorderSide(
-            color: borderColor ?? (themeChange.getThem() ? AppThemeData.grey200Dark : AppThemeData.grey200),
+            color: borderColor ??
+                (themeChange.getThem()
+                    ? AppThemeData.grey200Dark
+                    : AppThemeData.grey200),
             width: 0.7,
           ),
         ),
         hintText: hintText,
         hintStyle: TextStyle(
           fontSize: 16,
-          color: themeChange.getThem() ? AppThemeData.grey500Dark : AppThemeData.grey500,
+          color: themeChange.getThem()
+              ? AppThemeData.grey500Dark
+              : AppThemeData.grey500,
           fontFamily: AppThemeData.regular,
         ),
       ),

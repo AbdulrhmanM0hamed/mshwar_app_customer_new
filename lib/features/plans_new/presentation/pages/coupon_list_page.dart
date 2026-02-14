@@ -1,7 +1,8 @@
+import 'package:cabme/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
+import '../../../../service_locator.dart';
 import 'package:provider/provider.dart';
 import '../../../../common/widget/custom_app_bar.dart';
 import '../../../../common/widget/custom_text.dart';
@@ -23,7 +24,7 @@ class CouponListPage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocProvider(
-      create: (context) => GetIt.instance<PlansCouponCubit>()..loadCoupons(),
+      create: (context) => getIt<PlansCouponCubit>()..loadCoupons(),
       child: Scaffold(
         backgroundColor: themeChange.getThem()
             ? AppThemeData.surface50Dark
@@ -66,7 +67,9 @@ class CouponListPage extends StatelessWidget {
                       CustomText(
                         text: state.message,
                         size: 16,
-                        color: themeChange.getThem() ? Colors.white70 : Colors.black54,
+                        color: themeChange.getThem()
+                            ? Colors.white70
+                            : Colors.black54,
                         align: TextAlign.center,
                       ),
                     ],

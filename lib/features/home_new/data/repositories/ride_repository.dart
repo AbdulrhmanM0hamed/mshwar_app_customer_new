@@ -1,26 +1,23 @@
 import '../../../../core(new)/network/api_service.dart';
 import '../models/ride_request_model.dart';
 import '../models/ride_response_model.dart';
-import '../models/price_calculation_model.dart';
 import '../models/booking_confirmation_model.dart';
 import '../models/driver_model.dart';
 
 abstract class RideRepository {
-  Future<PriceCalculationModel> calculatePrice({
+  Future<Map<String, dynamic>> calculatePrice({
+    required String vehicleName,
+    required String distance,
     required double departureLat,
     required double departureLng,
     required double destinationLat,
     required double destinationLng,
-    required String vehicleCategoryId,
-    String? couponCode,
-    bool usePackageKm = false,
   });
 
   Future<List<DriverModel>> findAvailableDrivers({
     required double latitude,
     required double longitude,
     required String vehicleCategoryId,
-    double radiusKm = 10.0,
   });
 
   Future<RideResponseModel> bookRide(RideRequestModel request);
@@ -28,6 +25,8 @@ abstract class RideRepository {
   Future<BookingConfirmationModel> confirmBooking(String rideId);
 
   Future<bool> cancelRide(String rideId, String reason);
+
+  Future<Map<String, dynamic>?> getUserPendingPayment();
 }
 
 class RideRepositoryImpl implements RideRepository {
@@ -36,34 +35,32 @@ class RideRepositoryImpl implements RideRepository {
   RideRepositoryImpl({required this.apiService});
 
   @override
-  Future<PriceCalculationModel> calculatePrice({
+  Future<Map<String, dynamic>> calculatePrice({
+    required String vehicleName,
+    required String distance,
     required double departureLat,
     required double departureLng,
     required double destinationLat,
     required double destinationLng,
-    required String vehicleCategoryId,
-    String? couponCode,
-    bool usePackageKm = false,
   }) async {
     try {
+      // Mapping vehicle name to what the old backend expects
+      final normalization = vehicleName.toLowerCase().trim();
+      final backendName = normalization == 'classic' ? 'classic' : 'business';
+
       final response = await apiService.post(
-        '/ride/calculate-price',
+        'calculate-fare', // Use old endpoint
         data: {
-          'departure_latitude': departureLat,
-          'departure_longitude': departureLng,
-          'destination_latitude': destinationLat,
-          'destination_longitude': destinationLng,
-          'vehicle_category_id': vehicleCategoryId,
-          if (couponCode != null) 'coupon_code': couponCode,
-          'use_package_km': usePackageKm,
+          'name': backendName,
+          'distance': distance,
+          'pickup_latitude': departureLat.toString(),
+          'pickup_longitude': departureLng.toString(),
+          'destination_latitude': destinationLat.toString(),
+          'destination_longitude': destinationLng.toString(),
         },
       );
 
-      if (response['success'] == 'success' && response['data'] != null) {
-        return PriceCalculationModel.fromJson(response['data']);
-      }
-
-      throw Exception(response['message'] ?? 'Failed to calculate price');
+      return response;
     } catch (e) {
       throw Exception('Failed to calculate price: $e');
     }
@@ -74,17 +71,10 @@ class RideRepositoryImpl implements RideRepository {
     required double latitude,
     required double longitude,
     required String vehicleCategoryId,
-    double radiusKm = 10.0,
   }) async {
     try {
-      final response = await apiService.post(
-        '/ride/find-drivers',
-        data: {
-          'latitude': latitude,
-          'longitude': longitude,
-          'vehicle_category_id': vehicleCategoryId,
-          'radius_km': radiusKm,
-        },
+      final response = await apiService.get(
+        'driver?id_type_vehicule=$vehicleCategoryId&lat=$latitude&lng=$longitude',
       );
 
       if (response['success'] == 'success' && response['data'] != null) {
@@ -92,12 +82,7 @@ class RideRepositoryImpl implements RideRepository {
         return data.map((json) => DriverModel.fromJson(json)).toList();
       }
 
-      // Return empty list if no drivers found
-      if (response['message']?.toString().contains('No drivers') == true) {
-        return [];
-      }
-
-      throw Exception(response['message'] ?? 'Failed to find drivers');
+      return [];
     } catch (e) {
       throw Exception('Failed to find available drivers: $e');
     }
@@ -107,12 +92,21 @@ class RideRepositoryImpl implements RideRepository {
   Future<RideResponseModel> bookRide(RideRequestModel request) async {
     try {
       final response = await apiService.post(
-        '/ride/book',
+        'requete-register', // Correct endpoint from API.dart
         data: request.toJson(),
       );
 
       if (response['success'] == 'success' && response['data'] != null) {
-        return RideResponseModel.fromJson(response['data']);
+        // The old backend returns data as a list or map
+        final rideData = response['data'];
+        Map<String, dynamic> mappedData = {};
+        if (rideData is List && rideData.isNotEmpty) {
+          mappedData = rideData[0];
+        } else if (rideData is Map<String, dynamic>) {
+          mappedData = rideData;
+        }
+
+        return RideResponseModel.fromJson(mappedData);
       }
 
       throw Exception(response['message'] ?? 'Failed to book ride');
@@ -124,7 +118,8 @@ class RideRepositoryImpl implements RideRepository {
   @override
   Future<BookingConfirmationModel> confirmBooking(String rideId) async {
     try {
-      final response = await apiService.get('/ride/$rideId/confirm');
+      final response =
+          await apiService.get('user-confirmation?id_ride=$rideId');
 
       if (response['success'] == 'success' && response['data'] != null) {
         return BookingConfirmationModel.fromJson(response['data']);
@@ -139,14 +134,23 @@ class RideRepositoryImpl implements RideRepository {
   @override
   Future<bool> cancelRide(String rideId, String reason) async {
     try {
-      final response = await apiService.post(
-        '/ride/$rideId/cancel',
-        data: {'reason': reason},
-      );
-
+      final response =
+          await apiService.get('set-rejected-requete?id_ride=$rideId');
       return response['success'] == 'success';
     } catch (e) {
       throw Exception('Failed to cancel ride: $e');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>?> getUserPendingPayment() async {
+    try {
+      // Needs user ID from preferences usually, handled by intercepts or DI
+      // For now using the direct string
+      final response = await apiService.get('user-pending-payment');
+      return response;
+    } catch (e) {
+      return null;
     }
   }
 }

@@ -3,7 +3,6 @@ import 'package:cabme/common/widget/custom_text.dart';
 import 'package:cabme/core/themes/constant_colors.dart';
 import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -117,7 +116,7 @@ class MyCustomDialog extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: CustomButton(
-                                    btnName: cancelText ?? "No".tr,
+                                    btnName: cancelText ?? "No",
                                     isOutlined: true,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8, vertical: 12),
@@ -126,7 +125,7 @@ class MyCustomDialog extends StatelessWidget {
                                       if (onCancel != null) {
                                         onCancel!();
                                       } else {
-                                        Get.back();
+                                        Navigator.of(context).pop();
                                       }
                                     },
                                   ),
@@ -134,7 +133,7 @@ class MyCustomDialog extends StatelessWidget {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: CustomButton(
-                                    btnName: confirmText ?? "Yes".tr,
+                                    btnName: confirmText ?? "Yes",
                                     buttonColor: confirmButtonColor ??
                                         AppThemeData.primary200,
                                     padding: const EdgeInsets.symmetric(
@@ -144,7 +143,7 @@ class MyCustomDialog extends StatelessWidget {
                                       if (onConfirm != null) {
                                         onConfirm!();
                                       } else {
-                                        Get.back();
+                                        Navigator.of(context).pop();
                                       }
                                     },
                                   ),
@@ -152,7 +151,7 @@ class MyCustomDialog extends StatelessWidget {
                               ],
                             )
                           : CustomButton(
-                              btnName: confirmText ?? "OK".tr,
+                              btnName: confirmText ?? "OK",
                               buttonColor:
                                   confirmButtonColor ?? AppThemeData.primary200,
                               padding: const EdgeInsets.symmetric(
@@ -162,7 +161,7 @@ class MyCustomDialog extends StatelessWidget {
                                 if (onConfirm != null) {
                                   onConfirm!();
                                 } else {
-                                  Get.back();
+                                  Navigator.of(context).pop();
                                 }
                               },
                             ),
@@ -181,7 +180,7 @@ class MyCustomDialog extends StatelessWidget {
                 if (onCancel != null) {
                   onCancel!();
                 } else {
-                  Get.back();
+                  Navigator.of(context).pop();
                 }
               },
               child: Icon(

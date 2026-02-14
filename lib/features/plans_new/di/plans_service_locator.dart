@@ -1,4 +1,5 @@
-import 'package:get_it/get_it.dart';
+import '../../../core(new)/network/app_state_service.dart';
+import '../../../service_locator.dart';
 import '../../../core(new)/network/api_service.dart';
 import '../data/repositories/package_repository.dart';
 import '../data/repositories/subscription_repository.dart';
@@ -6,8 +7,6 @@ import '../data/repositories/coupon_repository.dart';
 import '../presentation/cubit/package/package_cubit.dart';
 import '../presentation/cubit/subscription/subscription_cubit.dart';
 import '../presentation/cubit/coupon/coupon_cubit.dart';
-
-final getIt = GetIt.instance;
 
 /// Setup all dependencies for Plans feature
 /// Call this in main.dart after core dependencies are registered
@@ -23,6 +22,7 @@ void _registerRepositories() {
     getIt.registerLazySingleton<PackageRepository>(
       () => PackageRepositoryImpl(
         apiService: getIt<ApiService>(),
+        appStateService: getIt<AppStateService>(),
       ),
     );
   }
@@ -32,6 +32,7 @@ void _registerRepositories() {
     getIt.registerLazySingleton<SubscriptionRepository>(
       () => SubscriptionRepositoryImpl(
         apiService: getIt<ApiService>(),
+        appStateService: getIt<AppStateService>(),
       ),
     );
   }

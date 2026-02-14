@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import '../../../../service_locator.dart';
 import '../../../../core/themes/constant_colors.dart';
 import '../../../../core/utils/dark_theme_provider.dart';
 import '../../../../core/utils/Preferences.dart';
@@ -14,14 +15,26 @@ import '../widgets/transaction_list_item.dart';
 import 'add_funds_page.dart';
 import 'transaction_history_page.dart';
 
-class WalletPage extends StatefulWidget {
+class WalletPage extends StatelessWidget {
   const WalletPage({super.key});
 
   @override
-  State<WalletPage> createState() => _WalletPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<WalletCubit>(),
+      child: const _WalletPageContent(),
+    );
+  }
 }
 
-class _WalletPageState extends State<WalletPage> {
+class _WalletPageContent extends StatefulWidget {
+  const _WalletPageContent();
+
+  @override
+  State<_WalletPageContent> createState() => _WalletPageContentState();
+}
+
+class _WalletPageContentState extends State<_WalletPageContent> {
   @override
   void initState() {
     super.initState();
@@ -41,20 +54,16 @@ class _WalletPageState extends State<WalletPage> {
     final isDarkMode = themeChange.getThem();
 
     return Scaffold(
-      backgroundColor: isDarkMode
-          ? AppThemeData.surface50Dark
-          : AppThemeData.surface50,
+      backgroundColor:
+          isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
       appBar: AppBar(
-        backgroundColor: isDarkMode
-            ? AppThemeData.surface50Dark
-            : AppThemeData.surface50,
+        backgroundColor:
+            isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: isDarkMode
-                ? AppThemeData.grey900Dark
-                : AppThemeData.grey900,
+            color: isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -62,17 +71,14 @@ class _WalletPageState extends State<WalletPage> {
           text: l10n.wallet,
           size: 20,
           weight: FontWeight.bold,
-          color: isDarkMode
-              ? AppThemeData.grey900Dark
-              : AppThemeData.grey900,
+          color: isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
         ),
         actions: [
           IconButton(
             icon: Icon(
               Icons.refresh,
-              color: isDarkMode
-                  ? AppThemeData.grey900Dark
-                  : AppThemeData.grey900,
+              color:
+                  isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
             ),
             onPressed: _loadWallet,
           ),

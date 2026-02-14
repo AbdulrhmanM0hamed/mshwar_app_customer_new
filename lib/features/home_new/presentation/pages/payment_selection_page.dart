@@ -1,6 +1,9 @@
+import 'package:cabme/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import '../../../../core/utils/Preferences.dart';
 import '../../../../core/themes/constant_colors.dart';
 import '../../../../core/utils/dark_theme_provider.dart';
 import '../../../../generated/app_localizations.dart';
@@ -17,6 +20,7 @@ import 'booking_success_page.dart';
 class PaymentSelectionPage extends StatefulWidget {
   final LocationModel departure;
   final LocationModel destination;
+  final List<LocationModel>? stops;
   final String vehicleCategoryId;
   final int numberOfPassengers;
   final DateTime? scheduledTime;
@@ -25,6 +29,7 @@ class PaymentSelectionPage extends StatefulWidget {
     super.key,
     required this.departure,
     required this.destination,
+    this.stops,
     required this.vehicleCategoryId,
     required this.numberOfPassengers,
     this.scheduledTime,
@@ -53,11 +58,12 @@ class _PaymentSelectionPageState extends State<PaymentSelectionPage> {
 
   void _calculatePrice() {
     context.read<RideCubit>().calculatePrice(
+          vehicleName: 'classic', // TODO: Get actual name from previous step
+          distance: '0',
           departureLat: widget.departure.latitude,
           departureLng: widget.departure.longitude,
           destinationLat: widget.destination.latitude,
           destinationLng: widget.destination.longitude,
-          vehicleCategoryId: widget.vehicleCategoryId,
         );
   }
 
@@ -70,20 +76,17 @@ class _PaymentSelectionPageState extends State<PaymentSelectionPage> {
     return BlocProvider(
       create: (_) => getIt<RideCubit>(),
       child: Scaffold(
-        backgroundColor: isDarkMode
-            ? AppThemeData.surface50Dark
-            : AppThemeData.surface50,
+        backgroundColor:
+            isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
         appBar: AppBar(
-          backgroundColor: isDarkMode
-              ? AppThemeData.surface50Dark
-              : AppThemeData.surface50,
+          backgroundColor:
+              isDarkMode ? AppThemeData.surface50Dark : AppThemeData.surface50,
           elevation: 0,
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: isDarkMode
-                  ? AppThemeData.grey900Dark
-                  : AppThemeData.grey900,
+              color:
+                  isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
             ),
             onPressed: () => Navigator.pop(context),
           ),
@@ -91,9 +94,7 @@ class _PaymentSelectionPageState extends State<PaymentSelectionPage> {
             text: l10n.selectPaymentMethod,
             size: 18,
             weight: FontWeight.bold,
-            color: isDarkMode
-                ? AppThemeData.grey900Dark
-                : AppThemeData.grey900,
+            color: isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
           ),
         ),
         body: BlocConsumer<RideCubit, RideState>(
@@ -211,9 +212,7 @@ class _PaymentSelectionPageState extends State<PaymentSelectionPage> {
             text: l10n.totalFare,
             size: 16,
             weight: FontWeight.bold,
-            color: isDarkMode
-                ? AppThemeData.grey900Dark
-                : AppThemeData.grey900,
+            color: isDarkMode ? AppThemeData.grey900Dark : AppThemeData.grey900,
           ),
           CustomText(
             text: '\$${price.toStringAsFixed(2)}',
@@ -239,9 +238,7 @@ class _PaymentSelectionPageState extends State<PaymentSelectionPage> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDarkMode
-              ? AppThemeData.grey200Dark
-              : AppThemeData.grey200,
+          color: isDarkMode ? AppThemeData.grey200Dark : AppThemeData.grey200,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
@@ -298,6 +295,8 @@ class _PaymentSelectionPageState extends State<PaymentSelectionPage> {
 
   void _handleBookRide(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final rideCubit = context.read<RideCubit>();
+    final calculation = rideCubit.lastCalculation;
 
     if (_selectedPaymentMethodId == null) {
       CustomSnackbar.showError(
@@ -307,16 +306,35 @@ class _PaymentSelectionPageState extends State<PaymentSelectionPage> {
       return;
     }
 
+    if (calculation == null) {
+      CustomSnackbar.showError(
+        context: context,
+        message: 'Price not calculated',
+      );
+      return;
+    }
+
+    final userJson = Preferences.getString(Preferences.user);
+    final userMap = jsonDecode(userJson);
+    final userData = userMap['data'];
+
     final request = RideRequestModel(
       departure: widget.departure,
       destination: widget.destination,
+      stops: widget.stops,
       vehicleCategoryId: widget.vehicleCategoryId,
       paymentMethodId: _selectedPaymentMethodId!,
       numberOfPassengers: widget.numberOfPassengers,
       scheduledTime: widget.scheduledTime,
+      tripPrice: calculation.finalPrice,
+      duration: calculation.duration,
+      userName: '${userData['nom'] ?? ''} ${userData['prenom'] ?? ''}',
+      userPhone: userData['phone'] ?? '',
+      userEmail: userData['email'] ?? '',
+      userId: Preferences.getInt(Preferences.userId).toString(),
     );
 
-    context.read<RideCubit>().bookRide(request);
+    rideCubit.bookRide(request);
   }
 }
 

@@ -4,7 +4,6 @@ import 'package:cabme/core/utils/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
-import 'package:get/get.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -49,10 +48,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     // Determine back button container color
     final backButtonBgColor = bgColor == AppThemeData.primary200
-        ? Colors.white.withValues(alpha:0.2)
+        ? Colors.white.withValues(alpha: 0.2)
         : (isDarkMode
-            ? AppThemeData.grey200Dark.withValues(alpha:0.3)
-            : AppThemeData.grey200.withValues(alpha:0.5));
+            ? AppThemeData.grey200Dark.withValues(alpha: 0.3)
+            : AppThemeData.grey200.withValues(alpha: 0.5));
 
     // Determine back button icon color
     final backButtonIconColor = bgColor == AppThemeData.primary200
@@ -108,7 +107,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           right: 0,
         ),
         child: CustomText(
-          text: title.tr,
+          text: title,
           size: 17,
           weight: FontWeight.w600,
           color: textColor,

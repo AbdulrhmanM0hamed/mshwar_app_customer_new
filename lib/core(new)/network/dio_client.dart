@@ -7,11 +7,11 @@ import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_stor
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import '../errors/dio_exception_handler.dart';
-import 'api_endpoints.dart';
-import 'interceptors/language_interceptor.dart';
 import 'interceptors/retry_interceptor.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'app_state_service.dart';
+import 'package:get_it/get_it.dart';
+import 'package:cabme/service/api.dart';
 
 class DioClient {
   late Dio _dio;
@@ -20,24 +20,42 @@ class DioClient {
   CacheOptions? _cacheOptions;
 
   // Base URL - يمكن تغييرها حسب البيئة
-  static String get _baseUrl => ApiEndpoints.baseUrl;
+  static String get _baseUrl => API.baseUrl;
 
-  DioClient._internal(this._appStateService) {
+  DioClient(this._appStateService) {
     _dio = Dio();
     _setupDio();
   }
 
   static DioClient? _cachedInstance;
 
-  static Future<void> initialize(AppStateService appStateService) async {
-    _cachedInstance = DioClient._internal(appStateService);
-    await _cachedInstance!._initializeCache();
+  static Future<DioClient> initialize(AppStateService appStateService) async {
+    final client = DioClient(appStateService);
+    await client._initializeCache();
+    _cachedInstance = client;
+    return client;
   }
 
   static DioClient get instance {
     if (_cachedInstance == null) {
+      // Fallback: try to get AppStateService from GetIt if already registered
+      try {
+        final getIt = GetIt.instance;
+        if (getIt.isRegistered<AppStateService>()) {
+          final appStateService = getIt<AppStateService>();
+          debugPrint(
+              '⚠️ DioClient: Warning - instance accessed before explicit initialization. Attempting fallback...');
+          _cachedInstance = DioClient(appStateService);
+          // Note: we can't await _initializeCache here, but it will run in the background
+          _cachedInstance!._initializeCache();
+          return _cachedInstance!;
+        }
+      } catch (e) {
+        debugPrint('❌ DioClient: Fallback initialization failed: $e');
+      }
+
       throw Exception(
-        'DioClient not initialized. Call DioClient.initialize() first.',
+        'DioClient not initialized. Ensure AppInitialization.initializeAppDependencies() is called and awaited in main().',
       );
     }
     return _cachedInstance!;
@@ -90,6 +108,7 @@ class DioClient {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Accept-Encoding': 'gzip',
+        'apikey': API.apiKey,
       },
     );
 
@@ -105,9 +124,9 @@ class DioClient {
         },
       );
     }
-   // Add interceptors (cache interceptor added in _initializeCache)
+    // Add interceptors (cache interceptor added in _initializeCache)
     _dio.interceptors.clear();
-  //  _dio.interceptors.add(LanguageInterceptor());
+    //  _dio.interceptors.add(LanguageInterceptor());
     _dio.interceptors.add(AuthInterceptor(_appStateService));
     _dio.interceptors.add(RetryInterceptor());
     _dio.interceptors.add(LoggingInterceptor());
@@ -124,20 +143,18 @@ class DioClient {
   }) async {
     try {
       Options requestOptions = options ?? Options();
-      
+
       // Apply custom cache settings if provided
       if (_cacheOptions != null) {
         final customCacheOptions = _cacheOptions!.copyWith(
           policy: forceRefresh ? CachePolicy.refresh : CachePolicy.request,
-          maxStale: cacheDuration != null 
-              ? Nullable(cacheDuration) 
-              : null,
+          maxStale: cacheDuration != null ? Nullable(cacheDuration) : null,
         );
         requestOptions = requestOptions.copyWith(
           extra: {...?requestOptions.extra, ...customCacheOptions.toExtra()},
         );
       }
-      
+
       return await _dio.get<T>(
         path,
         queryParameters: queryParameters,
@@ -240,12 +257,12 @@ class DioClient {
 
   // Add authorization token
   void setAuthToken(String token) {
-    _dio.options.headers['Authorization'] = 'Bearer $token';
+    _dio.options.headers['accesstoken'] = token;
   }
 
   // Remove authorization token
   void clearAuthToken() {
-    _dio.options.headers.remove('Authorization');
+    _dio.options.headers.remove('accesstoken');
   }
 
   // Update language

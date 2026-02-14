@@ -537,6 +537,13 @@
   "total": "Total",
   "pickup": "Pickup",
   "dropoff": "Dropoff",
+  "selected": "Selected",
+  "tapToSelect": "Tap to select",
+  "family": "Family",
+  "classic": "Classic",
+  "familyRideDescription": "Family ride: Comfortable trips with extra space.",
+  "classicRideDescription": "Comfortable commute at an affordable price",
+  "reliableTransportationService": "Reliable transportation service.",
 
   "@_comment_multi_stop": "Multi-Stop Feature",
   "stops": "Stops",
@@ -779,5 +786,12 @@
   "send": "Send",
   "catAll": "All",
   "catRide": "Ride",
-  "catBroadcast": "Broadcast"
+  "catBroadcast": "Broadcast",
+  "selected": "Selected",
+  "tapToSelect": "Tap to select",
+  "family": "Family",
+  "classic": "Classic",
+  "familyRideDescription": "Family ride: Comfortable trips with extra space.",
+  "classicRideDescription": "Comfortable commute at an affordable price",
+  "reliableTransportationService": "Reliable transportation service."
 }
